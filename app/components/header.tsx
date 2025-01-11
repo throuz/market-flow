@@ -6,8 +6,12 @@ export default function Header() {
     <header>
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
         <div className="w-full flex justify-between items-center p-3 px-5 text-sm">
-          <div className="flex gap-5 items-center font-semibold">
-            <Link href="/">Market flow</Link>
+          <div className="flex gap-5 items-center">
+            <Link href="/" className="font-semibold">
+              Market flow
+            </Link>
+            <Link href="/products">Products</Link>
+            <Link href="/orders">Orders</Link>
           </div>
           <HeaderAuth />
         </div>
