@@ -3,10 +3,14 @@ import { redirect } from "next/navigation";
 import { Database } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
 
-const roleLinks: Record<
-  Database["public"]["Enums"]["app_role"],
-  { href: string; label: string }[]
-> = {
+type Role = Database["public"]["Enums"]["app_role"];
+
+interface RoleLink {
+  href: string;
+  label: string;
+}
+
+const roleLinks: Record<Role, RoleLink[]> = {
   admin: [
     { href: "/admin/products", label: "Products" },
     { href: "/admin/orders", label: "Orders" },
