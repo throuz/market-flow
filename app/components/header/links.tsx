@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
 import { Database } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
 
@@ -33,7 +32,7 @@ export default async function Links() {
   } = await supabase.auth.getUser();
 
   if (!user) {
-    return redirect("/sign-in");
+    return null;
   }
 
   const { data: profile } = await supabase
