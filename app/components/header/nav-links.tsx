@@ -1,6 +1,7 @@
-import Link from "next/link";
 import { Database } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
+
+import NavLink from "./nav-link";
 
 type Role = Database["public"]["Enums"]["app_role"];
 
@@ -25,7 +26,7 @@ const roleLinks: Record<Role, RoleLink[]> = {
   ],
 };
 
-export default async function Links() {
+export default async function NavLinks() {
   const supabase = await createClient();
 
   const {
@@ -47,9 +48,7 @@ export default async function Links() {
   return (
     <>
       {links.map((link) => (
-        <Link key={link.href} href={link.href}>
-          {link.label}
-        </Link>
+        <NavLink href={link.href} label={link.label} />
       ))}
     </>
   );

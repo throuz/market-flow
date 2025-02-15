@@ -1,7 +1,7 @@
 import Link from "next/link";
 import HeaderAuth from "@/components/header-auth";
 
-import Links from "./links";
+import NavLinks from "./nav-links";
 
 export default function Header() {
   return (
@@ -12,7 +12,7 @@ export default function Header() {
             <Link href="/" className="font-semibold">
               Market flow
             </Link>
-            <Links />
+            <NavLinks />
           </div>
           <HeaderAuth />
         </div>
