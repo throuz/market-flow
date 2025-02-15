@@ -15,6 +15,7 @@ const roleLinks: Record<Role, RoleLink[]> = {
     { href: "/admin/orders", label: "Orders" },
   ],
   vendor: [
+    { href: "/vendor/categories", label: "Categories" },
     { href: "/vendor/products", label: "Products" },
     { href: "/vendor/orders", label: "Orders" },
   ],
