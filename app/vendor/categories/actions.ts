@@ -6,7 +6,10 @@ export async function createCategory(formData: FormData) {
   const supabase = await createClient();
   const name = formData.get("name") as string;
 
-  const { error } = await supabase.from("categories").insert([{ name }]);
+  const { error } = await supabase
+    .from("categories")
+    .insert([{ name }])
+    .select();
 
   if (error) throw error;
 }
