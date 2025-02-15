@@ -7,17 +7,16 @@ import { Separator } from "@/components/ui/separator";
 
 export default async function VendorProductsPage() {
   const supabase = await createClient();
-  const { data: products } = await supabase
-    .from("products")
-    .select("*, category_id");
+
+  const { data: products } = await supabase.from("products").select("*");
 
   return (
     <div className="flex flex-col gap-8 p-16">
       <section>
-        <CardHeader className="px-0">
-          <CardTitle>Add New Product</CardTitle>
+        <CardHeader>
+          <CardTitle className="text-center">Add New Product</CardTitle>
         </CardHeader>
-        <CardContent className="px-0">
+        <CardContent className="flex justify-center">
           <ProductForm onSubmit={createProduct} />
         </CardContent>
       </section>
@@ -25,8 +24,8 @@ export default async function VendorProductsPage() {
       <Separator className="my-4" />
 
       <section>
-        <CardHeader className="px-0">
-          <CardTitle>Your Products</CardTitle>
+        <CardHeader>
+          <CardTitle className="text-center">Your Products</CardTitle>
         </CardHeader>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {products?.map((product) => (
