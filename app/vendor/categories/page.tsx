@@ -2,31 +2,19 @@ import { createClient } from "@/utils/supabase/server";
 import CategoryForm from "./components/CategoryForm";
 import CategoryCard from "./components/CategoryCard";
 import { createCategory, updateCategory, deleteCategory } from "./actions";
-import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 
 export default async function VendorCategoriesPage() {
   const supabase = await createClient();
   const { data: categories } = await supabase.from("categories").select("*");
 
   return (
-    <div className="flex flex-col gap-8 p-16">
+    <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <section>
-        <CardHeader>
-          <CardTitle className="text-center">Add New Category</CardTitle>
-        </CardHeader>
-        <CardContent className="flex justify-center">
+        <div className="flex justify-between items-center mb-6">
+          <div className="text-2xl font-bold">Categories</div>
           <CategoryForm onSubmit={createCategory} />
-        </CardContent>
-      </section>
-
-      <Separator className="my-4" />
-
-      <section>
-        <CardHeader>
-          <CardTitle className="text-center">Categories</CardTitle>
-        </CardHeader>
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+        </div>
+        <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {categories?.map((category) => (
             <CategoryCard
               key={category.id}
