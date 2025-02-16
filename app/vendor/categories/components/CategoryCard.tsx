@@ -1,6 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import CategoryForm from "./CategoryForm";
 import { Button } from "@/components/ui/button";
 
@@ -23,22 +29,20 @@ export default function CategoryCard({
       <CardHeader>
         <CardTitle>{category.name}</CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="flex gap-2">
-          <CategoryForm
-            initialData={category}
-            onSubmit={(formData) => onUpdate(category.id, formData)}
-          />
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              await onDelete(category.id);
-            }}
-          >
-            <Button variant="destructive">Delete</Button>
-          </form>
-        </div>
-      </CardContent>
+      <CardFooter className="justify-end gap-4">
+        <CategoryForm
+          initialData={category}
+          onSubmit={(formData) => onUpdate(category.id, formData)}
+        />
+        <form
+          onSubmit={async (e) => {
+            e.preventDefault();
+            await onDelete(category.id);
+          }}
+        >
+          <Button variant="destructive">Delete</Button>
+        </form>
+      </CardFooter>
     </Card>
   );
 }
