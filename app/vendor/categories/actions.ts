@@ -9,9 +9,11 @@ export async function createCategory(formData: FormData) {
 
   const { error } = await supabase.from("categories").insert([{ name }]);
 
-  if (error) throw error;
-
-  revalidatePath("/vendor/categories");
+  if (error) {
+    throw error;
+  } else {
+    revalidatePath("/vendor/categories");
+  }
 }
 
 export async function updateCategory(id: number, formData: FormData) {
@@ -23,16 +25,20 @@ export async function updateCategory(id: number, formData: FormData) {
     .update({ name })
     .eq("id", id);
 
-  if (error) throw error;
-
-  revalidatePath("/vendor/categories");
+  if (error) {
+    throw error;
+  } else {
+    revalidatePath("/vendor/categories");
+  }
 }
 
 export async function deleteCategory(id: number) {
   const supabase = await createClient();
   const { error } = await supabase.from("categories").delete().eq("id", id);
 
-  if (error) throw error;
-
-  revalidatePath("/vendor/categories");
+  if (error) {
+    throw error;
+  } else {
+    revalidatePath("/vendor/categories");
+  }
 }
