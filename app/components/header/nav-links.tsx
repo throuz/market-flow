@@ -46,10 +46,10 @@ export default async function NavLinks() {
   const links = profile ? roleLinks[profile.role] : [];
 
   return (
-    <>
+    <div className="flex gap-4 items-center">
       {links.map((link) => (
         <NavLink href={link.href} label={link.label} />
       ))}
-    </>
+    </div>
   );
 }
