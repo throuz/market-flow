@@ -19,8 +19,8 @@ export async function createProduct(formData: FormData) {
   };
 
   const { error } = await supabase.from("products").insert(product);
+  if (error) throw error;
   revalidatePath("/vendor/products");
-  return { error };
 }
 
 export async function updateProduct(id: number, formData: FormData) {
@@ -41,13 +41,13 @@ export async function updateProduct(id: number, formData: FormData) {
     .from("products")
     .update(product)
     .eq("id", id);
+  if (error) throw error;
   revalidatePath("/vendor/products");
-  return { error };
 }
 
 export async function deleteProduct(id: number) {
   const supabase = await createClient();
   const { error } = await supabase.from("products").delete().eq("id", id);
+  if (error) throw error;
   revalidatePath("/vendor/products");
-  return { error };
 }

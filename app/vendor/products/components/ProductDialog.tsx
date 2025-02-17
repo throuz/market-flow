@@ -12,33 +12,33 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import CategoryForm from "./CategoryForm";
+import ProductForm from "./ProductForm";
 
-interface CategoryDialogProps {
+interface ProductDialogProps {
   onSubmit: (formData: FormData) => Promise<void>;
-  initialData?: Database["public"]["Tables"]["categories"]["Row"];
+  initialData?: Database["public"]["Tables"]["products"]["Row"];
 }
 
-export default function CategoryDialog({
+export default function ProductDialog({
   onSubmit,
   initialData,
-}: CategoryDialogProps) {
+}: ProductDialogProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={initialData ? "outline" : "default"}>
-          {initialData ? "Edit" : "Add Category"}
+          {initialData ? "Edit" : "Add Product"}
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>
-            {initialData ? "Edit Category" : "Add New Category"}
+            {initialData ? "Edit Product" : "Add New Product"}
           </DialogTitle>
         </DialogHeader>
-        <CategoryForm
+        <ProductForm
           initialData={initialData}
           onSubmit={async (formData) => {
             await onSubmit(formData);

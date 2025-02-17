@@ -5,8 +5,8 @@ import { Database } from "@/database.types";
 
 interface ProductCardProps {
   product: Database["public"]["Tables"]["products"]["Row"];
-  onUpdate: (id: number, formData: FormData) => Promise<{ error: any }>;
-  onDelete: (id: number) => Promise<{ error: any }>;
+  onUpdate: (id: number, formData: FormData) => Promise<void>;
+  onDelete: (id: number) => Promise<void>;
 }
 
 export default function ProductCard({

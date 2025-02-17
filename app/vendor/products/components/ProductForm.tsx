@@ -1,11 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -13,31 +12,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Database } from "@/database.types";
 
 interface ProductFormProps {
+  onSubmit: (formData: FormData) => Promise<void>;
   initialData?: Database["public"]["Tables"]["products"]["Row"];
-  onSubmit: (formData: FormData) => Promise<{ error: any }>;
 }
 
 export default function ProductForm({
-  initialData,
   onSubmit,
+  initialData,
 }: ProductFormProps) {
-  const [error, setError] = useState<string>("");
-
-  async function handleSubmit(formData: FormData) {
-    const { error } = await onSubmit(formData);
-    if (error) setError(error.message);
-  }
-
   return (
-    <form action={handleSubmit} className="flex flex-col gap-4 w-full max-w-md">
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
+    <form action={onSubmit} className="flex flex-col gap-4">
       <Input
         type="text"
         name="name"
