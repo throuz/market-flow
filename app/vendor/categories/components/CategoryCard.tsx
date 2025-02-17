@@ -1,23 +1,15 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import CategoryForm from "./CategoryForm";
 import { Button } from "@/components/ui/button";
+import { Database } from "@/database.types";
 
-type CategoryCardProps = {
-  category: {
-    id: number;
-    name: string;
-  };
+interface CategoryCardProps {
+  category: Database["public"]["Tables"]["categories"]["Row"];
   onUpdate: (id: number, formData: FormData) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
-};
+}
 
 export default function CategoryCard({
   category,
