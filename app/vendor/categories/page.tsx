@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import CategoryForm from "./components/CategoryForm";
+import CategoryDialog from "./components/CategoryDialog";
 import CategoryCard from "./components/CategoryCard";
 import { createCategory, updateCategory, deleteCategory } from "./actions";
 
@@ -12,7 +12,7 @@ export default async function VendorCategoriesPage() {
       <section>
         <div className="flex justify-between items-center mb-6">
           <div className="text-2xl font-bold">Categories</div>
-          <CategoryForm onSubmit={createCategory} />
+          <CategoryDialog onSubmit={createCategory} />
         </div>
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {categories?.map((category) => (

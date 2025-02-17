@@ -11,17 +11,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 
-type CategoryFormProps = {
+interface CategoryDialogProps {
   onSubmit: (formData: FormData) => Promise<void>;
   initialData?: {
     name: string;
   };
-};
+}
 
-export default function CategoryForm({
+export default function CategoryDialog({
   onSubmit,
   initialData,
-}: CategoryFormProps) {
+}: CategoryDialogProps) {
   const [open, setOpen] = useState(false);
 
   return (

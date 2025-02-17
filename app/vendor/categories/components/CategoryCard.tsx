@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import CategoryForm from "./CategoryForm";
+import CategoryForm from "./CategoryDialog";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/database.types";
 
