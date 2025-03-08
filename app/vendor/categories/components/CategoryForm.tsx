@@ -3,6 +3,7 @@
 import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
 interface CategoryFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -15,8 +16,10 @@ export default function CategoryForm({
 }: CategoryFormProps) {
   return (
     <form action={onSubmit} className="space-y-4">
-      <div>
+      <div className="space-y-2">
+        <Label htmlFor="category-name">Category Name</Label>
         <Input
+          id="category-name"
           name="name"
           placeholder="Category Name"
           defaultValue={initialData?.name}
