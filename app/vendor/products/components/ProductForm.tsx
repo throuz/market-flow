@@ -82,8 +82,12 @@ export default function ProductForm({
         <SelectContent>
           <SelectItem value="piece">Piece</SelectItem>
           <SelectItem value="kg">Kilogram</SelectItem>
-          <SelectItem value="gram">Gram</SelectItem>
-          <SelectItem value="liter">Liter</SelectItem>
+          <SelectItem value="g">Gram</SelectItem>
+          <SelectItem value="catty">Catty</SelectItem>
+          <SelectItem value="tael">Tael</SelectItem>
+          <SelectItem value="bundle">Bundle</SelectItem>
+          <SelectItem value="box">Box</SelectItem>
+          <SelectItem value="bag">Bag</SelectItem>
         </SelectContent>
       </Select>
       <div className="flex items-center gap-2">
