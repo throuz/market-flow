@@ -62,10 +62,10 @@ export default function ProductForm({
         required
       />
       <Input
-        type="url"
-        name="image_url"
+        type="file"
+        name="image"
         defaultValue={initialData?.image_url}
-        placeholder="Image URL"
+        placeholder="Image"
         required
       />
       <Input
