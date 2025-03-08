@@ -14,21 +14,95 @@ export type Database = {
           created_at: string
           id: number
           name: string
-          update_at: string
+          updated_at: string
         }
         Insert: {
           created_at?: string
           id?: number
           name: string
-          update_at?: string
+          updated_at?: string
         }
         Update: {
           created_at?: string
           id?: number
           name?: string
-          update_at?: string
+          updated_at?: string
         }
         Relationships: []
+      }
+      order_items: {
+        Row: {
+          id: number
+          order_id: number
+          price: number
+          product_id: number
+          quantity: number
+        }
+        Insert: {
+          id?: never
+          order_id: number
+          price: number
+          product_id: number
+          quantity: number
+        }
+        Update: {
+          id?: never
+          order_id?: number
+          price?: number
+          product_id?: number
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_items_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          created_at: string
+          id: number
+          status: Database["public"]["Enums"]["order_status"]
+          total_price: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: never
+          status?: Database["public"]["Enums"]["order_status"]
+          total_price: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: never
+          status?: Database["public"]["Enums"]["order_status"]
+          total_price?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       products: {
         Row: {
@@ -104,6 +178,16 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "vendor" | "customer"
+      order_status:
+        | "pending"
+        | "processing"
+        | "shipped"
+        | "out_for_delivery"
+        | "delivered"
+        | "completed"
+        | "cancelled"
+        | "refunded"
+        | "failed"
       product_unit:
         | "g"
         | "kg"

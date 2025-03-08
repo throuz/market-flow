@@ -1,11 +1,14 @@
 "use server";
 
+import { Database } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
 export async function createCategory(formData: FormData) {
   const supabase = await createClient();
-  const category = { name: formData.get("name") as string };
+  const category: Database["public"]["Tables"]["categories"]["Insert"] = {
+    name: formData.get("name") as string,
+  };
 
   try {
     const { error } = await supabase.from("categories").insert(category);
@@ -18,7 +21,9 @@ export async function createCategory(formData: FormData) {
 
 export async function updateCategory(id: number, formData: FormData) {
   const supabase = await createClient();
-  const category = { name: formData.get("name") as string };
+  const category: Database["public"]["Tables"]["categories"]["Update"] = {
+    name: formData.get("name") as string,
+  };
 
   try {
     const { error } = await supabase
