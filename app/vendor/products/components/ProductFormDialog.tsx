@@ -20,7 +20,7 @@ interface ProductDialogProps {
   initialData?: Database["public"]["Tables"]["products"]["Row"];
 }
 
-export default function ProductDialog({
+export default function ProductFormDialog({
   categories,
   onSubmit,
   initialData,

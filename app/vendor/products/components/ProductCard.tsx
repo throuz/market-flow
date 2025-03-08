@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import ProductDialog from "./ProductDialog";
+import ProductFormDialog from "./ProductFormDialog";
 import { Database } from "@/database.types";
 
 interface ProductCardProps {
@@ -44,7 +44,7 @@ export default function ProductCard({
           </p>
         </div>
         <div className="flex gap-2">
-          <ProductDialog
+          <ProductFormDialog
             initialData={product}
             categories={categories}
             onSubmit={(formData) => onUpdate(product.id, formData)}

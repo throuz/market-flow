@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import ProductDialog from "./components/ProductDialog";
+import ProductFormDialog from "./components/ProductFormDialog";
 import ProductCard from "./components/ProductCard";
 import { createProduct, updateProduct, deleteProduct } from "./actions";
 
@@ -13,7 +13,7 @@ export default async function VendorProductsPage() {
       <section>
         <div className="flex justify-between items-center mb-6">
           <div className="text-2xl font-bold">Products</div>
-          <ProductDialog
+          <ProductFormDialog
             categories={categories ?? []}
             onSubmit={createProduct}
           />

@@ -19,7 +19,7 @@ interface CategoryDialogProps {
   initialData?: Database["public"]["Tables"]["categories"]["Row"];
 }
 
-export default function CategoryDialog({
+export default function CategoryFormDialog({
   onSubmit,
   initialData,
 }: CategoryDialogProps) {
