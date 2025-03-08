@@ -1,6 +1,12 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import ProductFormDialog from "./ProductFormDialog";
 import { Database } from "@/database.types";
@@ -43,22 +49,22 @@ export default function ProductCard({
             Status: {product.is_active ? "Active" : "Inactive"}
           </p>
         </div>
-        <div className="flex gap-2">
-          <ProductFormDialog
-            initialData={product}
-            categories={categories}
-            onSubmit={(formData) => onUpdate(product.id, formData)}
-          />
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              onDelete(product.id);
-            }}
-          >
-            <Button variant="destructive">Delete</Button>
-          </form>
-        </div>
       </CardContent>
+      <CardFooter className="justify-end gap-4">
+        <ProductFormDialog
+          initialData={product}
+          categories={categories}
+          onSubmit={(formData) => onUpdate(product.id, formData)}
+        />
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            onDelete(product.id);
+          }}
+        >
+          <Button variant="destructive">Delete</Button>
+        </form>
+      </CardFooter>
     </Card>
   );
 }
