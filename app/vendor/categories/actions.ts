@@ -5,26 +5,40 @@ import { revalidatePath } from "next/cache";
 
 export async function createCategory(formData: FormData) {
   const supabase = await createClient();
-  const name = formData.get("name") as string;
-  const { error } = await supabase.from("categories").insert([{ name }]);
-  if (error) throw error;
-  revalidatePath("/vendor/categories");
+  const category = { name: formData.get("name") as string };
+
+  try {
+    const { error } = await supabase.from("categories").insert(category);
+    if (error) throw error;
+    revalidatePath("/vendor/categories");
+  } catch (error) {
+    throw new Error("Category creation failed");
+  }
 }
 
 export async function updateCategory(id: number, formData: FormData) {
   const supabase = await createClient();
-  const name = formData.get("name") as string;
-  const { error } = await supabase
-    .from("categories")
-    .update({ name })
-    .eq("id", id);
-  if (error) throw error;
-  revalidatePath("/vendor/categories");
+  const category = { name: formData.get("name") as string };
+
+  try {
+    const { error } = await supabase
+      .from("categories")
+      .update(category)
+      .eq("id", id);
+    if (error) throw error;
+    revalidatePath("/vendor/categories");
+  } catch (error) {
+    throw new Error("Category update failed");
+  }
 }
 
 export async function deleteCategory(id: number) {
   const supabase = await createClient();
-  const { error } = await supabase.from("categories").delete().eq("id", id);
-  if (error) throw error;
-  revalidatePath("/vendor/categories");
+  try {
+    const { error } = await supabase.from("categories").delete().eq("id", id);
+    if (error) throw error;
+    revalidatePath("/vendor/categories");
+  } catch (error) {
+    throw new Error("Category deletion failed");
+  }
 }
