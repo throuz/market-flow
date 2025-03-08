@@ -14,11 +14,13 @@ import {
 } from "@/components/ui/select";
 
 interface ProductFormProps {
+  categories: Database["public"]["Tables"]["categories"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
   initialData?: Database["public"]["Tables"]["products"]["Row"];
 }
 
 export default function ProductForm({
+  categories,
   onSubmit,
   initialData,
 }: ProductFormProps) {
@@ -31,13 +33,21 @@ export default function ProductForm({
         placeholder="Product name"
         required
       />
-      <Input
-        type="number"
+      <Select
         name="category_id"
-        defaultValue={initialData?.category_id}
-        placeholder="Category ID"
-        required
-      />
+        defaultValue={initialData?.category_id?.toString()}
+      >
+        <SelectTrigger>
+          <SelectValue placeholder="Select category" />
+        </SelectTrigger>
+        <SelectContent>
+          {categories.map((category) => (
+            <SelectItem key={category.id} value={category.id.toString()}>
+              {category.name}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       <Textarea
         name="description"
         defaultValue={initialData?.description ?? ""}

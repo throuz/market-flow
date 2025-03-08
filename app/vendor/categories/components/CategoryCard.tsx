@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import CategoryForm from "./CategoryDialog";
+import CategoryDialog from "./CategoryDialog";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/database.types";
 
@@ -22,7 +22,7 @@ export default function CategoryCard({
         <CardTitle>{category.name}</CardTitle>
       </CardHeader>
       <CardFooter className="justify-end gap-4">
-        <CategoryForm
+        <CategoryDialog
           initialData={category}
           onSubmit={(formData) => onUpdate(category.id, formData)}
         />

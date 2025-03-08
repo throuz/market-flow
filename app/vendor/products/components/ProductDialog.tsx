@@ -15,11 +15,13 @@ import {
 import ProductForm from "./ProductForm";
 
 interface ProductDialogProps {
+  categories: Database["public"]["Tables"]["categories"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
   initialData?: Database["public"]["Tables"]["products"]["Row"];
 }
 
 export default function ProductDialog({
+  categories,
   onSubmit,
   initialData,
 }: ProductDialogProps) {
@@ -40,6 +42,7 @@ export default function ProductDialog({
         </DialogHeader>
         <ProductForm
           initialData={initialData}
+          categories={categories}
           onSubmit={async (formData) => {
             await onSubmit(formData);
             setOpen(false);
