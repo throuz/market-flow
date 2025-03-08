@@ -11,7 +11,7 @@ export async function createProduct(formData: FormData) {
   const file = formData.get("image") as File | null; // Expecting the image file field as 'image'
   let imageUrl = "";
 
-  if (file) {
+  if (file && file.size > 0) {
     const fileExtension = file.name.split(".").pop();
     const fileName = `${Date.now()}.${fileExtension}`;
 
@@ -59,7 +59,7 @@ export async function updateProduct(id: number, formData: FormData) {
   const file = formData.get("image") as File | null; // Expecting the image file field as 'image'
   let imageUrl = "";
 
-  if (file) {
+  if (file && file.size > 0) {
     const fileExtension = file.name.split(".").pop();
     const fileName = `${Date.now()}.${fileExtension}`;
 

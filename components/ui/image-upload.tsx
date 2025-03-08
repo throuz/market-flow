@@ -2,12 +2,16 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 
 interface ImageUploadProps {
-  onImageChange: (imageUrl: string | null) => void; // Callback to pass image URL to parent
-  initialImageUrl?: string; // Initial image URL if any
+  inputName: string;
+  initialInputName: string;
+  required?: boolean;
+  initialImageUrl?: string;
 }
 
 export const ImageUpload = ({
-  onImageChange,
+  inputName,
+  initialInputName,
+  required,
   initialImageUrl,
 }: ImageUploadProps) => {
   const [imagePreview, setImagePreview] = useState<string | null>(
@@ -20,7 +24,6 @@ export const ImageUpload = ({
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result as string);
-        onImageChange(reader.result as string); // Pass the image URL to the parent
       };
       reader.readAsDataURL(file);
     }
@@ -30,10 +33,15 @@ export const ImageUpload = ({
     <div className="flex flex-col gap-2">
       <Input
         type="file"
-        name="image"
+        name={inputName}
         accept="image/*"
         onChange={handleImageChange}
-        required
+        required={required}
+      />
+      <Input
+        type="hidden"
+        name={initialInputName}
+        defaultValue={initialImageUrl}
       />
       {imagePreview && (
         <div className="mt-2">

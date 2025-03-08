@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { ImageUpload } from "@/components/ui/image-upload";
 import {
   Select,
   SelectContent,
@@ -61,12 +62,11 @@ export default function ProductForm({
         step="0.01"
         required
       />
-      <Input
-        type="file"
-        name="image"
-        defaultValue={initialData?.image_url}
-        placeholder="Image"
-        required
+      <ImageUpload
+        inputName="image"
+        initialInputName="image_url"
+        initialImageUrl={initialData?.image_url}
+        required={!initialData}
       />
       <Input
         type="number"
