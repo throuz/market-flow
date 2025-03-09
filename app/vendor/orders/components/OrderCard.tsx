@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -38,6 +39,21 @@ const getStatusStyle = (
   }
 };
 
+const formatDate = (date: string) => new Date(date).toLocaleDateString();
+
+const OrderStatus = ({
+  status,
+}: {
+  status: Database["public"]["Enums"]["order_status"];
+}) => (
+  <span className={`px-2 py-1 rounded-full text-sm ${getStatusStyle(status)}`}>
+    {status
+      ?.split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ") || "N/A"}
+  </span>
+);
+
 interface OrderCardProps {
   order: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
@@ -55,11 +71,13 @@ export default function OrderCard({
   onUpdate,
   onDelete,
 }: OrderCardProps) {
-  const getUserEmail = (userId: string) =>
-    profiles.find((profile) => profile.id === userId)?.email ?? "";
+  const userEmail = useMemo(
+    () => profiles.find((profile) => profile.id === order.user_id)?.email ?? "",
+    [profiles, order.user_id]
+  );
 
   return (
-    <Card key={order.id}>
+    <Card>
       <CardHeader>
         <CardTitle>Order #{order.id}</CardTitle>
       </CardHeader>
@@ -70,26 +88,18 @@ export default function OrderCard({
         </p>
         <p>
           <span className="font-semibold">Status:</span>{" "}
-          <span
-            className={`px-2 py-1 rounded-full text-sm ${getStatusStyle(order.status)}`}
-          >
-            {order.status
-              ?.split("_")
-              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-              .join(" ") || "N/A"}
-          </span>
+          <OrderStatus status={order.status} />
         </p>
         <p>
-          <span className="font-semibold">User Email:</span>{" "}
-          {getUserEmail(order.user_id)}
+          <span className="font-semibold">User Email:</span> {userEmail}
         </p>
         <p>
           <span className="font-semibold">Created:</span>{" "}
-          {new Date(order.created_at).toLocaleDateString()}
+          {formatDate(order.created_at)}
         </p>
         <p>
           <span className="font-semibold">Last Updated:</span>{" "}
-          {new Date(order.updated_at).toLocaleDateString()}
+          {formatDate(order.updated_at)}
         </p>
       </CardContent>
       <CardFooter className="justify-end gap-4">
