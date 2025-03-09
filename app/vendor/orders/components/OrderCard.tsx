@@ -55,6 +55,9 @@ export default function OrderCard({
   onUpdate,
   onDelete,
 }: OrderCardProps) {
+  const getUserEmail = (userId: string) =>
+    profiles.find((profile) => profile.id === userId)?.email ?? "";
+
   return (
     <Card key={order.id}>
       <CardHeader>
@@ -77,7 +80,8 @@ export default function OrderCard({
           </span>
         </p>
         <p>
-          <span className="font-semibold">User ID:</span> {order.user_id}
+          <span className="font-semibold">User Email:</span>{" "}
+          {getUserEmail(order.user_id)}
         </p>
         <p>
           <span className="font-semibold">Created:</span>{" "}
