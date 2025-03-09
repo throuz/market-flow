@@ -156,14 +156,17 @@ export type Database = {
       }
       profiles: {
         Row: {
+          email: string
           id: string
           role: Database["public"]["Enums"]["app_role"]
         }
         Insert: {
+          email: string
           id: string
           role?: Database["public"]["Enums"]["app_role"]
         }
         Update: {
+          email?: string
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
         }

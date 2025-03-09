@@ -15,11 +15,24 @@ import {
 import OrderForm from "./OrderForm";
 
 interface OrderDialogProps {
+  userIdOptions: {
+    label: string;
+    value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
+  }[];
+  productIdOptions: {
+    label: string;
+    value: Database["public"]["Tables"]["products"]["Row"]["id"];
+    price: number;
+  }[];
   onSubmit: (formData: FormData) => Promise<void>;
-  initialData?: Database["public"]["Tables"]["orders"]["Row"];
+  initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
+    orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
+  };
 }
 
 export default function OrderFormDialog({
+  userIdOptions,
+  productIdOptions,
   onSubmit,
   initialData,
 }: OrderDialogProps) {
@@ -39,6 +52,8 @@ export default function OrderFormDialog({
           </DialogTitle>
         </DialogHeader>
         <OrderForm
+          userIdOptions={userIdOptions}
+          productIdOptions={productIdOptions}
           initialData={initialData}
           onSubmit={async (formData) => {
             await onSubmit(formData);

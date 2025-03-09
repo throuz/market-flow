@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
+
 import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -25,16 +27,74 @@ const orderStatusOptions: Database["public"]["Enums"]["order_status"][] = [
 ];
 
 interface OrderFormProps {
+  userIdOptions: {
+    label: string;
+    value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
+  }[];
+  productIdOptions: {
+    label: string;
+    value: Database["public"]["Tables"]["products"]["Row"]["id"];
+    price: number;
+  }[];
   onSubmit: (formData: FormData) => Promise<void>;
-  initialData?: Database["public"]["Tables"]["orders"]["Row"];
+  initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
+    orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
+  };
 }
 
-export default function OrderForm({ onSubmit, initialData }: OrderFormProps) {
+export default function OrderForm({
+  userIdOptions,
+  productIdOptions,
+  onSubmit,
+  initialData,
+}: OrderFormProps) {
+  const [orderItems, setOrderItems] = useState<
+    Database["public"]["Tables"]["order_items"]["Update"][]
+  >(initialData?.orderItems ?? [{ quantity: 1 }]);
+
+  const addOrderItem = () => {
+    setOrderItems([...orderItems, { quantity: 1 }]);
+  };
+
+  const removeOrderItem = (index: number) => {
+    setOrderItems(orderItems.filter((_, i) => i !== index));
+  };
+
+  const handleProductSelect = (index: number, productId: string) => {
+    const product = productIdOptions.find(
+      (p) => p.value.toString() === productId
+    );
+    if (!product) return;
+
+    setOrderItems((items) =>
+      items.map((item, i) =>
+        i === index
+          ? { ...item, product_id: parseInt(productId), price: product.price }
+          : item
+      )
+    );
+  };
+
   return (
     <form action={onSubmit} className="space-y-4">
       <div className="space-y-2">
+        <Label htmlFor="user_id">User</Label>
+        <Select name="user_id" defaultValue={initialData?.user_id} required>
+          <SelectTrigger id="user_id">
+            <SelectValue placeholder="Select user" />
+          </SelectTrigger>
+          <SelectContent>
+            {userIdOptions.map(({ label, value }) => (
+              <SelectItem key={value} value={value}>
+                {label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="space-y-2">
         <Label htmlFor="status">Status</Label>
-        <Select name="status" defaultValue={initialData?.status}>
+        <Select name="status" defaultValue={initialData?.status} required>
           <SelectTrigger id="status">
             <SelectValue placeholder="Select status" />
           </SelectTrigger>
@@ -48,28 +108,76 @@ export default function OrderForm({ onSubmit, initialData }: OrderFormProps) {
           </SelectContent>
         </Select>
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="total-price">Total Price</Label>
-        <Input
-          id="total-price"
-          name="total_price"
-          type="number"
-          step="0.01"
-          placeholder="Total Price"
-          defaultValue={initialData?.total_price}
-          required
-        />
+
+      <div className="space-y-4">
+        <div className="flex justify-between items-center">
+          <h3 className="text-lg font-medium">Order Items</h3>
+          <Button type="button" variant="secondary" onClick={addOrderItem}>
+            Add Item
+          </Button>
+        </div>
+
+        {orderItems.map((item, index) => (
+          <div key={index} className="space-y-2 p-4 border rounded-lg">
+            <div className="flex justify-end">
+              <Button
+                type="button"
+                variant="destructive"
+                size="sm"
+                onClick={() => removeOrderItem(index)}
+              >
+                Remove
+              </Button>
+            </div>
+            <div className="grid grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor={`order_items.${index}.product_id`}>
+                  Product
+                </Label>
+                <Select
+                  name={`order_items.${index}.product_id`}
+                  defaultValue={item.product_id?.toString()}
+                  onValueChange={(value) => handleProductSelect(index, value)}
+                  required
+                >
+                  <SelectTrigger id={`order_items.${index}.product_id`}>
+                    <SelectValue placeholder="Select product" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {productIdOptions.map(({ label, value }) => (
+                      <SelectItem key={value} value={value.toString()}>
+                        {label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor={`order_items.${index}.price`}>Price</Label>
+                <div className="p-2">${item.price ?? 0}</div>
+                <Input
+                  type="hidden"
+                  name={`order_items.${index}.price`}
+                  defaultValue={item.price}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor={`order_items.${index}.quantity`}>
+                  Quantity
+                </Label>
+                <Input
+                  type="number"
+                  name={`order_items.${index}.quantity`}
+                  defaultValue={item.quantity}
+                  min="1"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="user-id">User ID</Label>
-        <Input
-          id="user-id"
-          name="user_id"
-          placeholder="User ID"
-          defaultValue={initialData?.user_id}
-          required
-        />
-      </div>
+
       <Button type="submit" className="w-full">
         Save
       </Button>
