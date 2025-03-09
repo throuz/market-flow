@@ -52,6 +52,9 @@ export default function OrderForm({
     );
   };
 
+  const getProductUnit = (productId?: number) =>
+    products.find((product) => product.id === productId)?.unit ?? "";
+
   const userIdOptions: {
     label: string;
     value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
@@ -201,21 +204,29 @@ export default function OrderForm({
                 <Label htmlFor={`order_items.${index}.quantity`}>
                   Quantity
                 </Label>
-                <Input
-                  type="number"
-                  name={`order_items.${index}.quantity`}
-                  value={item.quantity}
-                  onChange={(e) => {
-                    const newQuantity = parseInt(e.target.value) || 1;
-                    setOrderItems((items) =>
-                      items.map((item, i) =>
-                        i === index ? { ...item, quantity: newQuantity } : item
-                      )
-                    );
-                  }}
-                  min="1"
-                  required
-                />
+                <div className="relative">
+                  <Input
+                    type="number"
+                    name={`order_items.${index}.quantity`}
+                    value={item.quantity}
+                    onChange={(e) => {
+                      const newQuantity = parseInt(e.target.value) || 1;
+                      setOrderItems((items) =>
+                        items.map((item, i) =>
+                          i === index
+                            ? { ...item, quantity: newQuantity }
+                            : item
+                        )
+                      );
+                    }}
+                    min="1"
+                    required
+                    className="pr-12"
+                  />
+                  <span className="absolute inset-y-0 right-3 flex items-center text-sm text-muted-foreground">
+                    {getProductUnit(item.product_id)}
+                  </span>
+                </div>
               </div>
             </div>
             <div className="text-right text-sm text-muted-foreground">
