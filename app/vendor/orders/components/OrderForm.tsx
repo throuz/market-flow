@@ -45,6 +45,13 @@ export default function OrderForm({
     Database["public"]["Tables"]["order_items"]["Update"][]
   >(initialData?.orderItems ?? [{ quantity: 1 }]);
 
+  const calculateSubtotal = (items: typeof orderItems) => {
+    return items.reduce(
+      (sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0),
+      0
+    );
+  };
+
   const userIdOptions: {
     label: string;
     value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
@@ -125,14 +132,20 @@ export default function OrderForm({
       <div className="space-y-4">
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-medium">Order Items</h3>
-          <Button type="button" variant="secondary" onClick={addOrderItem}>
-            Add Item
-          </Button>
+          <div className="flex gap-4 items-center">
+            <div className="text-lg">
+              Subtotal: ${calculateSubtotal(orderItems).toFixed(2)}
+            </div>
+            <Button type="button" variant="secondary" onClick={addOrderItem}>
+              Add Item
+            </Button>
+          </div>
         </div>
 
         {orderItems.map((item, index) => (
           <div key={index} className="space-y-2 p-4 border rounded-lg">
-            <div className="flex justify-end">
+            <div className="flex justify-between items-center">
+              <div className="font-medium">Item #{index + 1}</div>
               <Button
                 type="button"
                 variant="destructive"
@@ -157,21 +170,31 @@ export default function OrderForm({
                     <SelectValue placeholder="Select product" />
                   </SelectTrigger>
                   <SelectContent>
-                    {productIdOptions.map(({ label, value }) => (
-                      <SelectItem key={value} value={value.toString()}>
-                        {label}
-                      </SelectItem>
-                    ))}
+                    {productIdOptions
+                      .filter(
+                        (option) =>
+                          !orderItems.some(
+                            (item, idx) =>
+                              idx !== index && item.product_id === option.value
+                          )
+                      )
+                      .map(({ label, value }) => (
+                        <SelectItem key={value} value={value.toString()}>
+                          {label}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
                 <Label htmlFor={`order_items.${index}.price`}>Price</Label>
-                <div className="p-2">${item.price ?? 0}</div>
+                <div className="p-2 bg-muted rounded-md">
+                  ${item.price?.toFixed(2) ?? "0.00"}
+                </div>
                 <Input
                   type="hidden"
                   name={`order_items.${index}.price`}
-                  defaultValue={item.price}
+                  value={item.price}
                 />
               </div>
               <div className="space-y-2">
@@ -181,11 +204,23 @@ export default function OrderForm({
                 <Input
                   type="number"
                   name={`order_items.${index}.quantity`}
-                  defaultValue={item.quantity}
+                  value={item.quantity}
+                  onChange={(e) => {
+                    const newQuantity = parseInt(e.target.value) || 1;
+                    setOrderItems((items) =>
+                      items.map((item, i) =>
+                        i === index ? { ...item, quantity: newQuantity } : item
+                      )
+                    );
+                  }}
                   min="1"
                   required
                 />
               </div>
+            </div>
+            <div className="text-right text-sm text-muted-foreground">
+              Item total: $
+              {((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
             </div>
           </div>
         ))}
