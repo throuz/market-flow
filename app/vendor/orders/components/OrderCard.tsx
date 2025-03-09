@@ -42,23 +42,16 @@ interface OrderCardProps {
   order: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
   };
-  userIdOptions: {
-    label: string;
-    value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
-  }[];
-  productIdOptions: {
-    label: string;
-    value: Database["public"]["Tables"]["products"]["Row"]["id"];
-    price: number;
-  }[];
+  profiles: Database["public"]["Tables"]["profiles"]["Row"][];
+  products: Database["public"]["Tables"]["products"]["Row"][];
   onUpdate: (id: number, formData: FormData) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
 }
 
 export default function OrderCard({
   order,
-  userIdOptions,
-  productIdOptions,
+  profiles,
+  products,
   onUpdate,
   onDelete,
 }: OrderCardProps) {
@@ -97,8 +90,8 @@ export default function OrderCard({
       </CardContent>
       <CardFooter className="justify-end gap-4">
         <OrderFormDialog
-          userIdOptions={userIdOptions}
-          productIdOptions={productIdOptions}
+          profiles={profiles}
+          products={products}
           initialData={order}
           onSubmit={(formData) => onUpdate(order.id, formData)}
         />

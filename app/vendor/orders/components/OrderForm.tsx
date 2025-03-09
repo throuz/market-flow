@@ -27,15 +27,8 @@ const orderStatusOptions: Database["public"]["Enums"]["order_status"][] = [
 ];
 
 interface OrderFormProps {
-  userIdOptions: {
-    label: string;
-    value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
-  }[];
-  productIdOptions: {
-    label: string;
-    value: Database["public"]["Tables"]["products"]["Row"]["id"];
-    price: number;
-  }[];
+  profiles: Database["public"]["Tables"]["profiles"]["Row"][];
+  products: Database["public"]["Tables"]["products"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
   initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
@@ -43,14 +36,32 @@ interface OrderFormProps {
 }
 
 export default function OrderForm({
-  userIdOptions,
-  productIdOptions,
+  profiles,
+  products,
   onSubmit,
   initialData,
 }: OrderFormProps) {
   const [orderItems, setOrderItems] = useState<
     Database["public"]["Tables"]["order_items"]["Update"][]
   >(initialData?.orderItems ?? [{ quantity: 1 }]);
+
+  const userIdOptions: {
+    label: string;
+    value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
+  }[] = profiles
+    .filter((profile) => profile.role === "customer")
+    .map((profile) => ({
+      label: profile.email,
+      value: profile.id,
+    }));
+
+  const productIdOptions: {
+    label: string;
+    value: Database["public"]["Tables"]["products"]["Row"]["id"];
+  }[] = products.map((product) => ({
+    label: product.name,
+    value: product.id,
+  }));
 
   const addOrderItem = () => {
     setOrderItems([...orderItems, { quantity: 1 }]);
@@ -61,15 +72,17 @@ export default function OrderForm({
   };
 
   const handleProductSelect = (index: number, productId: string) => {
-    const product = productIdOptions.find(
-      (p) => p.value.toString() === productId
-    );
+    const product = products.find((p) => p.id === parseInt(productId));
     if (!product) return;
 
     setOrderItems((items) =>
       items.map((item, i) =>
         i === index
-          ? { ...item, product_id: parseInt(productId), price: product.price }
+          ? {
+              ...item,
+              product_id: parseInt(productId),
+              price: product.price_per_unit,
+            }
           : item
       )
     );

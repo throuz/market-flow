@@ -1,4 +1,3 @@
-import { Database } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
 
 import OrderCard from "./components/OrderCard";
@@ -12,35 +11,20 @@ export default async function VendorOrdersPage() {
   const { data: profiles } = await supabase.from("profiles").select("*");
   const { data: products } = await supabase.from("products").select("*");
 
-  const userIdOptions: {
-    label: string;
-    value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
-  }[] = (() => {
-    if (profiles) {
-      return profiles
-        .filter((profile) => profile.role === "customer")
-        .map((profile) => ({
-          label: profile.email,
-          value: profile.id,
-        }));
-    }
-    return [];
-  })();
+  const getOrderItems = (id: number) =>
+    order_items?.filter((orderItem) => orderItem.order_id === id) ?? [];
 
-  const productIdOptions: {
-    label: string;
-    value: Database["public"]["Tables"]["products"]["Row"]["id"];
-    price: number;
-  }[] = (() => {
-    if (products) {
-      return products.map((product) => ({
-        label: product.name,
-        value: product.id,
-        price: product.price_per_unit,
-      }));
-    }
-    return [];
-  })();
+  const ordersWithItems =
+    orders?.map((order) => ({
+      ...order,
+      orderItems: getOrderItems(order.id).map(
+        ({ price, product_id, quantity }) => ({
+          price,
+          product_id,
+          quantity,
+        })
+      ),
+    })) ?? [];
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -48,34 +32,22 @@ export default async function VendorOrdersPage() {
         <div className="flex justify-between items-center mb-6">
           <div className="text-2xl font-bold">Orders</div>
           <OrderFormDialog
-            userIdOptions={userIdOptions}
-            productIdOptions={productIdOptions}
+            profiles={profiles ?? []}
+            products={products ?? []}
             onSubmit={createOrder}
           />
         </div>
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {orders
-            ?.map((order) => ({
-              ...order,
-              orderItems:
-                order_items
-                  ?.filter((orderItem) => orderItem.order_id === order.id)
-                  .map(({ price, product_id, quantity }) => ({
-                    price,
-                    product_id,
-                    quantity,
-                  })) || [],
-            }))
-            .map((order) => (
-              <OrderCard
-                key={order.id}
-                order={order}
-                userIdOptions={userIdOptions}
-                productIdOptions={productIdOptions}
-                onUpdate={updateOrder}
-                onDelete={deleteOrder}
-              />
-            ))}
+          {ordersWithItems.map((order) => (
+            <OrderCard
+              key={order.id}
+              order={order}
+              profiles={profiles ?? []}
+              products={products ?? []}
+              onUpdate={updateOrder}
+              onDelete={deleteOrder}
+            />
+          ))}
         </div>
       </section>
     </div>
