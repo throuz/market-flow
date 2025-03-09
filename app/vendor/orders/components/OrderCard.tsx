@@ -77,32 +77,35 @@ export default function OrderCard({
   );
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Order #{order.id}</CardTitle>
+    <Card className="hover:shadow-md transition-shadow duration-200">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-bold text-gray-800">
+          Order #{order.id}
+        </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2">
-        <p>
-          <span className="font-semibold">Total Price:</span> NT$
-          {order.total_price.toFixed(2)}
-        </p>
-        <p>
-          <span className="font-semibold">Status:</span>{" "}
+      <CardContent className="space-y-3 py-4 border-t">
+        <div>
+          <p className="text-sm text-gray-500">Total Price</p>
+          <p className="font-medium">NT${order.total_price.toFixed(2)}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Status</p>
           <OrderStatus status={order.status} />
-        </p>
-        <p>
-          <span className="font-semibold">User Email:</span> {userEmail}
-        </p>
-        <p>
-          <span className="font-semibold">Created:</span>{" "}
-          {formatDate(order.created_at)}
-        </p>
-        <p>
-          <span className="font-semibold">Last Updated:</span>{" "}
-          {formatDate(order.updated_at)}
-        </p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">User Email</p>
+          <p className="font-medium truncate">{userEmail}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Created</p>
+          <p className="font-medium">{formatDate(order.created_at)}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Last Updated</p>
+          <p className="font-medium">{formatDate(order.updated_at)}</p>
+        </div>
       </CardContent>
-      <CardFooter className="justify-end gap-4">
+      <CardFooter className="justify-end gap-4 pt-4 border-t">
         <OrderFormDialog
           profiles={profiles}
           products={products}
