@@ -18,6 +18,20 @@ interface ProductCardProps {
   onDelete: (id: number) => Promise<void>;
 }
 
+const getStatusStyle = (isActive: boolean) => {
+  return isActive
+    ? "bg-emerald-200 text-emerald-800"
+    : "bg-red-200 text-red-800";
+};
+
+const StatusBadge = ({ isActive }: { isActive: boolean }) => (
+  <span
+    className={`px-2 py-1 rounded-full text-sm ${getStatusStyle(isActive)}`}
+  >
+    {isActive ? "Active" : "Inactive"}
+  </span>
+);
+
 export default function ProductCard({
   product,
   categories,
@@ -25,32 +39,44 @@ export default function ProductCard({
   onDelete,
 }: ProductCardProps) {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{product.name}</CardTitle>
+    <Card className="hover:shadow-md transition-shadow duration-200">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-xl font-bold text-gray-800">
+          {product.name}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="space-y-3 py-4 border-t">
         {product.image_url && (
-          <img
-            src={product.image_url}
-            alt={product.name}
-            className="w-full h-48 object-cover rounded-md mb-4"
-          />
+          <div className="mb-4">
+            <img
+              src={product.image_url}
+              alt={product.name}
+              className="w-full h-48 object-cover rounded-md"
+            />
+          </div>
         )}
-        <p className="text-muted-foreground mb-2">{product.description}</p>
-        <div className="space-y-2 mb-4">
-          <p className="font-semibold">
+        <div>
+          <p className="text-sm text-gray-500">Price per unit</p>
+          <p className="font-medium">
             ${product.price_per_unit}/{product.unit}
           </p>
-          <p className="text-sm">
-            Stock: {product.stock_quantity} {product.unit}s
-          </p>
-          <p className="text-sm">
-            Status: {product.is_active ? "Active" : "Inactive"}
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Stock</p>
+          <p className="font-medium">
+            {product.stock_quantity} {product.unit}s
           </p>
         </div>
+        <div>
+          <p className="text-sm text-gray-500">Description</p>
+          <p className="font-medium">{product.description}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Status</p>
+          <StatusBadge isActive={product.is_active} />
+        </div>
       </CardContent>
-      <CardFooter className="justify-end gap-4">
+      <CardFooter className="justify-end gap-4 pt-4 border-t">
         <ProductFormDialog
           initialData={product}
           categories={categories}
