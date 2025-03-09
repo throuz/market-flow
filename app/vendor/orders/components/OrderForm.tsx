@@ -189,7 +189,7 @@ export default function OrderForm({
               <div className="space-y-2">
                 <Label htmlFor={`order_items.${index}.price`}>Price</Label>
                 <div className="p-2 bg-muted rounded-md">
-                  NT$ {item.price?.toFixed(2) ?? "0.00"}
+                  NT${item.price?.toFixed(2) ?? "0.00"}
                 </div>
                 <Input
                   type="hidden"

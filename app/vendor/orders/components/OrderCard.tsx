@@ -65,7 +65,7 @@ export default function OrderCard({
       </CardHeader>
       <CardContent className="space-y-2">
         <p>
-          <span className="font-semibold">Total Price:</span> $
+          <span className="font-semibold">Total Price:</span> NT$
           {order.total_price.toFixed(2)}
         </p>
         <p>
