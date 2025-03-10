@@ -29,7 +29,8 @@ export default async function VendorOrdersPage({
   const { data: orders } = await supabase
     .from("orders")
     .select("*")
-    .eq("status", (await params).status);
+    .eq("status", (await params).status)
+    .order("updated_at", { ascending: false });
   const { data: order_items } = await supabase.from("order_items").select("*");
   const { data: profiles } = await supabase.from("profiles").select("*");
   const { data: categories } = await supabase.from("categories").select("*");
