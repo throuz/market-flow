@@ -98,8 +98,6 @@ export async function updateOrder(id: number, formData: FormData) {
     total_price: 0,
   };
 
-  console.log(order);
-
   try {
     // Delete existing order items
     const { error: deleteError } = await supabase

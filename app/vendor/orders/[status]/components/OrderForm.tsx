@@ -189,7 +189,7 @@ export default function OrderForm({
           type="datetime-local"
           id="estimated_delivery_time"
           name="estimated_delivery_time"
-          defaultValue={initialData?.estimated_delivery_time?.split(".")[0]}
+          defaultValue={initialData?.estimated_delivery_time.slice(0, 16)}
           required
         />
       </div>
