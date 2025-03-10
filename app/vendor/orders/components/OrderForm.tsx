@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Separator } from "@/components/ui/separator";
 
 const orderStatusOptions: Database["public"]["Enums"]["order_status"][] = [
   "pending",
@@ -217,6 +218,7 @@ export default function OrderForm({
                                 {label}
                               </SelectItem>
                             ))}
+                          <Separator />
                         </div>
                       )
                     )}
