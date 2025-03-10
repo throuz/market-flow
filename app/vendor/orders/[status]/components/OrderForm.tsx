@@ -18,13 +18,8 @@ import { Separator } from "@/components/ui/separator";
 const orderStatusOptions: Database["public"]["Enums"]["order_status"][] = [
   "pending",
   "processing",
-  "shipped",
-  "out_for_delivery",
-  "delivered",
   "completed",
   "cancelled",
-  "refunded",
-  "failed",
 ];
 
 interface OrderFormProps {
