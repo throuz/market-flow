@@ -102,7 +102,12 @@ export default function OrderForm({
     <form action={onSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="user_id">User</Label>
-        <Select name="user_id" defaultValue={initialData?.user_id} required>
+        <Select
+          name="user_id"
+          defaultValue={initialData?.user_id}
+          required
+          disabled={!!initialData}
+        >
           <SelectTrigger id="user_id">
             <SelectValue placeholder="Select user" />
           </SelectTrigger>
