@@ -15,11 +15,14 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
-const orderStatusOptions: Database["public"]["Enums"]["order_status"][] = [
-  "pending",
-  "processing",
-  "completed",
-  "cancelled",
+const orderStatusOptions: {
+  label: string;
+  value: Database["public"]["Enums"]["order_status"];
+}[] = [
+  { label: "Pending", value: "pending" },
+  { label: "Processing", value: "processing" },
+  { label: "Completed", value: "completed" },
+  { label: "Cancelled", value: "cancelled" },
 ];
 
 interface OrderFormProps {
@@ -134,6 +137,13 @@ export default function OrderForm({
             ))}
           </SelectContent>
         </Select>
+        {!!initialData && (
+          <Input
+            type="hidden"
+            name="user_id"
+            defaultValue={initialData?.user_id}
+          />
+        )}
       </div>
       <div className="space-y-2">
         <Label htmlFor="status">Status</Label>
@@ -142,14 +152,46 @@ export default function OrderForm({
             <SelectValue placeholder="Select status" />
           </SelectTrigger>
           <SelectContent>
-            {orderStatusOptions.map((status) => (
-              <SelectItem key={status} value={status}>
-                {status.charAt(0).toUpperCase() +
-                  status.slice(1).replace(/_/g, " ")}
+            {orderStatusOptions.map(({ label, value }) => (
+              <SelectItem key={value} value={value}>
+                {label}
               </SelectItem>
             ))}
           </SelectContent>
         </Select>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="phone">Phone</Label>
+        <Input
+          type="tel"
+          id="phone"
+          name="phone"
+          defaultValue={initialData?.phone}
+          required
+          pattern="[0-9]{10}"
+          placeholder="Enter phone number"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="address">Address</Label>
+        <Input
+          type="text"
+          id="address"
+          name="address"
+          defaultValue={initialData?.address}
+          required
+          placeholder="Enter delivery address"
+        />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="estimated_delivery_time">Estimated Delivery Time</Label>
+        <Input
+          type="datetime-local"
+          id="estimated_delivery_time"
+          name="estimated_delivery_time"
+          defaultValue={initialData?.estimated_delivery_time?.split(".")[0]}
+          required
+        />
       </div>
 
       <div className="space-y-4">

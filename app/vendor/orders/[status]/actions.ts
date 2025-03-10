@@ -4,6 +4,12 @@ import { Database } from "@/database.types";
 import { createClient } from "@/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 
+function convertTimestamp(input: string): string {
+  const date = new Date(input);
+  const formatted = date.toISOString().replace("T", " ").replace("Z", "+00");
+  return formatted;
+}
+
 export async function createOrder(formData: FormData) {
   const supabase = await createClient();
 
@@ -12,7 +18,12 @@ export async function createOrder(formData: FormData) {
       "status"
     ) as Database["public"]["Enums"]["order_status"],
     user_id: formData.get("user_id") as string,
-    total_price: 0, // Will be calculated from items
+    phone: formData.get("phone") as string,
+    address: formData.get("address") as string,
+    estimated_delivery_time: convertTimestamp(
+      formData.get("estimated_delivery_time") as string
+    ),
+    total_price: 0,
   };
 
   try {
@@ -79,8 +90,15 @@ export async function updateOrder(id: number, formData: FormData) {
       "status"
     ) as Database["public"]["Enums"]["order_status"],
     user_id: formData.get("user_id") as string,
-    total_price: 0, // Will be calculated from items
+    phone: formData.get("phone") as string,
+    address: formData.get("address") as string,
+    estimated_delivery_time: convertTimestamp(
+      formData.get("estimated_delivery_time") as string
+    ),
+    total_price: 0,
   };
+
+  console.log(order);
 
   try {
     // Delete existing order items

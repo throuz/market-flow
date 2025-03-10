@@ -12,6 +12,8 @@ import OrderFormDialog from "./OrderFormDialog";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/database.types";
 
+const formatDateTime = (date: string) => new Date(date).toLocaleString();
+
 const getStatusStyle = (
   status: Database["public"]["Enums"]["order_status"]
 ) => {
@@ -20,39 +22,39 @@ const getStatusStyle = (
       return "bg-yellow-200 text-yellow-800";
     case "processing":
       return "bg-blue-200 text-blue-800";
-    case "shipped":
-      return "bg-indigo-200 text-indigo-800";
-    case "out_for_delivery":
-      return "bg-purple-200 text-purple-800";
-    case "delivered":
-      return "bg-emerald-200 text-emerald-800";
     case "completed":
       return "bg-green-200 text-green-800";
     case "cancelled":
       return "bg-red-200 text-red-800";
-    case "refunded":
-      return "bg-orange-200 text-orange-800";
-    case "failed":
-      return "bg-rose-200 text-rose-800";
     default:
       return "bg-gray-200 text-gray-800";
   }
 };
 
-const formatDate = (date: string) => new Date(date).toLocaleDateString();
+const orderStatusOptions: {
+  label: string;
+  value: Database["public"]["Enums"]["order_status"];
+}[] = [
+  { label: "Pending", value: "pending" },
+  { label: "Processing", value: "processing" },
+  { label: "Completed", value: "completed" },
+  { label: "Cancelled", value: "cancelled" },
+];
 
 const OrderStatus = ({
   status,
 }: {
   status: Database["public"]["Enums"]["order_status"];
-}) => (
-  <span className={`px-2 py-1 rounded-full text-sm ${getStatusStyle(status)}`}>
-    {status
-      ?.split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ") || "N/A"}
-  </span>
-);
+}) => {
+  return (
+    <span
+      className={`px-2 py-1 rounded-full text-sm ${getStatusStyle(status)}`}
+    >
+      {orderStatusOptions.find((option) => option.value === status)?.label ??
+        "N/A"}
+    </span>
+  );
+};
 
 interface OrderCardProps {
   order: Database["public"]["Tables"]["orders"]["Row"] & {
@@ -99,12 +101,26 @@ export default function OrderCard({
           <p className="font-medium truncate">{userEmail}</p>
         </div>
         <div>
+          <p className="text-sm text-gray-500">Phone</p>
+          <p className="font-medium">{order.phone}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Address</p>
+          <p className="font-medium">{order.address}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Estimated Delivery</p>
+          <p className="font-medium">
+            {formatDateTime(order.estimated_delivery_time)}
+          </p>
+        </div>
+        <div>
           <p className="text-sm text-gray-500">Created</p>
-          <p className="font-medium">{formatDate(order.created_at)}</p>
+          <p className="font-medium">{formatDateTime(order.created_at)}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500">Last Updated</p>
-          <p className="font-medium">{formatDate(order.updated_at)}</p>
+          <p className="font-medium">{formatDateTime(order.updated_at)}</p>
         </div>
       </CardContent>
       <CardFooter className="justify-end gap-4 pt-4 border-t">

@@ -71,24 +71,33 @@ export type Database = {
       }
       orders: {
         Row: {
+          address: string
           created_at: string
+          estimated_delivery_time: string
           id: number
+          phone: string
           status: Database["public"]["Enums"]["order_status"]
           total_price: number
           updated_at: string
           user_id: string
         }
         Insert: {
+          address: string
           created_at?: string
+          estimated_delivery_time: string
           id?: never
-          status?: Database["public"]["Enums"]["order_status"]
+          phone: string
+          status: Database["public"]["Enums"]["order_status"]
           total_price: number
           updated_at?: string
           user_id: string
         }
         Update: {
+          address?: string
           created_at?: string
+          estimated_delivery_time?: string
           id?: never
+          phone?: string
           status?: Database["public"]["Enums"]["order_status"]
           total_price?: number
           updated_at?: string
@@ -181,16 +190,7 @@ export type Database = {
     }
     Enums: {
       app_role: "admin" | "vendor" | "customer"
-      order_status:
-        | "pending"
-        | "processing"
-        | "shipped"
-        | "out_for_delivery"
-        | "delivered"
-        | "completed"
-        | "cancelled"
-        | "refunded"
-        | "failed"
+      order_status: "pending" | "processing" | "completed" | "cancelled"
       product_unit:
         | "g"
         | "kg"

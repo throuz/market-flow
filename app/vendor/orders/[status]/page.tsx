@@ -8,7 +8,7 @@ import OrderCard from "./components/OrderCard";
 import OrderFormDialog from "./components/OrderFormDialog";
 import { createOrder, deleteOrder, updateOrder } from "./actions";
 
-const orderStatusTabsData: {
+const orderStatusOptions: {
   label: string;
   value: Database["public"]["Enums"]["order_status"];
 }[] = [
@@ -71,7 +71,7 @@ export default async function VendorOrdersPage({
           />
           <Tabs value={(await params).status}>
             <TabsList>
-              {orderStatusTabsData.map(({ label, value }) => (
+              {orderStatusOptions.map(({ label, value }) => (
                 <TabsTrigger key={value} value={value} asChild>
                   <Link href={`/vendor/orders/${value}`}>{label}</Link>
                 </TabsTrigger>
