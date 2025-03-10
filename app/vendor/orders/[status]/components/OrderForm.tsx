@@ -169,6 +169,7 @@ export default function OrderForm({
           defaultValue={initialData?.phone}
           required
           pattern="[0-9]{10}"
+          title="Phone number must be 10 digits"
           placeholder="Enter phone number"
         />
       </div>
@@ -180,6 +181,8 @@ export default function OrderForm({
           name="address"
           defaultValue={initialData?.address}
           required
+          pattern=".{10,}"
+          title="Address must be at least 10 characters long"
           placeholder="Enter delivery address"
         />
       </div>
