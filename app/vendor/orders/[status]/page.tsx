@@ -20,10 +20,8 @@ const orderStatusOptions: {
 
 export default async function VendorOrdersPage({
   params,
-  searchParams,
 }: {
   params: Promise<{ status: Database["public"]["Enums"]["order_status"] }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const supabase = await createClient();
   const { data: orders } = await supabase
@@ -64,12 +62,7 @@ export default async function VendorOrdersPage({
           />
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-          <Input
-            type="text"
-            placeholder="Search by Order ID"
-            className="w-full sm:w-64"
-          />
+        <div className="mb-6">
           <Tabs value={(await params).status}>
             <TabsList>
               {orderStatusOptions.map(({ label, value }) => (
