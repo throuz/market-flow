@@ -28,6 +28,7 @@ const orderStatusOptions: Database["public"]["Enums"]["order_status"][] = [
 
 interface OrderFormProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
+  categories: Database["public"]["Tables"]["categories"]["Row"][];
   products: Database["public"]["Tables"]["products"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
   initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
@@ -37,6 +38,7 @@ interface OrderFormProps {
 
 export default function OrderForm({
   profiles,
+  categories,
   products,
   onSubmit,
   initialData,
@@ -65,13 +67,30 @@ export default function OrderForm({
       value: profile.id,
     }));
 
-  const productIdOptions: {
-    label: string;
-    value: Database["public"]["Tables"]["products"]["Row"]["id"];
-  }[] = products.map((product) => ({
-    label: product.name,
-    value: product.id,
-  }));
+  const productIdOptions = products.reduce<
+    Record<
+      string,
+      {
+        label: string;
+        value: Database["public"]["Tables"]["products"]["Row"]["id"];
+      }[]
+    >
+  >((acc, product) => {
+    const categoryName =
+      categories.find((c) => c.id === product.category_id)?.name ||
+      "Uncategorized";
+
+    if (!acc[categoryName]) {
+      acc[categoryName] = [];
+    }
+
+    acc[categoryName].push({
+      label: product.name,
+      value: product.id,
+    });
+
+    return acc;
+  }, {});
 
   const addOrderItem = () => {
     setOrderItems([...orderItems, { quantity: 1 }]);
@@ -178,19 +197,29 @@ export default function OrderForm({
                     <SelectValue placeholder="Select product" />
                   </SelectTrigger>
                   <SelectContent>
-                    {productIdOptions
-                      .filter(
-                        (option) =>
-                          !orderItems.some(
-                            (item, idx) =>
-                              idx !== index && item.product_id === option.value
-                          )
+                    {Object.entries(productIdOptions).map(
+                      ([category, options]) => (
+                        <div key={category}>
+                          <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
+                            {category}
+                          </div>
+                          {options
+                            .filter(
+                              (option) =>
+                                !orderItems.some(
+                                  (item, idx) =>
+                                    idx !== index &&
+                                    item.product_id === option.value
+                                )
+                            )
+                            .map(({ label, value }) => (
+                              <SelectItem key={value} value={value.toString()}>
+                                {label}
+                              </SelectItem>
+                            ))}
+                        </div>
                       )
-                      .map(({ label, value }) => (
-                        <SelectItem key={value} value={value.toString()}>
-                          {label}
-                        </SelectItem>
-                      ))}
+                    )}
                   </SelectContent>
                 </Select>
               </div>

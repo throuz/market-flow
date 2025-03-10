@@ -16,6 +16,7 @@ import OrderForm from "./OrderForm";
 
 interface OrderDialogProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
+  categories: Database["public"]["Tables"]["categories"]["Row"][];
   products: Database["public"]["Tables"]["products"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
   initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
@@ -25,6 +26,7 @@ interface OrderDialogProps {
 
 export default function OrderFormDialog({
   profiles,
+  categories,
   products,
   onSubmit,
   initialData,
@@ -46,6 +48,7 @@ export default function OrderFormDialog({
         </DialogHeader>
         <OrderForm
           profiles={profiles}
+          categories={categories}
           products={products}
           initialData={initialData}
           onSubmit={async (formData) => {

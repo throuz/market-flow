@@ -59,6 +59,7 @@ interface OrderCardProps {
     orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
   };
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
+  categories: Database["public"]["Tables"]["categories"]["Row"][];
   products: Database["public"]["Tables"]["products"]["Row"][];
   onUpdate: (id: number, formData: FormData) => Promise<void>;
   onDelete: (id: number) => Promise<void>;
@@ -67,6 +68,7 @@ interface OrderCardProps {
 export default function OrderCard({
   order,
   profiles,
+  categories,
   products,
   onUpdate,
   onDelete,
@@ -108,6 +110,7 @@ export default function OrderCard({
       <CardFooter className="justify-end gap-4 pt-4 border-t">
         <OrderFormDialog
           profiles={profiles}
+          categories={categories}
           products={products}
           initialData={order}
           onSubmit={(formData) => onUpdate(order.id, formData)}

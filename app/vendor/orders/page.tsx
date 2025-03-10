@@ -9,6 +9,7 @@ export default async function VendorOrdersPage() {
   const { data: orders } = await supabase.from("orders").select("*");
   const { data: order_items } = await supabase.from("order_items").select("*");
   const { data: profiles } = await supabase.from("profiles").select("*");
+  const { data: categories } = await supabase.from("categories").select("*");
   const { data: products } = await supabase.from("products").select("*");
 
   const getOrderItems = (id: number) =>
@@ -33,6 +34,7 @@ export default async function VendorOrdersPage() {
           <div className="text-2xl font-bold">Orders</div>
           <OrderFormDialog
             profiles={profiles ?? []}
+            categories={categories ?? []}
             products={products ?? []}
             onSubmit={createOrder}
           />
@@ -43,6 +45,7 @@ export default async function VendorOrdersPage() {
               key={order.id}
               order={order}
               profiles={profiles ?? []}
+              categories={categories ?? []}
               products={products ?? []}
               onUpdate={updateOrder}
               onDelete={deleteOrder}
