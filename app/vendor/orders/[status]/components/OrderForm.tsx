@@ -191,6 +191,16 @@ export default function OrderForm({
           name="estimated_delivery_time"
           defaultValue={initialData?.estimated_delivery_time.slice(0, 16)}
           required
+          // 1 day later & UTC+8 timezone
+          min={new Date(Date.now() + 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000)
+            .toISOString()
+            .slice(0, 16)}
+          // 1 month later & UTC+8 timezone
+          max={new Date(
+            Date.now() + 30 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000
+          )
+            .toISOString()
+            .slice(0, 16)}
         />
       </div>
 
