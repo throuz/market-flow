@@ -1,6 +1,7 @@
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
+
 import { createClient } from "@/utils/supabase/server";
-import HeaderAuth from "@/app/components/header/header-auth";
+import HeaderAuth from "@/app/[locale]/components/header/header-auth";
 
 import NavLinks from "./nav-links";
 import HeaderDrawer from "./header-drawer";

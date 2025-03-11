@@ -1,6 +1,6 @@
 "use client";
 
-import HeaderAuth from "@/app/components/header/header-auth";
+import HeaderAuth from "@/app/[locale]/components/header/header-auth";
 import {
   Drawer,
   DrawerContent,

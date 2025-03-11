@@ -1,8 +1,9 @@
-import Link from "next/link";
-import { User } from "@supabase/supabase-js";
-import { signOutAction } from "@/app/actions";
+import { Link } from "@/i18n/navigation";
 
-import { Button } from "../../../components/ui/button";
+import { User } from "@supabase/supabase-js";
+import { signOutAction } from "@/app/[locale]/actions";
+
+import { Button } from "../../../../components/ui/button";
 
 interface HeaderAuthProps {
   user: User | null;

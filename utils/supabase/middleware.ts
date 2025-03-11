@@ -25,14 +25,19 @@ export const updateSession = async (request: NextRequest) => {
   const isLoggedIn = Boolean(user);
   const { pathname } = request.nextUrl;
 
+  // Extract the locale and path (excluding the locale part)
+  const segments = pathname.split("/");
+  const locale = segments[1]; // This assumes that the locale is always the first segment
+  const pathWithoutLocale = pathname.replace(`/${locale}`, "");
+
   const protectedRoutes = ["/protected", "/admin", "/vendor", "/customer"];
   const isProtected = protectedRoutes.some((route) =>
-    pathname.startsWith(route)
+    pathWithoutLocale.startsWith(route)
   );
 
   // Redirect to sign-in if not logged in and the route is protected
   if (!isLoggedIn && isProtected) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    return NextResponse.redirect(new URL(`/${locale}/sign-in`, request.url));
   }
 
   const { data: profile } = await supabase
@@ -51,10 +56,12 @@ export const updateSession = async (request: NextRequest) => {
   if (
     isLoggedIn &&
     profile?.role &&
-    !pathname.startsWith("/protected") &&
-    !pathname.startsWith(rolePaths[profile.role])
+    !pathWithoutLocale.startsWith("/protected") &&
+    !pathWithoutLocale.startsWith(rolePaths[profile.role])
   ) {
-    return NextResponse.redirect(new URL(rolePaths[profile.role], request.url));
+    return NextResponse.redirect(
+      new URL(`/${locale}${rolePaths[profile.role]}`, request.url)
+    );
   }
 
   return response;

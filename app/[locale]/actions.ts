@@ -3,35 +3,59 @@
 import { encodedRedirect } from "@/utils/utils";
 import { createClient } from "@/utils/supabase/server";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/navigation";
+import { getLocale } from "next-intl/server";
 
 export const signUpAction = async (formData: FormData): Promise<void> => {
+  const locale = await getLocale();
+
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   if (!email || !password) {
-    encodedRedirect("error", "/sign-up", "Email and password are required");
-    return;
+    encodedRedirect(
+      locale,
+      "error",
+      "/sign-up",
+      "Email and password are required"
+    );
   }
 
   const supabase = await createClient();
   const origin = (await headers()).get("origin") || "";
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: { emailRedirectTo: `${origin}/auth/callback` },
   });
 
-  error
-    ? encodedRedirect("error", "/sign-up", error.message)
-    : redirect("/customer");
+  if (error) {
+    encodedRedirect(locale, "error", "/sign-up", error.message);
+  }
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", data.user?.id ?? "")
+    .single();
+
+  redirect({
+    locale,
+    href: `/${profile?.role ?? ""}`,
+  });
 };
 
 export const signInAction = async (formData: FormData): Promise<void> => {
+  const locale = await getLocale();
+
   const email = formData.get("email")?.toString();
   const password = formData.get("password")?.toString();
   if (!email || !password) {
-    encodedRedirect("error", "/sign-in", "Email and password are required");
-    return;
+    encodedRedirect(
+      locale,
+      "error",
+      "/sign-in",
+      "Email and password are required"
+    );
   }
 
   const supabase = await createClient();
@@ -40,8 +64,7 @@ export const signInAction = async (formData: FormData): Promise<void> => {
     password,
   });
   if (error) {
-    encodedRedirect("error", "/sign-in", error.message);
-    return;
+    encodedRedirect(locale, "error", "/sign-in", error.message);
   }
 
   const { data: profile } = await supabase
@@ -49,16 +72,21 @@ export const signInAction = async (formData: FormData): Promise<void> => {
     .select("role")
     .eq("id", data.user.id)
     .single();
-  redirect(`/${profile?.role ?? ""}`);
+
+  redirect({
+    locale,
+    href: `/${profile?.role ?? ""}`,
+  });
 };
 
 export const forgotPasswordAction = async (
   formData: FormData
 ): Promise<void> => {
+  const locale = await getLocale();
+
   const email = formData.get("email")?.toString();
   if (!email) {
-    encodedRedirect("error", "/forgot-password", "Email is required");
-    return;
+    encodedRedirect(locale, "error", "/forgot-password", "Email is required");
   }
 
   const supabase = await createClient();
@@ -70,57 +98,78 @@ export const forgotPasswordAction = async (
   });
 
   if (error) {
-    encodedRedirect("error", "/forgot-password", "Could not reset password");
-    return;
+    encodedRedirect(
+      locale,
+      "error",
+      "/forgot-password",
+      "Could not reset password"
+    );
   }
 
-  callbackUrl
-    ? redirect(callbackUrl)
-    : encodedRedirect(
-        "success",
-        "/forgot-password",
-        "Check your email for a reset link."
-      );
+  if (callbackUrl) {
+    redirect({
+      locale,
+      href: callbackUrl,
+    });
+  }
+
+  encodedRedirect(
+    locale,
+    "success",
+    "/forgot-password",
+    "Check your email for a reset link."
+  );
 };
 
 export const resetPasswordAction = async (
   formData: FormData
 ): Promise<void> => {
+  const locale = await getLocale();
+
   const password = formData.get("password")?.toString();
   const confirmPassword = formData.get("confirmPassword")?.toString();
   if (!password || !confirmPassword) {
     encodedRedirect(
+      locale,
       "error",
       "/protected/reset-password",
       "Password and confirm password are required"
     );
-    return;
   }
   if (password !== confirmPassword) {
     encodedRedirect(
+      locale,
       "error",
       "/protected/reset-password",
       "Passwords do not match"
     );
-    return;
   }
 
   const supabase = await createClient();
   const { error } = await supabase.auth.updateUser({ password });
   if (error) {
     encodedRedirect(
+      locale,
       "error",
       "/protected/reset-password",
       "Password update failed"
     );
-    return;
   }
 
-  encodedRedirect("success", "/protected/reset-password", "Password updated");
+  encodedRedirect(
+    locale,
+    "success",
+    "/protected/reset-password",
+    "Password updated"
+  );
 };
 
 export const signOutAction = async (): Promise<void> => {
   const supabase = await createClient();
   await supabase.auth.signOut();
-  redirect("/sign-in");
+  const locale = await getLocale();
+  redirect({
+    locale,
+    href: "/sign-in",
+  });
 };
