@@ -37,7 +37,6 @@ export async function createProduct(formData: FormData) {
     description: formData.get("description") as string,
     price_per_unit: parseFloat(formData.get("price_per_unit") as string) || 0,
     image_url: imageUrl || (formData.get("image_url") as string),
-    is_active: formData.get("is_active") === "on",
     stock_quantity: Number(formData.get("stock_quantity")) || 0,
     unit: formData.get("unit") as Database["public"]["Enums"]["product_unit"],
   };
@@ -61,7 +60,6 @@ export async function updateProduct(id: number, formData: FormData) {
     description: formData.get("description") as string,
     price_per_unit: parseFloat(formData.get("price_per_unit") as string) || 0,
     image_url: imageUrl || (formData.get("image_url") as string),
-    is_active: formData.get("is_active") === "on",
     stock_quantity: Number(formData.get("stock_quantity")) || 0,
     unit: formData.get("unit") as Database["public"]["Enums"]["product_unit"],
   };

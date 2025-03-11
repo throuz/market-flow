@@ -120,7 +120,6 @@ export type Database = {
           description: string | null
           id: number
           image_url: string
-          is_active: boolean
           name: string
           price_per_unit: number
           stock_quantity: number
@@ -133,7 +132,6 @@ export type Database = {
           description?: string | null
           id?: number
           image_url: string
-          is_active: boolean
           name: string
           price_per_unit: number
           stock_quantity?: number
@@ -146,7 +144,6 @@ export type Database = {
           description?: string | null
           id?: number
           image_url?: string
-          is_active?: boolean
           name?: string
           price_per_unit?: number
           stock_quantity?: number

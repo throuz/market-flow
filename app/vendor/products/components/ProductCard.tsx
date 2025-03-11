@@ -18,20 +18,6 @@ interface ProductCardProps {
   onDelete: (id: number) => Promise<void>;
 }
 
-const getStatusStyle = (isActive: boolean) => {
-  return isActive
-    ? "bg-emerald-200 text-emerald-800"
-    : "bg-red-200 text-red-800";
-};
-
-const StatusBadge = ({ isActive }: { isActive: boolean }) => (
-  <span
-    className={`px-2 py-1 rounded-full text-sm ${getStatusStyle(isActive)}`}
-  >
-    {isActive ? "Active" : "Inactive"}
-  </span>
-);
-
 export default function ProductCard({
   product,
   categories,
@@ -70,10 +56,6 @@ export default function ProductCard({
         <div>
           <p className="text-sm text-gray-500">Description</p>
           <p className="font-medium">{product.description}</p>
-        </div>
-        <div>
-          <p className="text-sm text-gray-500">Status</p>
-          <StatusBadge isActive={product.is_active} />
         </div>
       </CardContent>
       <CardFooter className="justify-end gap-4 pt-4 border-t">

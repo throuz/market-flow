@@ -123,15 +123,6 @@ export default function ProductForm({
         </Select>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Switch
-          id="is_active"
-          name="is_active"
-          defaultChecked={initialData?.is_active ?? true}
-        />
-        <Label htmlFor="is_active">Active</Label>
-      </div>
-
       <Button type="submit" className="w-full">
         {initialData ? "Update Product" : "Add Product"}
       </Button>
