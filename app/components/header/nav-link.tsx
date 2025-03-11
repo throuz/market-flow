@@ -17,7 +17,7 @@ export default function NavLink({
       key={href}
       href={href}
       className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-        pathname === href
+        pathname.startsWith(href)
           ? "bg-gray-900 text-white"
           : "text-gray-700 hover:bg-gray-100"
       }`}
