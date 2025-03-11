@@ -11,6 +11,8 @@ interface RoleLink {
 
 const roleLinks: Record<Role | "guest", RoleLink[]> = {
   admin: [
+    { href: "/admin/profiles", label: "Profiles" },
+    { href: "/admin/categories", label: "Categories" },
     { href: "/admin/products", label: "Products" },
     { href: "/admin/orders", label: "Orders" },
   ],
@@ -22,10 +24,12 @@ const roleLinks: Record<Role | "guest", RoleLink[]> = {
   customer: [
     { href: "/customer/products", label: "Products" },
     { href: "/customer/orders", label: "Orders" },
+    { href: "/customer/shopping-cart", label: "Shopping Cart" },
   ],
   guest: [
     { href: "/products", label: "Products" },
     { href: "/orders", label: "Orders" },
+    { href: "/shopping-cart", label: "Shopping Cart" },
   ],
 };
 
