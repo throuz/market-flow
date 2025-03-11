@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { Database } from "@/database.types";
-import { Input } from "@/components/ui/input";
 import { createClient } from "@/utils/supabase/server";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
