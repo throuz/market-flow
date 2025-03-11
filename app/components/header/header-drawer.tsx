@@ -22,7 +22,7 @@ interface HeaderDrawerProps {
 export default function HeaderDrawer({ role, user }: HeaderDrawerProps) {
   const [open, setOpen] = useState(false);
   return (
-    <Drawer direction="left" open={open}>
+    <Drawer direction="left" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild onClick={() => setOpen(true)}>
         <label htmlFor="nav-toggle" className="md:hidden cursor-pointer">
           <svg
