@@ -2,9 +2,10 @@ import { Database } from "@/database.types";
 import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
-export const updateSession = async (request: NextRequest) => {
-  const response = NextResponse.next({ request: { headers: request.headers } });
-
+export const updateSession = async (
+  request: NextRequest,
+  response: NextResponse
+) => {
   const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
