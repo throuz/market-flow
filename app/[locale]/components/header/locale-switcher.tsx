@@ -1,23 +1,35 @@
 "use client";
 
-import clsx from "clsx";
-import { useParams } from "next/navigation";
-import { ChangeEvent, useTransition } from "react";
-import { usePathname, useRouter } from "@/i18n/navigation";
-import { Locale } from "@/i18n/types";
-import { useTranslations, useLocale } from "next-intl";
-import { routing } from "@/i18n/routing";
+import { useTransition } from "react";
 
-export default function LocaleSwitcherSelect() {
-  const t = useTranslations("LocaleSwitcher");
+import clsx from "clsx";
+import { useLocale } from "next-intl";
+
+import { Locale } from "@/i18n/types";
+import { useParams } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+export default function LocaleSwitcher() {
   const locale = useLocale();
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
   const pathname = usePathname();
   const params = useParams();
 
-  function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-    const nextLocale = event.target.value as Locale;
+  const localeOptions: { label: string; value: Locale }[] = [
+    { label: "繁體中文", value: "zh-TW" },
+    { label: "English", value: "en-US" },
+  ];
+
+  function onSelectChange(value: string) {
+    const nextLocale = value as Locale;
     startTransition(() => {
       router.replace(
         // @ts-expect-error -- TypeScript will validate that only known `params`
@@ -30,26 +42,27 @@ export default function LocaleSwitcherSelect() {
   }
 
   return (
-    <label
+    <div
       className={clsx(
-        "relative text-gray-400",
         isPending && "transition-opacity [&:disabled]:opacity-30"
       )}
     >
-      <p className="sr-only">label</p>
-      <select
-        className="inline-flex appearance-none bg-transparent py-3 pl-2 pr-6"
+      <Select
         defaultValue={locale}
+        onValueChange={onSelectChange}
         disabled={isPending}
-        onChange={onSelectChange}
       >
-        {routing.locales.map((locale) => (
-          <option key={locale} value={locale}>
-            {locale}
-          </option>
-        ))}
-      </select>
-      <span className="pointer-events-none absolute right-2 top-[8px]">⌄</span>
-    </label>
+        <SelectTrigger>
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {localeOptions.map(({ label, value }) => (
+            <SelectItem key={value} value={value}>
+              {label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }
