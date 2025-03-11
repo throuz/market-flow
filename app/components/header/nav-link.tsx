@@ -14,7 +14,6 @@ export default function NavLink({
 
   return (
     <Link
-      key={href}
       href={href}
       className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
         pathname.startsWith(href)

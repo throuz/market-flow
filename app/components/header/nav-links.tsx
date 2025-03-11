@@ -47,8 +47,8 @@ export default async function NavLinks() {
 
   return (
     <div className="flex gap-4 items-center">
-      {links.map((link) => (
-        <NavLink href={link.href} label={link.label} />
+      {links.map(({ href, label }) => (
+        <NavLink key={href} href={href} label={label} />
       ))}
     </div>
   );
