@@ -42,7 +42,7 @@ export default async function NavLinks() {
   const links = profile ? roleLinks[profile.role] : [];
 
   return (
-    <div className="flex gap-4 items-center">
+    <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
       {links.map(({ href, label }) => (
         <NavLink key={href} href={href} label={label} />
       ))}
