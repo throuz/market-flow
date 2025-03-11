@@ -28,14 +28,9 @@ export const signUpAction = async (formData: FormData) => {
   });
 
   if (error) {
-    console.error(error.code + " " + error.message);
     return encodedRedirect("error", "/sign-up", error.message);
   } else {
-    return encodedRedirect(
-      "success",
-      "/sign-up",
-      "Thanks for signing up! Please check your email for a verification link."
-    );
+    return redirect("/customer");
   }
 };
 
@@ -59,11 +54,7 @@ export const signInAction = async (formData: FormData) => {
     .eq("id", data.user.id)
     .single();
 
-  if (profile?.role === "vendor") {
-    return redirect("/vendor");
-  }
-
-  return redirect("/protected");
+  return redirect(`/${profile?.role ?? ""}`);
 };
 
 export const forgotPasswordAction = async (formData: FormData) => {
@@ -81,7 +72,6 @@ export const forgotPasswordAction = async (formData: FormData) => {
   });
 
   if (error) {
-    console.error(error.message);
     return encodedRedirect(
       "error",
       "/forgot-password",
