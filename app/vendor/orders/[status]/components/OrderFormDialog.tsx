@@ -40,7 +40,7 @@ export default function OrderFormDialog({
           {initialData ? "Edit" : "Add Order"}
         </Button>
       </DialogTrigger>
-      <DialogContent className="overflow-y-scroll max-h-screen">
+      <DialogContent className="rounded-lg overflow-y-scroll max-w-[90vw] md:max-w-lg max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>
             {initialData ? "Edit Order" : "Add New Order"}

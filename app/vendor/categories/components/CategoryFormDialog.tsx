@@ -32,7 +32,7 @@ export default function CategoryFormDialog({
           {initialData ? "Edit" : "Add Category"}
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="rounded-lg overflow-y-scroll max-w-[90vw] md:max-w-lg max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>
             {initialData ? "Edit Category" : "Add New Category"}

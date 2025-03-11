@@ -34,7 +34,7 @@ export default function ProductFormDialog({
           {initialData ? "Edit" : "Add Product"}
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="rounded-lg overflow-y-scroll max-w-[90vw] md:max-w-lg max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>
             {initialData ? "Edit Product" : "Add New Product"}
