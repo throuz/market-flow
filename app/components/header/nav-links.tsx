@@ -33,14 +33,10 @@ export default async function NavLinks() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) {
-    return null;
-  }
-
   const { data: profile } = await supabase
     .from("profiles")
     .select("*")
-    .eq("id", user.id)
+    .eq("id", user?.id ?? "")
     .single();
 
   const links = profile ? roleLinks[profile.role] : [];
