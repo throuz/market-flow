@@ -63,7 +63,10 @@ export default async function VendorOrdersPage({
         </div>
 
         <div className="mb-6">
-          <Tabs value={(await params).status}>
+          <Tabs
+            value={(await params).status}
+            className="w-full overflow-x-auto"
+          >
             <TabsList>
               {orderStatusOptions.map(({ label, value }) => (
                 <TabsTrigger key={value} value={value} asChild>
