@@ -1,15 +1,14 @@
-import { signOutAction } from "@/app/actions";
 import Link from "next/link";
-import { Button } from "./ui/button";
-import { createClient } from "@/utils/supabase/server";
+import { User } from "@supabase/supabase-js";
+import { signOutAction } from "@/app/actions";
 
-export default async function AuthButton() {
-  const supabase = await createClient();
+import { Button } from "../../../components/ui/button";
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+interface HeaderAuthProps {
+  user: User | null;
+}
 
+export default function HeaderAuth({ user }: HeaderAuthProps) {
   return user ? (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
       Hey, {user.email}

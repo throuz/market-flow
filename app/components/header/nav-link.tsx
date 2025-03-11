@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 export default function NavLink({
   href,
@@ -11,17 +11,18 @@ export default function NavLink({
   label: string;
 }) {
   const pathname = usePathname();
+  const router = useRouter();
 
   return (
-    <Link
-      href={href}
-      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+    <div
+      className={`px-3 py-2 rounded-md text-sm font-medium transition-colors cursor-pointer ${
         pathname.startsWith(href)
           ? "bg-gray-900 text-white"
           : "text-gray-700 hover:bg-gray-100"
       }`}
+      onClick={() => router.push(href)}
     >
       {label}
-    </Link>
+    </div>
   );
 }

@@ -1,5 +1,4 @@
 import { Database } from "@/database.types";
-import { createClient } from "@/utils/supabase/server";
 
 import NavLink from "./nav-link";
 
@@ -10,7 +9,7 @@ interface RoleLink {
   label: string;
 }
 
-const roleLinks: Record<Role, RoleLink[]> = {
+const roleLinks: Record<Role | "guest", RoleLink[]> = {
   admin: [
     { href: "/admin/products", label: "Products" },
     { href: "/admin/orders", label: "Orders" },
@@ -24,22 +23,18 @@ const roleLinks: Record<Role, RoleLink[]> = {
     { href: "/customer/products", label: "Products" },
     { href: "/customer/orders", label: "Orders" },
   ],
+  guest: [
+    { href: "/products", label: "Products" },
+    { href: "/orders", label: "Orders" },
+  ],
 };
 
-export default async function NavLinks() {
-  const supabase = await createClient();
+interface NavLinksProps {
+  role: Role | null;
+}
 
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user?.id ?? "")
-    .single();
-
-  const links = profile ? roleLinks[profile.role] : [];
+export default function NavLinks({ role }: NavLinksProps) {
+  const links = role ? roleLinks[role] : roleLinks["guest"];
 
   return (
     <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
