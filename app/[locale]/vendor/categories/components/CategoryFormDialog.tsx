@@ -12,29 +12,36 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import CategoryUpdateForm from "./CategoryUpdateForm";
+import CategoryForm from "./CategoryForm";
 
-interface CategoryUpdateDialogProps {
-  initialData: Database["public"]["Tables"]["categories"]["Row"];
+interface CategoryDialogProps {
+  onSubmit: (formData: FormData) => Promise<void>;
+  initialData?: Database["public"]["Tables"]["categories"]["Row"];
 }
 
-export default function CategoryUpdateDialog({
+export default function CategoryFormDialog({
+  onSubmit,
   initialData,
-}: CategoryUpdateDialogProps) {
+}: CategoryDialogProps) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Edit</Button>
+        <Button variant={initialData ? "outline" : "default"}>
+          {initialData ? "Edit" : "Add Category"}
+        </Button>
       </DialogTrigger>
       <DialogContent className="rounded-lg overflow-y-scroll max-w-[90vw] md:max-w-lg max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>Edit Category</DialogTitle>
+          <DialogTitle>
+            {initialData ? "Edit Category" : "Add New Category"}
+          </DialogTitle>
         </DialogHeader>
-        <CategoryUpdateForm
+        <CategoryForm
           initialData={initialData}
-          onSubmit={() => {
+          onSubmit={async (formData) => {
+            await onSubmit(formData);
             setOpen(false);
           }}
         />

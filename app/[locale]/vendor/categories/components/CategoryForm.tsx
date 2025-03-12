@@ -1,32 +1,28 @@
 "use client";
 
+import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 
-import { createCategory } from "../actions";
-
-interface CategoryCreateFormProps {
-  onSubmit: () => void;
+interface CategoryFormProps {
+  onSubmit: (formData: FormData) => Promise<void>;
+  initialData?: Database["public"]["Tables"]["categories"]["Row"];
 }
 
-export default function CategoryCreateForm({
+export default function CategoryForm({
   onSubmit,
-}: CategoryCreateFormProps) {
+  initialData,
+}: CategoryFormProps) {
   return (
-    <form
-      action={async (formData) => {
-        await createCategory(formData);
-        onSubmit();
-      }}
-      className="space-y-4"
-    >
+    <form action={onSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="category-name">Category Name</Label>
         <Input
           id="category-name"
           name="name"
           placeholder="Category Name"
+          defaultValue={initialData?.name}
           required
         />
       </div>
