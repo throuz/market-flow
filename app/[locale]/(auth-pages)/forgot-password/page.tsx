@@ -1,38 +1,40 @@
-import { forgotPasswordAction } from "@/app/[locale]/actions";
-import { FormMessage, Message } from "@/components/form-message";
-import { SubmitButton } from "@/components/submit-button";
+"use client";
+
+import { use } from "react";
+
+import { useTranslations } from "next-intl";
+
+import { Link } from "@/i18n/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "@/i18n/navigation";
+import { SubmitButton } from "@/components/submit-button";
+import { forgotPasswordAction } from "@/app/[locale]/actions";
+import { FormMessage, Message } from "@/components/form-message";
 
-import { SmtpMessage } from "../smtp-message";
-
-export default async function ForgotPassword(props: {
+export default function ForgotPassword(props: {
   searchParams: Promise<Message>;
 }) {
-  const searchParams = await props.searchParams;
+  const searchParams = use(props.searchParams);
+  const t = useTranslations();
   return (
-    <>
-      <form className="flex-1 flex flex-col w-full gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
-        <div>
-          <h1 className="text-2xl font-medium">Reset Password</h1>
-          <p className="text-sm text-secondary-foreground">
-            Already have an account?{" "}
-            <Link className="text-primary underline" href="/sign-in">
-              Sign in
-            </Link>
-          </p>
-        </div>
-        <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-          <Label htmlFor="email">Email</Label>
-          <Input name="email" placeholder="you@example.com" required />
-          <SubmitButton formAction={forgotPasswordAction}>
-            Reset Password
-          </SubmitButton>
-          <FormMessage message={searchParams} />
-        </div>
-      </form>
-      <SmtpMessage />
-    </>
+    <form className="flex-1 flex flex-col w-full gap-2 text-foreground [&>input]:mb-6 min-w-64 max-w-64 mx-auto">
+      <div>
+        <h1 className="text-2xl font-medium">{t("Reset Password")}</h1>
+        <p className="text-sm text-secondary-foreground">
+          {t("Already have an account?")}{" "}
+          <Link className="text-primary underline" href="/sign-in">
+            {t("Sign in")}
+          </Link>
+        </p>
+      </div>
+      <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
+        <Label htmlFor="email">Email</Label>
+        <Input name="email" placeholder="you@example.com" required />
+        <SubmitButton formAction={forgotPasswordAction}>
+          {t("Reset Password")}
+        </SubmitButton>
+        <FormMessage message={searchParams} />
+      </div>
+    </form>
   );
 }
