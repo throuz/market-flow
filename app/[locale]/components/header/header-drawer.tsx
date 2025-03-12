@@ -13,6 +13,7 @@ import NavLinks from "./nav-links";
 import { Database } from "@/database.types";
 import { User } from "@supabase/supabase-js";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface HeaderDrawerProps {
   role: Database["public"]["Enums"]["app_role"] | null;
@@ -20,7 +21,9 @@ interface HeaderDrawerProps {
 }
 
 export default function HeaderDrawer({ role, user }: HeaderDrawerProps) {
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
+
   return (
     <Drawer direction="left" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild onClick={() => setOpen(true)}>
@@ -46,7 +49,7 @@ export default function HeaderDrawer({ role, user }: HeaderDrawerProps) {
         onClick={() => setOpen(false)}
       >
         <DrawerHeader>
-          <DrawerTitle>Menu</DrawerTitle>
+          <DrawerTitle>{t("Menu")}</DrawerTitle>
         </DrawerHeader>
         <div className="p-4">
           <NavLinks role={role} />

@@ -1,23 +1,28 @@
-import { Link } from "@/i18n/navigation";
+"use client";
 
+import { useTranslations } from "next-intl";
+
+import { Link } from "@/i18n/navigation";
 import { User } from "@supabase/supabase-js";
 import { signOutAction } from "@/app/[locale]/actions";
 
-import { Button } from "../../../../components/ui/button";
 import LocaleSwitcherSelect from "./locale-switcher";
+import { Button } from "../../../../components/ui/button";
 
 interface HeaderAuthProps {
   user: User | null;
 }
 
 export default function HeaderAuth({ user }: HeaderAuthProps) {
+  const t = useTranslations();
+
   return user ? (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
       <LocaleSwitcherSelect />
-      Hey, {user.email}
+      {t("Hey")}, {user.email}
       <form action={signOutAction}>
         <Button type="submit" variant={"outline"}>
-          Sign out
+          {t("Sign out")}
         </Button>
       </form>
     </div>
@@ -25,10 +30,10 @@ export default function HeaderAuth({ user }: HeaderAuthProps) {
     <div className="flex flex-col sm:flex-row gap-2">
       <LocaleSwitcherSelect />
       <Button asChild size="sm" variant={"outline"}>
-        <Link href="/sign-in">Sign in</Link>
+        <Link href="/sign-in">{t("Sign in")}</Link>
       </Button>
       <Button asChild size="sm" variant={"default"}>
-        <Link href="/sign-up">Sign up</Link>
+        <Link href="/sign-up">{t("Sign up")}</Link>
       </Button>
     </div>
   );

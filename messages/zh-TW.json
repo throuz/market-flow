@@ -1,7 +1,12 @@
 {
-  "Profiles": "個人資料",
+  "Profiles": "個人檔案",
   "Categories": "分類",
   "Products": "商品",
   "Orders": "訂單",
-  "Shopping Cart": "購物車"
+  "Shopping Cart": "購物車",
+  "Menu": "選單",
+  "Hey": "嗨",
+  "Sign out": "登出",
+  "Sign in": "登入",
+  "Sign up": "註冊"
 }
