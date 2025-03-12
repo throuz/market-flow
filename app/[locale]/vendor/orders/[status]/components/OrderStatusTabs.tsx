@@ -1,8 +1,10 @@
 "use client";
 
 import { Database } from "@/database.types";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useRouter } from "@/i18n/navigation";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+import useOrderStatusOptions from "../hooks/useOrderStatusOptions";
 
 interface OrderStatusTabsProps {
   status: Database["public"]["Enums"]["order_status"];
@@ -11,15 +13,7 @@ interface OrderStatusTabsProps {
 export default function OrderStatusTabs({ status }: OrderStatusTabsProps) {
   const router = useRouter();
 
-  const orderStatusOptions: {
-    label: string;
-    value: Database["public"]["Enums"]["order_status"];
-  }[] = [
-    { label: "Pending", value: "pending" },
-    { label: "Processing", value: "processing" },
-    { label: "Completed", value: "completed" },
-    { label: "Cancelled", value: "cancelled" },
-  ];
+  const orderStatusOptions = useOrderStatusOptions();
 
   return (
     <Tabs

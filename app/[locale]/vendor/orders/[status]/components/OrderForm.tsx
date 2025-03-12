@@ -2,10 +2,13 @@
 
 import { useState } from "react";
 
+import { useTranslations } from "next-intl";
+
 import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -13,17 +16,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
 
-const orderStatusOptions: {
-  label: string;
-  value: Database["public"]["Enums"]["order_status"];
-}[] = [
-  { label: "Pending", value: "pending" },
-  { label: "Processing", value: "processing" },
-  { label: "Completed", value: "completed" },
-  { label: "Cancelled", value: "cancelled" },
-];
+import useOrderStatusOptions from "../hooks/useOrderStatusOptions";
 
 interface OrderFormProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
@@ -42,6 +36,10 @@ export default function OrderForm({
   onSubmit,
   initialData,
 }: OrderFormProps) {
+  const t = useTranslations();
+
+  const orderStatusOptions = useOrderStatusOptions();
+
   const [orderItems, setOrderItems] = useState<
     Database["public"]["Tables"]["order_items"]["Update"][]
   >(initialData?.orderItems ?? [{ quantity: 1 }]);
@@ -59,12 +57,10 @@ export default function OrderForm({
   const userIdOptions: {
     label: string;
     value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
-  }[] = profiles
-    .filter((profile) => profile.role === "customer")
-    .map((profile) => ({
-      label: profile.email,
-      value: profile.id,
-    }));
+  }[] = profiles.map((profile) => ({
+    label: profile.email,
+    value: profile.id,
+  }));
 
   const productIdOptions = products.reduce<
     Record<
@@ -119,7 +115,7 @@ export default function OrderForm({
   return (
     <form action={onSubmit} className="space-y-4">
       <div className="space-y-2">
-        <Label htmlFor="user_id">User</Label>
+        <Label htmlFor="user_id">{t("User")}</Label>
         <Select
           name="user_id"
           defaultValue={initialData?.user_id}
@@ -127,7 +123,7 @@ export default function OrderForm({
           disabled={!!initialData}
         >
           <SelectTrigger id="user_id">
-            <SelectValue placeholder="Select user" />
+            <SelectValue placeholder={t("Select user")} />
           </SelectTrigger>
           <SelectContent>
             {userIdOptions.map(({ label, value }) => (
@@ -146,10 +142,10 @@ export default function OrderForm({
         )}
       </div>
       <div className="space-y-2">
-        <Label htmlFor="status">Status</Label>
+        <Label htmlFor="status">{t("Status")}</Label>
         <Select name="status" defaultValue={initialData?.status} required>
           <SelectTrigger id="status">
-            <SelectValue placeholder="Select status" />
+            <SelectValue placeholder={t("Select status")} />
           </SelectTrigger>
           <SelectContent>
             {orderStatusOptions.map(({ label, value }) => (
@@ -161,7 +157,7 @@ export default function OrderForm({
         </Select>
       </div>
       <div className="space-y-2">
-        <Label htmlFor="phone">Phone</Label>
+        <Label htmlFor="phone">{t("Phone")}</Label>
         <Input
           type="tel"
           id="phone"
@@ -169,12 +165,12 @@ export default function OrderForm({
           defaultValue={initialData?.phone}
           required
           pattern="[0-9]{10}"
-          title="Phone number must be 10 digits"
-          placeholder="Enter phone number"
+          title={t("Phone number must be 10 digits")}
+          placeholder={t("Enter phone number")}
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="address">Address</Label>
+        <Label htmlFor="address">{t("Address")}</Label>
         <Input
           type="text"
           id="address"
@@ -182,12 +178,14 @@ export default function OrderForm({
           defaultValue={initialData?.address}
           required
           pattern=".{10,}"
-          title="Address must be at least 10 characters long"
-          placeholder="Enter delivery address"
+          title={t("Address must be at least 10 characters long")}
+          placeholder={t("Enter delivery address")}
         />
       </div>
       <div className="space-y-2">
-        <Label htmlFor="estimated_delivery_time">Estimated Delivery Time</Label>
+        <Label htmlFor="estimated_delivery_time">
+          {t("Estimated Delivery Time")}
+        </Label>
         <Input
           type="datetime-local"
           id="estimated_delivery_time"
@@ -209,13 +207,13 @@ export default function OrderForm({
 
       <div className="space-y-4">
         <div className="flex justify-between items-center">
-          <h3 className="text-lg font-medium">Order Items</h3>
+          <h3 className="text-lg font-medium">{t("Order Items")}</h3>
           <div className="flex gap-4 items-center">
             <div className="text-lg">
-              Subtotal: ${calculateSubtotal(orderItems).toFixed(2)}
+              {t("Subtotal")}: ${calculateSubtotal(orderItems).toFixed(2)}
             </div>
             <Button type="button" variant="secondary" onClick={addOrderItem}>
-              Add Item
+              {t("Add Item")}
             </Button>
           </div>
         </div>
@@ -223,20 +221,22 @@ export default function OrderForm({
         {orderItems.map((item, index) => (
           <div key={index} className="space-y-2 p-4 border rounded-lg">
             <div className="flex justify-between items-center">
-              <div className="font-medium">Item #{index + 1}</div>
+              <div className="font-medium">
+                {t("Item")} #{index + 1}
+              </div>
               <Button
                 type="button"
                 variant="destructive"
                 size="sm"
                 onClick={() => removeOrderItem(index)}
               >
-                Remove
+                {t("Remove")}
               </Button>
             </div>
             <div className="grid grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor={`order_items.${index}.product_id`}>
-                  Product
+                  {t("Product")}
                 </Label>
                 <Select
                   name={`order_items.${index}.product_id`}
@@ -245,7 +245,7 @@ export default function OrderForm({
                   required
                 >
                   <SelectTrigger id={`order_items.${index}.product_id`}>
-                    <SelectValue placeholder="Select product" />
+                    <SelectValue placeholder={t("Select product")} />
                   </SelectTrigger>
                   <SelectContent>
                     {Object.entries(productIdOptions).map(
@@ -276,7 +276,9 @@ export default function OrderForm({
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label htmlFor={`order_items.${index}.price`}>Price</Label>
+                <Label htmlFor={`order_items.${index}.price`}>
+                  {t("Price")}
+                </Label>
                 <div className="p-2 bg-muted rounded-md">
                   NT${item.price?.toFixed(2) ?? "0.00"}
                 </div>
@@ -288,7 +290,7 @@ export default function OrderForm({
               </div>
               <div className="space-y-2">
                 <Label htmlFor={`order_items.${index}.quantity`}>
-                  Quantity
+                  {t("Quantity")}
                 </Label>
                 <div className="relative">
                   <Input
@@ -316,7 +318,7 @@ export default function OrderForm({
               </div>
             </div>
             <div className="text-right text-sm text-muted-foreground">
-              Item total: $
+              {t("Item total")}: $
               {((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
             </div>
           </div>
@@ -324,7 +326,7 @@ export default function OrderForm({
       </div>
 
       <Button type="submit" className="w-full">
-        Save
+        {t("Save")}
       </Button>
     </form>
   );
