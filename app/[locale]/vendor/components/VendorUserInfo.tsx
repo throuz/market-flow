@@ -9,10 +9,7 @@ interface VendorUserInfoProps {
   role: Database["public"]["Enums"]["app_role"];
 }
 
-export default async function VendorUserInfo({
-  user,
-  role,
-}: VendorUserInfoProps) {
+export default function VendorUserInfo({ user, role }: VendorUserInfoProps) {
   const t = useTranslations();
 
   const userDisplay: { label: string; value: string }[] = [

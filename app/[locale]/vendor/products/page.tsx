@@ -1,8 +1,10 @@
-import { createClient } from "@/utils/supabase/server";
-import ProductFormDialog from "./components/ProductFormDialog";
-import ProductCard from "./components/ProductCard";
-import { createProduct, updateProduct, deleteProduct } from "./actions";
 import { Database } from "@/database.types";
+import { createClient } from "@/utils/supabase/server";
+
+import ProductCard from "./components/ProductCard";
+import ProductTitle from "./components/ProductTitle";
+import ProductFormDialog from "./components/ProductFormDialog";
+import { createProduct, deleteProduct, updateProduct } from "./actions";
 
 type ProductsByCategory = Record<
   number,
@@ -30,7 +32,7 @@ export default async function VendorProductsPage() {
     <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <section>
         <div className="flex justify-between items-center mb-6">
-          <div className="text-2xl font-bold">Products</div>
+          <ProductTitle />
           <ProductFormDialog
             categories={categories ?? []}
             onSubmit={createProduct}

@@ -1,6 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
-import VendorHeader from "./components/vendor-header";
-import VendorUserInfo from "./components/vendor-user-info";
+import VendorTitle from "./components/VendorTitle";
+import VendorUserInfo from "./components/VendorUserInfo";
 
 export default async function VendorPage() {
   const supabase = await createClient();
@@ -17,7 +17,7 @@ export default async function VendorPage() {
 
   return (
     <div className="flex flex-col gap-4 items-center p-10">
-      <VendorHeader />
+      <VendorTitle />
       <VendorUserInfo user={user} role={profile?.role ?? "customer"} />
     </div>
   );

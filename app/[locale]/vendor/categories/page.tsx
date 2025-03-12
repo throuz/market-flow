@@ -1,8 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
 
 import CategoryCard from "./components/CategoryCard";
-import { deleteCategory, updateCategory } from "./actions";
-import CategoryHeader from "./components/CategoryHeader";
+import CategoryTitle from "./components/CategoryTitle";
+import CategoryFormDialog from "./components/CategoryFormDialog";
+import { createCategory, deleteCategory, updateCategory } from "./actions";
 
 export default async function VendorCategoriesPage() {
   const supabase = await createClient();
@@ -11,7 +12,10 @@ export default async function VendorCategoriesPage() {
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
       <section>
-        <CategoryHeader />
+        <div className="flex justify-between items-center mb-6">
+          <CategoryTitle />
+          <CategoryFormDialog onSubmit={createCategory} />
+        </div>
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {categories?.map((category) => (
             <CategoryCard

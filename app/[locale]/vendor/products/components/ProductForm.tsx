@@ -1,12 +1,13 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
 import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { ImageUpload } from "@/components/ui/image-upload";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -26,28 +27,29 @@ export default function ProductForm({
   onSubmit,
   initialData,
 }: ProductFormProps) {
+  const t = useTranslations();
   return (
     <form action={onSubmit} className="flex flex-col gap-4">
       <div className="space-y-2">
-        <Label htmlFor="name">Product Name</Label>
+        <Label htmlFor="name">{t("Product Name")}</Label>
         <Input
           id="name"
           type="text"
           name="name"
           defaultValue={initialData?.name}
-          placeholder="Product name"
+          placeholder={t("Product name")}
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="category">Category</Label>
+        <Label htmlFor="category">{t("Category")}</Label>
         <Select
           name="category_id"
           defaultValue={initialData?.category_id?.toString()}
         >
           <SelectTrigger id="category">
-            <SelectValue placeholder="Select category" />
+            <SelectValue placeholder={t("Select category")} />
           </SelectTrigger>
           <SelectContent>
             {categories.map((category) => (
@@ -60,30 +62,30 @@ export default function ProductForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
+        <Label htmlFor="description">{t("Description")}</Label>
         <Textarea
           id="description"
           name="description"
           defaultValue={initialData?.description ?? ""}
-          placeholder="Description"
+          placeholder={t("Description")}
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="price">Price per Unit</Label>
+        <Label htmlFor="price">{t("Price per Unit")}</Label>
         <Input
           id="price"
           type="number"
           name="price_per_unit"
           defaultValue={initialData?.price_per_unit}
-          placeholder="Price per unit"
+          placeholder={t("Price per unit")}
           step="0.01"
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label>Product Image</Label>
+        <Label>{t("Product Image")}</Label>
         <ImageUpload
           inputName="image"
           initialInputName="image_url"
@@ -93,38 +95,38 @@ export default function ProductForm({
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="stock">Stock Quantity</Label>
+        <Label htmlFor="stock">{t("Stock Quantity")}</Label>
         <Input
           id="stock"
           type="number"
           name="stock_quantity"
           defaultValue={initialData?.stock_quantity}
-          placeholder="Stock quantity"
+          placeholder={t("Stock quantity")}
           required
         />
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="unit">Unit</Label>
+        <Label htmlFor="unit">{t("Unit")}</Label>
         <Select name="unit" defaultValue={initialData?.unit}>
           <SelectTrigger id="unit">
-            <SelectValue placeholder="Select unit" />
+            <SelectValue placeholder={t("Select unit")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="piece">Piece</SelectItem>
-            <SelectItem value="kg">Kilogram</SelectItem>
-            <SelectItem value="g">Gram</SelectItem>
-            <SelectItem value="catty">Catty</SelectItem>
-            <SelectItem value="tael">Tael</SelectItem>
-            <SelectItem value="bundle">Bundle</SelectItem>
-            <SelectItem value="box">Box</SelectItem>
-            <SelectItem value="bag">Bag</SelectItem>
+            <SelectItem value="piece">{t("Piece")}</SelectItem>
+            <SelectItem value="kg">{t("Kilogram")}</SelectItem>
+            <SelectItem value="g">{t("Gram")}</SelectItem>
+            <SelectItem value="catty">{t("Catty")}</SelectItem>
+            <SelectItem value="tael">{t("Tael")}</SelectItem>
+            <SelectItem value="bundle">{t("Bundle")}</SelectItem>
+            <SelectItem value="box">{t("Box")}</SelectItem>
+            <SelectItem value="bag">{t("Bag")}</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <Button type="submit" className="w-full">
-        {initialData ? "Update Product" : "Add Product"}
+        {initialData ? t("Update Product") : t("Add Product")}
       </Button>
     </form>
   );

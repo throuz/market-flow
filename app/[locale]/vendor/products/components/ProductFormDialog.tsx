@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { useTranslations } from "next-intl";
+
 import { Database } from "@/database.types";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,19 +27,20 @@ export default function ProductFormDialog({
   onSubmit,
   initialData,
 }: ProductDialogProps) {
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={initialData ? "outline" : "default"}>
-          {initialData ? "Edit" : "Add Product"}
+          {initialData ? t("Edit") : t("Add Product")}
         </Button>
       </DialogTrigger>
       <DialogContent className="rounded-lg overflow-y-scroll max-w-[90vw] md:max-w-lg max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>
-            {initialData ? "Edit Product" : "Add New Product"}
+            {initialData ? t("Edit Product") : t("Add New Product")}
           </DialogTitle>
         </DialogHeader>
         <ProductForm

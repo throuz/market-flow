@@ -1,5 +1,9 @@
 "use client";
 
+import { useTranslations } from "next-intl";
+
+import { Database } from "@/database.types";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,9 +11,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+
 import ProductFormDialog from "./ProductFormDialog";
-import { Database } from "@/database.types";
 
 interface ProductCardProps {
   product: Database["public"]["Tables"]["products"]["Row"];
@@ -24,6 +27,7 @@ export default function ProductCard({
   onUpdate,
   onDelete,
 }: ProductCardProps) {
+  const t = useTranslations();
   return (
     <Card className="hover:shadow-md transition-shadow duration-200">
       <CardHeader className="pb-4">
@@ -42,19 +46,19 @@ export default function ProductCard({
           </div>
         )}
         <div>
-          <p className="text-sm text-gray-500">Price per unit</p>
+          <p className="text-sm text-gray-500">{t("Price per unit")}</p>
           <p className="font-medium">
             ${product.price_per_unit}/{product.unit}
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Stock</p>
+          <p className="text-sm text-gray-500">{t("Stock")}</p>
           <p className="font-medium">
-            {product.stock_quantity} {product.unit}s
+            {product.stock_quantity} {product.unit}
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Description</p>
+          <p className="text-sm text-gray-500">{t("Description")}</p>
           <p className="font-medium">{product.description}</p>
         </div>
       </CardContent>
@@ -70,7 +74,7 @@ export default function ProductCard({
             onDelete(product.id);
           }}
         >
-          <Button variant="destructive">Delete</Button>
+          <Button variant="destructive">{t("Delete")}</Button>
         </form>
       </CardFooter>
     </Card>
