@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 import CategoryForm from "./CategoryForm";
+import { useTranslations } from "next-intl";
 
 interface CategoryDialogProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -23,19 +24,20 @@ export default function CategoryFormDialog({
   onSubmit,
   initialData,
 }: CategoryDialogProps) {
+  const t = useTranslations();
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant={initialData ? "outline" : "default"}>
-          {initialData ? "Edit" : "Add Category"}
+          {initialData ? t("Edit") : t("Add Category")}
         </Button>
       </DialogTrigger>
       <DialogContent className="rounded-lg overflow-y-scroll max-w-[90vw] md:max-w-lg max-h-[90vh]">
         <DialogHeader>
           <DialogTitle>
-            {initialData ? "Edit Category" : "Add New Category"}
+            {initialData ? t("Edit Category") : t("Add New Category")}
           </DialogTitle>
         </DialogHeader>
         <CategoryForm

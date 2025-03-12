@@ -4,6 +4,7 @@ import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import CategoryFormDialog from "./CategoryFormDialog";
 import { Button } from "@/components/ui/button";
 import { Database } from "@/database.types";
+import { useTranslations } from "next-intl";
 
 interface CategoryCardProps {
   category: Database["public"]["Tables"]["categories"]["Row"];
@@ -16,6 +17,7 @@ export default function CategoryCard({
   onUpdate,
   onDelete,
 }: CategoryCardProps) {
+  const t = useTranslations();
   return (
     <Card key={category.id}>
       <CardHeader>
@@ -32,7 +34,7 @@ export default function CategoryCard({
             await onDelete(category.id);
           }}
         >
-          <Button variant="destructive">Delete</Button>
+          <Button variant="destructive">{t("Delete")}</Button>
         </form>
       </CardFooter>
     </Card>
