@@ -41,7 +41,7 @@ export default function Login(props: { searchParams: Promise<Message> }) {
           required
         />
         <SubmitButton
-          pendingText={t("Signing In...")}
+          pendingText={t("Signing In") + "..."}
           formAction={signInAction}
         >
           {t("Sign in")}

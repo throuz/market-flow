@@ -36,7 +36,7 @@ export default function ResetPassword(props: {
       />
       <SubmitButton
         formAction={resetPasswordAction}
-        pendingText={t("Resetting...")}
+        pendingText={t("Resetting") + "..."}
       >
         {t("Reset password")}
       </SubmitButton>

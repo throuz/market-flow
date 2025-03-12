@@ -43,7 +43,7 @@ export default function Signup(props: { searchParams: Promise<Message> }) {
         />
         <SubmitButton
           formAction={signUpAction}
-          pendingText={t("Signing up...")}
+          pendingText={t("Signing up") + "..."}
         >
           {t("Sign up")}
         </SubmitButton>
