@@ -17,7 +17,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import useOrderStatusOptions from "../hooks/useOrderStatusOptions";
+import useOrderStatusOptions from "../../../../../../hooks/useOrderStatusOptions";
+import useProductUnitOptions from "@/hooks/useProductUnitOptions";
 
 interface OrderFormProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
@@ -40,6 +41,8 @@ export default function OrderForm({
 
   const orderStatusOptions = useOrderStatusOptions();
 
+  const productUnitOptions = useProductUnitOptions();
+
   const [orderItems, setOrderItems] = useState<
     Database["public"]["Tables"]["order_items"]["Update"][]
   >(initialData?.orderItems ?? [{ quantity: 1 }]);
@@ -51,8 +54,15 @@ export default function OrderForm({
     );
   };
 
-  const getProductUnit = (productId?: number) =>
-    products.find((product) => product.id === productId)?.unit ?? "";
+  const getProductUnit = (productId?: number) => {
+    const unitValue = products.find(
+      (product) => product.id === productId
+    )?.unit;
+    const unitLabel = productUnitOptions.find(
+      (option) => option.value === unitValue
+    )?.label;
+    return unitLabel;
+  };
 
   const userIdOptions: {
     label: string;
@@ -312,7 +322,7 @@ export default function OrderForm({
                     className="pr-12"
                   />
                   <span className="absolute inset-y-0 right-3 flex items-center text-sm text-muted-foreground">
-                    {getProductUnit(item.product_id)}
+                    {getProductUnit(item.product_id) ?? ""}
                   </span>
                 </div>
               </div>

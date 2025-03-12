@@ -4,7 +4,7 @@ import { Database } from "@/database.types";
 import { useRouter } from "@/i18n/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import useOrderStatusOptions from "../hooks/useOrderStatusOptions";
+import useOrderStatusOptions from "../../../../../../hooks/useOrderStatusOptions";
 
 interface OrderStatusTabsProps {
   status: Database["public"]["Enums"]["order_status"];

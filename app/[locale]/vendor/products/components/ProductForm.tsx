@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import useProductUnitOptions from "@/hooks/useProductUnitOptions";
 
 import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
@@ -28,6 +29,8 @@ export default function ProductForm({
   initialData,
 }: ProductFormProps) {
   const t = useTranslations();
+  const productUnitOptions = useProductUnitOptions();
+
   return (
     <form action={onSubmit} className="flex flex-col gap-4">
       <div className="space-y-2">
@@ -113,14 +116,11 @@ export default function ProductForm({
             <SelectValue placeholder={t("Select unit")} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="piece">{t("Piece")}</SelectItem>
-            <SelectItem value="kg">{t("Kilogram")}</SelectItem>
-            <SelectItem value="g">{t("Gram")}</SelectItem>
-            <SelectItem value="catty">{t("Catty")}</SelectItem>
-            <SelectItem value="tael">{t("Tael")}</SelectItem>
-            <SelectItem value="bundle">{t("Bundle")}</SelectItem>
-            <SelectItem value="box">{t("Box")}</SelectItem>
-            <SelectItem value="bag">{t("Bag")}</SelectItem>
+            {productUnitOptions.map((option) => (
+              <SelectItem key={option.value} value={option.value}>
+                {option.label}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
