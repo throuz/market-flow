@@ -1,6 +1,9 @@
+"use client";
+
 import { Database } from "@/database.types";
 
 import NavLink from "./nav-link";
+import { useTranslations } from "next-intl";
 
 type Role = Database["public"]["Enums"]["app_role"];
 
@@ -9,35 +12,37 @@ interface RoleLink {
   label: string;
 }
 
-const roleLinks: Record<Role | "guest", RoleLink[]> = {
-  admin: [
-    { href: "/admin/profiles", label: "Profiles" },
-    { href: "/admin/categories", label: "Categories" },
-    { href: "/admin/products", label: "Products" },
-    { href: "/admin/orders", label: "Orders" },
-  ],
-  vendor: [
-    { href: "/vendor/categories", label: "Categories" },
-    { href: "/vendor/products", label: "Products" },
-    { href: "/vendor/orders", label: "Orders" },
-  ],
-  customer: [
-    { href: "/customer/products", label: "Products" },
-    { href: "/customer/orders", label: "Orders" },
-    { href: "/customer/shopping-cart", label: "Shopping Cart" },
-  ],
-  guest: [
-    { href: "/products", label: "Products" },
-    { href: "/orders", label: "Orders" },
-    { href: "/shopping-cart", label: "Shopping Cart" },
-  ],
-};
-
 interface NavLinksProps {
   role: Role | null;
 }
 
 export default function NavLinks({ role }: NavLinksProps) {
+  const t = useTranslations();
+
+  const roleLinks: Record<Role | "guest", RoleLink[]> = {
+    admin: [
+      { href: "/admin/profiles", label: t("Profiles") },
+      { href: "/admin/categories", label: t("Categories") },
+      { href: "/admin/products", label: t("Products") },
+      { href: "/admin/orders", label: t("Orders") },
+    ],
+    vendor: [
+      { href: "/vendor/categories", label: t("Categories") },
+      { href: "/vendor/products", label: t("Products") },
+      { href: "/vendor/orders", label: t("Orders") },
+    ],
+    customer: [
+      { href: "/customer/products", label: t("Products") },
+      { href: "/customer/orders", label: t("Orders") },
+      { href: "/customer/shopping-cart", label: t("Shopping Cart") },
+    ],
+    guest: [
+      { href: "/products", label: t("Products") },
+      { href: "/orders", label: t("Orders") },
+      { href: "/shopping-cart", label: t("Shopping Cart") },
+    ],
+  };
+
   const links = role ? roleLinks[role] : roleLinks["guest"];
 
   return (

@@ -1,6 +1,7 @@
 {
-  "HomePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
-  }
+  "Profiles": "個人資料",
+  "Categories": "分類",
+  "Products": "商品",
+  "Orders": "訂單",
+  "Shopping Cart": "購物車"
 }

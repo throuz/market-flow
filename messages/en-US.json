@@ -1,6 +1,7 @@
 {
-  "HomePage": {
-    "title": "Hello world!",
-    "about": "Go to the about page"
-  }
+  "Profiles": "Profiles",
+  "Categories": "Categories",
+  "Products": "Products",
+  "Orders": "Orders",
+  "Shopping Cart": "Shopping Cart"
 }

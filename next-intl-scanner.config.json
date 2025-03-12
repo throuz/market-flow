@@ -1,0 +1,12 @@
+{
+  "locales": ["en-US", "zh-TW"],
+  "sourceDirectory": "./",
+  "outputDirectory": "./messages",
+  "pages": [
+    {
+      "match": "./**/*.{js,jsx,ts,tsx}",
+      "ignore": ["**/*.test.{js,jsx,ts,tsx}", "**/_*.js"]
+    }
+  ],
+  "ignore": ["**/node_modules/**", "**/.next/**"]
+}
