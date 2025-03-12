@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 
 import ProductFormDialog from "./ProductFormDialog";
+import useProductUnitOptions from "@/hooks/useProductUnitOptions";
 
 interface ProductCardProps {
   product: Database["public"]["Tables"]["products"]["Row"];
@@ -28,6 +29,13 @@ export default function ProductCard({
   onDelete,
 }: ProductCardProps) {
   const t = useTranslations();
+
+  const productUnitOptions = useProductUnitOptions();
+
+  const productUnitLabel = productUnitOptions.find(
+    (option) => option.value === product.unit
+  )?.label;
+
   return (
     <Card className="hover:shadow-md transition-shadow duration-200">
       <CardHeader className="pb-4">
@@ -48,13 +56,13 @@ export default function ProductCard({
         <div>
           <p className="text-sm text-gray-500">{t("Price per unit")}</p>
           <p className="font-medium">
-            ${product.price_per_unit}/{product.unit}
+            ${product.price_per_unit} / {productUnitLabel}
           </p>
         </div>
         <div>
           <p className="text-sm text-gray-500">{t("Stock")}</p>
           <p className="font-medium">
-            {product.stock_quantity} {product.unit}
+            {product.stock_quantity} {productUnitLabel}
           </p>
         </div>
         <div>
