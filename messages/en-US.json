@@ -8,6 +8,7 @@
   "Add Product": "Add Product",
   "Address": "Address",
   "Address must be at least 10 characters long": "Address must be at least 10 characters long",
+  "Admin": "Admin",
   "Already have an account?": "Already have an account?",
   "Bag": "Bag",
   "Box": "Box",
@@ -21,6 +22,7 @@
   "Confirm password": "Confirm password",
   "Created": "Created",
   "Created at": "Created at",
+  "Customer": "Customer",
   "Dashboard": "Dashboard",
   "Delete": "Delete",
   "Description": "Description",
@@ -93,5 +95,6 @@
   "Update Product": "Update Product",
   "User": "User",
   "User Email": "User Email",
+  "Vendor": "Vendor",
   "Your password": "Your password"
 }
