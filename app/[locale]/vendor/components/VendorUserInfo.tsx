@@ -1,6 +1,7 @@
 "use client";
 
 import { Database } from "@/database.types";
+import useAppRoles from "@/hooks/useAppRoles";
 import { User } from "@supabase/supabase-js";
 import { useTranslations } from "next-intl";
 
@@ -11,6 +12,8 @@ interface VendorUserInfoProps {
 
 export default function VendorUserInfo({ user, role }: VendorUserInfoProps) {
   const t = useTranslations();
+
+  const { appRoleMap } = useAppRoles();
 
   const userDisplay: { label: string; value: string }[] = [
     {
@@ -23,7 +26,7 @@ export default function VendorUserInfo({ user, role }: VendorUserInfoProps) {
     },
     {
       label: t("Role"),
-      value: role ?? "",
+      value: appRoleMap[role],
     },
     {
       label: t("Created at"),
