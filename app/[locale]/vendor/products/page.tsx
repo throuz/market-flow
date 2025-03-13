@@ -5,6 +5,7 @@ import ProductCard from "./components/ProductCard";
 import ProductTitle from "./components/ProductTitle";
 import ProductFormDialog from "./components/ProductFormDialog";
 import { createProduct, deleteProduct, updateProduct } from "./actions";
+import NoProductsMessage from "./components/NoProductsMessage";
 
 type ProductsByCategory = Record<
   number,
@@ -51,11 +52,7 @@ export default async function VendorProductsPage() {
                     onUpdate={updateProduct}
                     onDelete={deleteProduct}
                   />
-                )) ?? (
-                  <p className="text-gray-500 italic">
-                    No products in this category
-                  </p>
-                )}
+                )) ?? <NoProductsMessage />}
               </div>
             </div>
           ))}
