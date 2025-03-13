@@ -1,13 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import useProductUnitOptions from "@/hooks/useProductUnitOptions";
 
 import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import useProductUnits from "@/hooks/useProductUnits";
 import { ImageUpload } from "@/components/ui/image-upload";
 import {
   Select,
@@ -29,7 +29,7 @@ export default function ProductForm({
   initialData,
 }: ProductFormProps) {
   const t = useTranslations();
-  const productUnitOptions = useProductUnitOptions();
+  const { productUnitOptions } = useProductUnits();
 
   return (
     <form action={onSubmit} className="flex flex-col gap-4">

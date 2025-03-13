@@ -3,8 +3,7 @@
 import { Database } from "@/database.types";
 import { useRouter } from "@/i18n/navigation";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import useOrderStatusOptions from "../../../../../../hooks/useOrderStatusOptions";
+import useOrderStatus from "@/hooks/useOrderStatus";
 
 interface OrderStatusTabsProps {
   status: Database["public"]["Enums"]["order_status"];
@@ -13,7 +12,7 @@ interface OrderStatusTabsProps {
 export default function OrderStatusTabs({ status }: OrderStatusTabsProps) {
   const router = useRouter();
 
-  const orderStatusOptions = useOrderStatusOptions();
+  const { orderStatusOptions } = useOrderStatus();
 
   return (
     <Tabs

@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 
 import ProductFormDialog from "./ProductFormDialog";
-import useProductUnitOptions from "@/hooks/useProductUnitOptions";
+import useProductUnits from "@/hooks/useProductUnits";
 
 interface ProductCardProps {
   product: Database["public"]["Tables"]["products"]["Row"];
@@ -30,11 +30,9 @@ export default function ProductCard({
 }: ProductCardProps) {
   const t = useTranslations();
 
-  const productUnitOptions = useProductUnitOptions();
+  const { productUnitMap } = useProductUnits();
 
-  const productUnitLabel = productUnitOptions.find(
-    (option) => option.value === product.unit
-  )?.label;
+  const productUnitLabel = productUnitMap[product.unit];
 
   return (
     <Card className="hover:shadow-md transition-shadow duration-200">

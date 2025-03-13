@@ -1,7 +1,7 @@
 "use client";
 
 import { Database } from "@/database.types";
-import useOrderStatusOptions from "../../../../../../hooks/useOrderStatusOptions";
+import useOrderStatus from "@/hooks/useOrderStatus";
 
 const getStatusStyle = (
   status: Database["public"]["Enums"]["order_status"]
@@ -25,7 +25,7 @@ interface OrderStatusBadgeProps {
 }
 
 export default function OrderStatusBadge({ status }: OrderStatusBadgeProps) {
-  const orderStatusOptions = useOrderStatusOptions();
+  const { orderStatusOptions } = useOrderStatus();
 
   return (
     <span
