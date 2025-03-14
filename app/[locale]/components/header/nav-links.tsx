@@ -34,12 +34,8 @@ export default function NavLinks({ role }: NavLinksProps) {
     customer: [
       { href: "/customer/products", label: t("Products") },
       { href: "/customer/orders", label: t("Orders") },
-      { href: "/customer/shopping-cart", label: t("Shopping Cart") },
     ],
-    guest: [
-      { href: "/products", label: t("Products") },
-      { href: "/shopping-cart", label: t("Shopping Cart") },
-    ],
+    guest: [{ href: "/products", label: t("Products") }],
   };
 
   const links = role ? roleLinks[role] : roleLinks["guest"];

@@ -1,6 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { ShoppingCart } from "lucide-react";
 
 import { Link } from "@/i18n/navigation";
 import { User } from "@supabase/supabase-js";
@@ -16,25 +17,30 @@ interface HeaderAuthProps {
 export default function HeaderAuth({ user }: HeaderAuthProps) {
   const t = useTranslations();
 
-  return user ? (
+  return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
       <LocaleSwitcherSelect />
-      {t("Hey")}, {user.email}
-      <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
-          {t("Sign out")}
-        </Button>
-      </form>
-    </div>
-  ) : (
-    <div className="flex flex-col sm:flex-row gap-2">
-      <LocaleSwitcherSelect />
-      <Button asChild size="sm" variant={"outline"}>
-        <Link href="/sign-in">{t("Sign in")}</Link>
-      </Button>
-      <Button asChild size="sm" variant={"default"}>
-        <Link href="/sign-up">{t("Sign up")}</Link>
-      </Button>
+      {user ? (
+        <>
+          <span>
+            {t("Hey")}, {user.email}
+          </span>
+          <form action={signOutAction}>
+            <Button type="submit" variant="outline">
+              {t("Sign out")}
+            </Button>
+          </form>
+        </>
+      ) : (
+        <>
+          <Button asChild size="sm" variant="outline">
+            <Link href="/sign-in">{t("Sign in")}</Link>
+          </Button>
+          <Button asChild size="sm" variant="default">
+            <Link href="/sign-up">{t("Sign up")}</Link>
+          </Button>
+        </>
+      )}
     </div>
   );
 }

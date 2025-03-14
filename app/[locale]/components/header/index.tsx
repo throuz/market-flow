@@ -5,6 +5,8 @@ import HeaderAuth from "@/app/[locale]/components/header/header-auth";
 
 import NavLinks from "./nav-links";
 import HeaderDrawer from "./header-drawer";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react";
 
 export default async function Header() {
   const supabase = await createClient();
@@ -24,6 +26,7 @@ export default async function Header() {
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
         <div className="w-full flex justify-between items-center p-3 px-5 text-sm">
           <div className="flex gap-5 items-center">
+            <HeaderDrawer role={profile?.role ?? null} user={user} />
             <Link href="/" className="font-semibold">
               Market flow
             </Link>
@@ -31,10 +34,16 @@ export default async function Header() {
               <NavLinks role={profile?.role ?? null} />
             </div>
           </div>
-          <div className="hidden md:block">
-            <HeaderAuth user={user} />
+          <div className="flex items-center gap-4">
+            <div className="hidden md:block">
+              <HeaderAuth user={user} />
+            </div>
+            <Link href="/cart" className="relative">
+              <Button variant="ghost" size="icon">
+                <ShoppingCart className="w-5 h-5" />
+              </Button>
+            </Link>
           </div>
-          <HeaderDrawer role={profile?.role ?? null} user={user} />
         </div>
       </nav>
     </header>
