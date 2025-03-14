@@ -8,7 +8,10 @@ import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import useOrderStatus from "@/hooks/useOrderStatus";
 import { Separator } from "@/components/ui/separator";
+import useProductUnits from "@/hooks/useProductUnits";
+import usePaymentMethods from "@/hooks/usePaymentMethods";
 import {
   Select,
   SelectContent,
@@ -16,9 +19,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import useProductUnits from "@/hooks/useProductUnits";
-import useOrderStatus from "@/hooks/useOrderStatus";
 
 interface OrderFormProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
@@ -42,6 +42,12 @@ export default function OrderForm({
   const { orderStatusOptions } = useOrderStatus();
 
   const { productUnitMap } = useProductUnits();
+
+  const { paymentMethodOptions } = usePaymentMethods();
+
+  const [paymentMethod, setPaymentMethod] = useState<
+    Database["public"]["Enums"]["payment_method"] | null
+  >(initialData?.payment_method ?? null);
 
   const [orderItems, setOrderItems] = useState<
     Database["public"]["Tables"]["order_items"]["Update"][]
@@ -212,6 +218,51 @@ export default function OrderForm({
             .slice(0, 16)}
         />
       </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="payment_method">{t("Payment Method")}</Label>
+        <Select
+          name="payment_method"
+          defaultValue={initialData?.payment_method}
+          onValueChange={(value) =>
+            setPaymentMethod(
+              value as Database["public"]["Enums"]["payment_method"]
+            )
+          }
+          required
+        >
+          <SelectTrigger id="payment_method">
+            <SelectValue placeholder={t("Select payment method")} />
+          </SelectTrigger>
+          <SelectContent>
+            {paymentMethodOptions.map(({ label, value }) => (
+              <SelectItem key={value} value={value.toString()}>
+                {label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {paymentMethod === "money_transfer" && (
+        <div className="space-y-2">
+          <Label htmlFor="account_last_five">
+            {t("Account Last 5 Digits")}
+          </Label>
+          <Input
+            type="number"
+            id="account_last_five"
+            name="account_last_five"
+            defaultValue={initialData?.account_last_five ?? ""}
+            required
+            min="0"
+            max="99999"
+            pattern="[0-9]{5}"
+            title={t("Please enter last 5 digits of the account")}
+            placeholder={t("Enter last 5 digits")}
+          />
+        </div>
+      )}
 
       <div className="space-y-4">
         <div className="flex justify-between items-center">

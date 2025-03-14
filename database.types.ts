@@ -71,10 +71,12 @@ export type Database = {
       }
       orders: {
         Row: {
+          account_last_five: number | null
           address: string
           created_at: string
           estimated_delivery_time: string
           id: number
+          payment_method: Database["public"]["Enums"]["payment_method"]
           phone: string
           status: Database["public"]["Enums"]["order_status"]
           total_price: number
@@ -82,10 +84,12 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          account_last_five?: number | null
           address: string
           created_at?: string
           estimated_delivery_time: string
           id?: never
+          payment_method: Database["public"]["Enums"]["payment_method"]
           phone: string
           status: Database["public"]["Enums"]["order_status"]
           total_price: number
@@ -93,10 +97,12 @@ export type Database = {
           user_id: string
         }
         Update: {
+          account_last_five?: number | null
           address?: string
           created_at?: string
           estimated_delivery_time?: string
           id?: never
+          payment_method?: Database["public"]["Enums"]["payment_method"]
           phone?: string
           status?: Database["public"]["Enums"]["order_status"]
           total_price?: number
@@ -188,6 +194,7 @@ export type Database = {
     Enums: {
       app_role: "admin" | "vendor" | "customer"
       order_status: "pending" | "processing" | "completed" | "cancelled"
+      payment_method: "money_transfer" | "cash_on_delivery"
       product_unit:
         | "g"
         | "kg"

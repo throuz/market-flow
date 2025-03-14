@@ -21,9 +21,15 @@ export async function createOrder(formData: FormData) {
     phone: formData.get("phone") as string,
     address: formData.get("address") as string,
     estimated_delivery_time: convertTimestamp(
-      formData.get("estimated_delivery_time") as string
+      String(formData.get("estimated_delivery_time"))
     ),
     total_price: 0,
+    payment_method: formData.get(
+      "payment_method"
+    ) as Database["public"]["Enums"]["payment_method"],
+    account_last_five: formData.get("account_last_five")
+      ? Number(formData.get("account_last_five"))
+      : null,
   };
 
   try {
@@ -96,6 +102,12 @@ export async function updateOrder(id: number, formData: FormData) {
       formData.get("estimated_delivery_time") as string
     ),
     total_price: 0,
+    payment_method: formData.get(
+      "payment_method"
+    ) as Database["public"]["Enums"]["payment_method"],
+    account_last_five: formData.get("account_last_five")
+      ? Number(formData.get("account_last_five"))
+      : null,
   };
 
   try {
