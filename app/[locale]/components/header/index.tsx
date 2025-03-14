@@ -1,12 +1,10 @@
 import { Link } from "@/i18n/navigation";
-
 import { createClient } from "@/utils/supabase/server";
 import HeaderAuth from "@/app/[locale]/components/header/header-auth";
 
 import NavLinks from "./nav-links";
 import HeaderDrawer from "./header-drawer";
-import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import ShoppingCartLink from "./shopping-cart-link";
 
 export default async function Header() {
   const supabase = await createClient();
@@ -38,11 +36,7 @@ export default async function Header() {
             <div className="hidden md:block">
               <HeaderAuth user={user} />
             </div>
-            <Link href="/cart" className="relative">
-              <Button variant="ghost" size="icon">
-                <ShoppingCart className="w-5 h-5" />
-              </Button>
-            </Link>
+            <ShoppingCartLink />
           </div>
         </div>
       </nav>
