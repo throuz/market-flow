@@ -250,14 +250,12 @@ export default function OrderForm({
             {t("Account Last 5 Digits")}
           </Label>
           <Input
-            type="number"
+            type="text"
             id="account_last_five"
             name="account_last_five"
             defaultValue={initialData?.account_last_five ?? ""}
             required
-            min="0"
-            max="99999"
-            pattern="[0-9]{5}"
+            pattern="\d{5}"
             title={t("Please enter last 5 digits of the account")}
             placeholder={t("Enter last 5 digits")}
           />
