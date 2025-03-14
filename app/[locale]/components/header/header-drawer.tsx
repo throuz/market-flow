@@ -15,6 +15,7 @@ import { User } from "@supabase/supabase-js";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { AlignLeft } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 interface HeaderDrawerProps {
   role: Database["public"]["Enums"]["app_role"] | null;
@@ -39,11 +40,10 @@ export default function HeaderDrawer({ role, user }: HeaderDrawerProps) {
         <DrawerHeader>
           <DrawerTitle>{t("Menu")}</DrawerTitle>
         </DrawerHeader>
-        <div className="p-4">
+        <div className="p-4 flex flex-col gap-4">
           <NavLinks role={role} />
-          <div className="pt-4">
-            <HeaderAuth user={user} />
-          </div>
+          <Separator />
+          <HeaderAuth user={user} />
         </div>
       </DrawerContent>
     </Drawer>
