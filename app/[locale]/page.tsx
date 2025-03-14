@@ -1,9 +1,9 @@
-import Hero from "@/components/hero";
+import Hero from "./components/Hero";
 
 export default async function Home() {
   return (
-    <div className="p-16">
+    <main>
       <Hero />
-    </div>
+    </main>
   );
 }
