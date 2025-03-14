@@ -14,6 +14,7 @@ import { Database } from "@/database.types";
 import { User } from "@supabase/supabase-js";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import { AlignLeft } from "lucide-react";
 
 interface HeaderDrawerProps {
   role: Database["public"]["Enums"]["app_role"] | null;
@@ -27,22 +28,9 @@ export default function HeaderDrawer({ role, user }: HeaderDrawerProps) {
   return (
     <Drawer direction="left" open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild onClick={() => setOpen(true)}>
-        <label htmlFor="nav-toggle" className="md:hidden cursor-pointer">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 6h16M4 12h16m-7 6h7"
-            />
-          </svg>
-        </label>
+        <div className="md:hidden cursor-pointer">
+          <AlignLeft />
+        </div>
       </DrawerTrigger>
       <DrawerContent
         className="top-0 mt-0 mr-20 rounded-none"
