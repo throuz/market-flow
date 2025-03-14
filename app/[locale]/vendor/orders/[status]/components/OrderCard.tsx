@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 
 import { Database } from "@/database.types";
 import { Button } from "@/components/ui/button";
+import usePaymentMethods from "@/hooks/usePaymentMethods";
 import {
   Card,
   CardContent,
@@ -40,6 +41,8 @@ export default function OrderCard({
 }: OrderCardProps) {
   const t = useTranslations();
 
+  const { paymentMethodMap } = usePaymentMethods();
+
   const userEmail = useMemo(
     () => profiles.find((profile) => profile.id === order.user_id)?.email ?? "",
     [profiles, order.user_id]
@@ -57,6 +60,21 @@ export default function OrderCard({
           <p className="text-sm text-gray-500">{t("Total Price")}</p>
           <p className="font-medium">NT${order.total_price.toFixed(2)}</p>
         </div>
+        <div>
+          <p className="text-sm text-gray-500">{t("Payment Method")}</p>
+          <p className="font-medium capitalize">
+            {paymentMethodMap[order.payment_method]}
+          </p>
+        </div>
+        {order.payment_method === "money_transfer" &&
+          order.account_last_five && (
+            <div>
+              <p className="text-sm text-gray-500">
+                {t("Account Last 5 Digits")}
+              </p>
+              <p className="font-medium">{order.account_last_five}</p>
+            </div>
+          )}
         <div>
           <p className="text-sm text-gray-500">{t("Status")}</p>
           <OrderStatusBadge status={order.status} />
