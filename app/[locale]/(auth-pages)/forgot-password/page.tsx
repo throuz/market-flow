@@ -28,7 +28,7 @@ export default function ForgotPassword(props: {
         </p>
       </div>
       <div className="flex flex-col gap-2 [&>input]:mb-3 mt-8">
-        <Label htmlFor="email">Email</Label>
+        <Label htmlFor="email">{t("Email")}</Label>
         <Input name="email" placeholder="you@example.com" required />
         <SubmitButton formAction={forgotPasswordAction}>
           {t("Reset Password")}
