@@ -38,7 +38,6 @@ export default function NavLinks({ role }: NavLinksProps) {
     ],
     guest: [
       { href: "/products", label: t("Products") },
-      { href: "/orders", label: t("Orders") },
       { href: "/shopping-cart", label: t("Shopping Cart") },
     ],
   };

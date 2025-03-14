@@ -5,6 +5,7 @@ import { Geist } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { getMessages } from "next-intl/server";
+import { CartStoreProvider } from "@/providers/shopping-cart-provider";
 
 import Header from "./components/header";
 import Footer from "./components/footer";
@@ -49,20 +50,22 @@ export default async function RootLayout({
       className={geistSans.className}
       suppressHydrationWarning
     >
-      <NextIntlClientProvider messages={messages}>
-        <body className="bg-background text-foreground">
+      <body className="bg-background text-foreground">
+        <NextIntlClientProvider messages={messages}>
           <ThemeProvider
             attribute="class"
             defaultTheme="light"
             enableSystem
             disableTransitionOnChange
           >
-            <Header />
-            <main>{children}</main>
-            <Footer />
+            <CartStoreProvider>
+              <Header />
+              <main>{children}</main>
+              <Footer />
+            </CartStoreProvider>
           </ThemeProvider>
-        </body>
-      </NextIntlClientProvider>
+        </NextIntlClientProvider>
+      </body>
     </html>
   );
 }
