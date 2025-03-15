@@ -30,25 +30,23 @@ export default function ShoppingCartDrawer({
   const cart = useCartStore((store) => store.cart);
   const removeFromCart = useCartStore((store) => store.removeFromCart);
   const updateCartItem = useCartStore((store) => store.updateCartItem);
-  const [isOpen, setIsOpen] = React.useState(false); // Manage the drawer state
+  const [isOpen, setIsOpen] = React.useState(false);
   const itemCount = cart.length;
 
   const router = useRouter();
 
-  // Memoized product lookup map for efficient access
   const productMap = React.useMemo(
     () => new Map(products.map((product) => [product.id, product])),
     [products]
   );
 
   const handleProceedToCheckout = () => {
-    setIsOpen(false); // Close the drawer when proceeding to checkout
-    router.push("/checkout"); // Navigate to the checkout page
+    router.push("/customer/checkout");
+    setIsOpen(false);
   };
 
   return (
     <Drawer direction="right" open={isOpen} onOpenChange={setIsOpen}>
-      {/* Shopping Cart Button (Trigger) */}
       <DrawerTrigger asChild>
         <Button
           variant="ghost"
@@ -68,7 +66,6 @@ export default function ShoppingCartDrawer({
         </Button>
       </DrawerTrigger>
 
-      {/* Cart Drawer Content */}
       <DrawerContent className="top-0 mt-0 ml-20 md:w-1/4 md:ml-auto rounded-none">
         <DrawerHeader>
           <div className="flex justify-between items-center">
@@ -85,7 +82,6 @@ export default function ShoppingCartDrawer({
           </div>
         </DrawerHeader>
 
-        {/* Cart Items */}
         <div className="p-4 space-y-4">
           {cart.length === 0 ? (
             <p className="text-center text-muted-foreground">
@@ -94,7 +90,7 @@ export default function ShoppingCartDrawer({
           ) : (
             cart.map((item) => {
               const product = productMap.get(item.product_id);
-              if (!product) return null; // If product doesn't exist, skip rendering
+              if (!product) return null;
 
               return (
                 <div
@@ -145,7 +141,6 @@ export default function ShoppingCartDrawer({
           )}
         </div>
 
-        {/* Footer Buttons */}
         <DrawerFooter>
           {cart.length > 0 && (
             <>
