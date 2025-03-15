@@ -10,7 +10,7 @@ type ProductsByCategory = Record<
   Database["public"]["Tables"]["products"]["Row"][]
 >;
 
-export default async function VendorProductsPage() {
+export default async function ProductsPage() {
   const supabase = await createClient();
   const { data: products } = await supabase.from("products").select("*");
   const { data: categories } = await supabase.from("categories").select("*");
