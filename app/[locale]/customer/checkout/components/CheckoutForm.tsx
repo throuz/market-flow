@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createOrder } from "../actions";
+import { useRouter } from "@/i18n/navigation";
 
 interface CheckoutFormProps {
   userId: string;
@@ -30,6 +31,7 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
   const updateCartItem = useCartStore((store) => store.updateCartItem);
   const t = useTranslations();
   const { paymentMethodOptions } = usePaymentMethods();
+  const router = useRouter();
 
   const [paymentMethod, setPaymentMethod] =
     React.useState<Database["public"]["Enums"]["payment_method"]>();
@@ -46,8 +48,17 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
     0
   );
 
+  const formAction = async (formData: FormData): Promise<void> => {
+    try {
+      await createOrder(formData);
+      router.push("/customer/orders");
+    } catch (error) {
+      throw new Error("Order creation failed");
+    }
+  };
+
   return (
-    <form action={createOrder} className="max-w-4xl mx-auto space-y-6">
+    <form action={formAction} className="max-w-4xl mx-auto space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>{t("Your Cart")}</CardTitle>

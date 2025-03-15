@@ -84,11 +84,6 @@ export async function createOrder(formData: FormData) {
       .eq("id", orderData.id);
 
     if (updateError) throw updateError;
-
-    redirect({
-      href: "/customer/orders",
-      locale,
-    });
   } catch (error) {
     throw new Error("Order creation failed");
   }
