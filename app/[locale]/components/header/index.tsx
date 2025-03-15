@@ -4,7 +4,7 @@ import HeaderAuth from "@/app/[locale]/components/header/header-auth";
 
 import NavLinks from "./nav-links";
 import HeaderDrawer from "./header-drawer";
-import ShoppingCartLink from "./shopping-cart-link";
+import ShoppingCartDrawer from "./ShoppingCartDrawer";
 
 export default async function Header() {
   const supabase = await createClient();
@@ -18,6 +18,8 @@ export default async function Header() {
     .select("*")
     .eq("id", user?.id ?? "")
     .single();
+
+  const { data: products } = await supabase.from("products").select("*");
 
   return (
     <header className="relative">
@@ -36,7 +38,7 @@ export default async function Header() {
             <div className="hidden md:block">
               <HeaderAuth user={user} />
             </div>
-            <ShoppingCartLink />
+            <ShoppingCartDrawer products={products ?? []} />
           </div>
         </div>
       </nav>

@@ -24,6 +24,7 @@
   "Catty": "Catty",
   "Completed": "Completed",
   "Confirm password": "Confirm password",
+  "Continue Shopping": "Continue Shopping",
   "Created": "Created",
   "Created at": "Created at",
   "Customer": "Customer",
@@ -69,6 +70,7 @@
   "Price": "Price",
   "Price per Unit": "Price per Unit",
   "Price per unit": "Price per unit",
+  "Proceed to Checkout": "Proceed to Checkout",
   "Processing": "Processing",
   "Product": "Product",
   "Product Image": "Product Image",
@@ -108,5 +110,6 @@
   "User Email": "User Email",
   "Vendor": "Vendor",
   "Welcome to": "Welcome to",
+  "Your cart is empty": "Your cart is empty",
   "Your password": "Your password"
 }
