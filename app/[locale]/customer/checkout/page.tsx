@@ -8,6 +8,10 @@ import CheckoutTitle from "./components/CheckoutTitle";
 export default async function CheckoutPage() {
   const supabase = await createClient();
 
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const { data: products } = await supabase.from("products").select("*");
 
   return (
@@ -17,7 +21,7 @@ export default async function CheckoutPage() {
           <CheckoutTitle />
         </div>
         <div className="space-y-8">
-          <CheckoutForm products={products ?? []} />
+          <CheckoutForm userId={user?.id ?? ""} products={products ?? []} />
         </div>
       </section>
     </div>

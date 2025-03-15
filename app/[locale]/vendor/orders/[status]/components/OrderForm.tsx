@@ -236,7 +236,7 @@ export default function OrderForm({
           </SelectTrigger>
           <SelectContent>
             {paymentMethodOptions.map(({ label, value }) => (
-              <SelectItem key={value} value={value.toString()}>
+              <SelectItem key={value} value={value}>
                 {label}
               </SelectItem>
             ))}

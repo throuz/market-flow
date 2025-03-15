@@ -8,7 +8,6 @@ import { Label } from "@/components/ui/label";
 import { useCartStore } from "@/providers/shopping-cart-provider";
 import { Database } from "@/database.types";
 import { useTranslations } from "next-intl";
-import { useRouter } from "next/navigation";
 import { Minus, Plus, Trash } from "lucide-react";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
 import {
@@ -18,22 +17,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { createOrder } from "../actions";
 
 interface CheckoutFormProps {
+  userId: string;
   products: Database["public"]["Tables"]["products"]["Row"][];
 }
 
-export default function CheckoutForm({ products }: CheckoutFormProps) {
+export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
   const cart = useCartStore((store) => store.cart);
   const removeFromCart = useCartStore((store) => store.removeFromCart);
   const updateCartItem = useCartStore((store) => store.updateCartItem);
   const t = useTranslations();
-  const router = useRouter();
   const { paymentMethodOptions } = usePaymentMethods();
 
-  const [paymentMethod, setPaymentMethod] = React.useState<string | null>(null);
-  const [phone, setPhone] = React.useState("");
-  const [address, setAddress] = React.useState("");
+  const [paymentMethod, setPaymentMethod] =
+    React.useState<Database["public"]["Enums"]["payment_method"]>();
 
   const productMap = React.useMemo(
     () => new Map(products.map((product) => [product.id, product])),
@@ -47,13 +46,8 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
     0
   );
 
-  const handlePlaceOrder = () => {
-    console.log("Order placed with:", { phone, address, paymentMethod });
-    router.push("/order-confirmation");
-  };
-
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <form action={createOrder} className="max-w-4xl mx-auto space-y-6">
       <Card>
         <CardHeader>
           <CardTitle>{t("Your Cart")}</CardTitle>
@@ -62,7 +56,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
           {cart.length === 0 ? (
             <p className="text-gray-500">{t("Your cart is empty")}</p>
           ) : (
-            cart.map((item) => {
+            cart.map((item, index) => {
               const product = productMap.get(item.product_id);
               if (!product) return null;
 
@@ -71,6 +65,18 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
                   key={item.product_id}
                   className="flex justify-between items-center p-4 border-b"
                 >
+                  <Input
+                    type="hidden"
+                    name={`order_items.${index}.product_id`}
+                    value={item.product_id}
+                    required
+                  />
+                  <Input
+                    type="hidden"
+                    name={`order_items.${index}.quantity`}
+                    value={item.quantity}
+                    required
+                  />
                   <div>
                     <p className="font-medium">{product.name}</p>
                     <p className="text-gray-500">
@@ -79,6 +85,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
                   </div>
                   <div className="flex items-center space-x-3">
                     <Button
+                      type="button"
                       variant="outline"
                       size="icon"
                       onClick={() =>
@@ -92,6 +99,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
                       {item.quantity}
                     </span>
                     <Button
+                      type="button"
                       variant="outline"
                       size="icon"
                       onClick={() =>
@@ -101,6 +109,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
                       <Plus className="w-4 h-4" />
                     </Button>
                     <Button
+                      type="button"
                       variant="destructive"
                       size="icon"
                       onClick={() => removeFromCart(item.product_id)}
@@ -121,14 +130,27 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
+            <Input
+              type="hidden"
+              name="user_id"
+              defaultValue={userId}
+              required
+            />
+            <Input
+              type="hidden"
+              name="status"
+              defaultValue="pending"
+              required
+            />
             <div>
               <Label htmlFor="phone">{t("Phone")}</Label>
               <Input
                 type="tel"
                 id="phone"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
+                name="phone"
                 required
+                pattern="[0-9]{10}"
+                title={t("Phone number must be 10 digits")}
                 placeholder={t("Enter phone number")}
               />
             </div>
@@ -137,18 +159,45 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
               <Input
                 type="text"
                 id="address"
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
+                name="address"
                 required
+                pattern=".{10,}"
+                title={t("Address must be at least 10 characters long")}
                 placeholder={t("Enter delivery address")}
+              />
+            </div>
+            <div>
+              <Label htmlFor="estimated_delivery_time">
+                {t("Estimated Delivery Time")}
+              </Label>
+              <Input
+                type="datetime-local"
+                id="estimated_delivery_time"
+                name="estimated_delivery_time"
+                required
+                // 1 day later & UTC+8 timezone
+                min={new Date(
+                  Date.now() + 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000
+                )
+                  .toISOString()
+                  .slice(0, 16)}
+                // 1 month later & UTC+8 timezone
+                max={new Date(
+                  Date.now() + 30 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000
+                )
+                  .toISOString()
+                  .slice(0, 16)}
               />
             </div>
             <div>
               <Label htmlFor="payment_method">{t("Payment Method")}</Label>
               <Select
                 name="payment_method"
-                value={paymentMethod ?? ""}
-                onValueChange={setPaymentMethod}
+                onValueChange={(value) =>
+                  setPaymentMethod(
+                    value as Database["public"]["Enums"]["payment_method"]
+                  )
+                }
                 required
               >
                 <SelectTrigger id="payment_method">
@@ -156,7 +205,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
                 </SelectTrigger>
                 <SelectContent>
                   {paymentMethodOptions.map(({ label, value }) => (
-                    <SelectItem key={value} value={value.toString()}>
+                    <SelectItem key={value} value={value}>
                       {label}
                     </SelectItem>
                   ))}
@@ -164,7 +213,7 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
               </Select>
             </div>
             {paymentMethod === "money_transfer" && (
-              <div className="space-y-2">
+              <div>
                 <Label htmlFor="account_last_five">
                   {t("Account Last 5 Digits")}
                 </Label>
@@ -172,8 +221,6 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
                   type="text"
                   id="account_last_five"
                   name="account_last_five"
-                  defaultValue=""
-                  required
                   pattern="\d{5}"
                   title={t("Please enter last 5 digits of the account")}
                   placeholder={t("Enter last 5 digits")}
@@ -196,13 +243,9 @@ export default function CheckoutForm({ products }: CheckoutFormProps) {
         </CardContent>
       </Card>
 
-      <Button
-        className="w-full"
-        onClick={handlePlaceOrder}
-        disabled={!phone || !address || !paymentMethod}
-      >
+      <Button className="w-full" type="submit">
         {t("Place Order")}
       </Button>
-    </div>
+    </form>
   );
 }
