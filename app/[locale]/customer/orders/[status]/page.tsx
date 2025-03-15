@@ -4,6 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 import OrderCard from "./components/OrderCard";
 import OrderTitle from "./components/OrderTitle";
 import OrderStatusTabs from "./components/OrderStatusTabs";
+import NoOrdersMessage from "./components/NoOrdersMessage";
 
 export default async function CustomerOrdersPage({
   params,
@@ -52,9 +53,13 @@ export default async function CustomerOrdersPage({
         </div>
 
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {ordersWithItems.map((order) => (
-            <OrderCard key={order.id} order={order} />
-          ))}
+          {ordersWithItems.length === 0 ? (
+            <NoOrdersMessage />
+          ) : (
+            ordersWithItems.map((order) => (
+              <OrderCard key={order.id} order={order} />
+            ))
+          )}
         </div>
       </section>
     </div>
