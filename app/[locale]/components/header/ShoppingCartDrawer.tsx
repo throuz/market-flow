@@ -1,12 +1,13 @@
 "use client";
 
 import * as React from "react";
+
 import { useTranslations } from "next-intl";
 import { Minus, Plus, ShoppingCart, Trash, X } from "lucide-react";
-import { useRouter } from "next/navigation";
 
 import { Database } from "@/database.types";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
 import { useCartStore } from "@/providers/shopping-cart-provider";
 import {
