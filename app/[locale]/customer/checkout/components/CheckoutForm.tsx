@@ -77,6 +77,12 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
                     value={item.quantity}
                     required
                   />
+                  <Input
+                    type="hidden"
+                    name={`order_items.${index}.price`}
+                    value={productMap.get(item.product_id)?.price_per_unit}
+                    required
+                  />
                   <div>
                     <p className="font-medium">{product.name}</p>
                     <p className="text-gray-500">
