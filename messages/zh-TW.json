@@ -24,7 +24,7 @@
   "Catty": "斤",
   "Completed": "已完成",
   "Confirm password": "確認密碼",
-  "Continue Shopping": "Continue Shopping",
+  "Continue Shopping": "繼續購物",
   "Created": "已建立",
   "Created at": "建立時間",
   "Customer": "客戶",
@@ -70,7 +70,7 @@
   "Price": "價格",
   "Price per Unit": "單位價格",
   "Price per unit": "單位價格",
-  "Proceed to Checkout": "Proceed to Checkout",
+  "Proceed to Checkout": "前往結帳",
   "Processing": "處理中",
   "Product": "商品",
   "Product Image": "商品圖片",
@@ -110,6 +110,6 @@
   "User Email": "使用者電子郵件",
   "Vendor": "供應商",
   "Welcome to": "歡迎來到",
-  "Your cart is empty": "Your cart is empty",
+  "Your cart is empty": "您的購物車是空的",
   "Your password": "您的密碼"
 }
