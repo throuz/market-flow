@@ -1,8 +1,9 @@
 "use server";
 
 import { Database } from "@/database.types";
+import { redirect } from "@/i18n/navigation";
+import { getLocale } from "next-intl/server";
 import { createClient } from "@/utils/supabase/server";
-import { revalidatePath } from "next/cache";
 
 function convertTimestamp(input: string): string {
   const date = new Date(input);
@@ -11,6 +12,8 @@ function convertTimestamp(input: string): string {
 }
 
 export async function createOrder(formData: FormData) {
+  const locale = await getLocale();
+
   const supabase = await createClient();
 
   const order: Database["public"]["Tables"]["orders"]["Insert"] = {
@@ -82,7 +85,10 @@ export async function createOrder(formData: FormData) {
 
     if (updateError) throw updateError;
 
-    revalidatePath("/customer/orders");
+    redirect({
+      href: "/customer/orders",
+      locale,
+    });
   } catch (error) {
     throw new Error("Order creation failed");
   }
