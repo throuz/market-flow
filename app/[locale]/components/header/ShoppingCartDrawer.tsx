@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-
 import { useTranslations } from "next-intl";
 import { Minus, Plus, ShoppingCart, Trash, X } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 import { Database } from "@/database.types";
 import { Badge } from "@/components/ui/badge";
@@ -30,25 +30,38 @@ export default function ShoppingCartDrawer({
   const cart = useCartStore((store) => store.cart);
   const removeFromCart = useCartStore((store) => store.removeFromCart);
   const updateCartItem = useCartStore((store) => store.updateCartItem);
+  const [isOpen, setIsOpen] = React.useState(false); // Manage the drawer state
   const itemCount = cart.length;
-  const [isOpen, setIsOpen] = React.useState(false);
 
-  const getProductName = (productId: number) => {
-    return products.find((product) => product.id === productId)?.name;
-  };
+  const router = useRouter();
 
-  const getProductPrice = (productId: number) => {
-    return products.find((product) => product.id === productId)?.price_per_unit;
+  // Memoized product lookup map for efficient access
+  const productMap = React.useMemo(
+    () => new Map(products.map((product) => [product.id, product])),
+    [products]
+  );
+
+  const handleProceedToCheckout = () => {
+    setIsOpen(false); // Close the drawer when proceeding to checkout
+    router.push("/checkout"); // Navigate to the checkout page
   };
 
   return (
     <Drawer direction="right" open={isOpen} onOpenChange={setIsOpen}>
       {/* Shopping Cart Button (Trigger) */}
       <DrawerTrigger asChild>
-        <Button variant="ghost" size="icon" onClick={() => setIsOpen(true)}>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative"
+          onClick={() => setIsOpen(true)}
+        >
           <ShoppingCart className="w-5 h-5" />
           {itemCount > 0 && (
-            <Badge variant="destructive" className="absolute top-1 right-1">
+            <Badge
+              variant="destructive"
+              className="absolute -top-2 -right-2 text-xs"
+            >
               {itemCount}
             </Badge>
           )}
@@ -79,53 +92,56 @@ export default function ShoppingCartDrawer({
               {t("Your cart is empty")}.
             </p>
           ) : (
-            cart.map((item) => (
-              <div
-                key={item.product_id}
-                className="flex items-center justify-between border-b pb-2"
-              >
-                <div>
-                  <p className="font-semibold">
-                    {getProductName(item.product_id)}
-                  </p>
-                  <p className="text-sm text-muted-foreground">
-                    ${getProductPrice(item.product_id)?.toFixed(2)}
-                  </p>
+            cart.map((item) => {
+              const product = productMap.get(item.product_id);
+              if (!product) return null; // If product doesn't exist, skip rendering
+
+              return (
+                <div
+                  key={item.product_id}
+                  className="flex items-center justify-between border-b pb-2"
+                >
+                  <div>
+                    <p className="font-semibold">{product.name}</p>
+                    <p className="text-sm text-muted-foreground">
+                      ${product.price_per_unit.toFixed(2)}
+                    </p>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-6 w-6"
+                      onClick={() =>
+                        updateCartItem(item.product_id, item.quantity - 1)
+                      }
+                      disabled={item.quantity <= 1}
+                    >
+                      <Minus className="w-4 h-4" />
+                    </Button>
+                    <span>{item.quantity}</span>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      className="h-6 w-6"
+                      onClick={() =>
+                        updateCartItem(item.product_id, item.quantity + 1)
+                      }
+                    >
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant="destructive"
+                      size="icon"
+                      className="h-6 w-6"
+                      onClick={() => removeFromCart(item.product_id)}
+                    >
+                      <Trash className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() =>
-                      updateCartItem(item.product_id, item.quantity - 1)
-                    }
-                    disabled={item.quantity <= 1}
-                  >
-                    <Minus className="w-4 h-4" />
-                  </Button>
-                  <span>{item.quantity}</span>
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() =>
-                      updateCartItem(item.product_id, item.quantity + 1)
-                    }
-                  >
-                    <Plus className="w-4 h-4" />
-                  </Button>
-                  <Button
-                    variant="destructive"
-                    size="icon"
-                    className="h-6 w-6"
-                    onClick={() => removeFromCart(item.product_id)}
-                  >
-                    <Trash className="w-4 h-4" />
-                  </Button>
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
@@ -133,13 +149,11 @@ export default function ShoppingCartDrawer({
         <DrawerFooter>
           {cart.length > 0 && (
             <>
-              <Button className="w-full">{t("Proceed to Checkout")}</Button>
+              <Button className="w-full" onClick={handleProceedToCheckout}>
+                {t("Proceed to Checkout")}
+              </Button>
               <DrawerClose asChild>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => setIsOpen(false)}
-                >
+                <Button variant="outline" className="w-full">
                   {t("Continue Shopping")}
                 </Button>
               </DrawerClose>
