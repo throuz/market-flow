@@ -35,11 +35,16 @@ export default function ProfileForm({
             <SelectValue placeholder={t("Select profile role")} />
           </SelectTrigger>
           <SelectContent>
-            {appRoleOptions.map(({ label, value }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
+            {appRoleOptions.map(({ label, value }) => {
+              if (value === "admin") {
+                return null;
+              }
+              return (
+                <SelectItem key={value} value={value}>
+                  {label}
+                </SelectItem>
+              );
+            })}
           </SelectContent>
         </Select>
       </div>
