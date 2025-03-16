@@ -6,7 +6,10 @@ import { updateProfile } from "./actions";
 
 export default async function AdminProfilesPage() {
   const supabase = await createClient();
-  const { data: profiles } = await supabase.from("profiles").select("*");
+  const { data: profiles } = await supabase
+    .from("profiles")
+    .select("*")
+    .neq("role", "admin");
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
