@@ -5,6 +5,7 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Minus, Plus, Trash } from "lucide-react";
 
+import { formatPrice } from "@/lib/utils";
 import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -108,7 +109,7 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
                   <div>
                     <p className="font-medium">{product.name}</p>
                     <p className="text-gray-500">
-                      ${product.price_per_unit.toFixed(2)}
+                      {formatPrice(product.price_per_unit)}
                     </p>
                   </div>
                   <div className="flex items-center space-x-3">
@@ -266,7 +267,7 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
         <CardContent>
           <div className="flex justify-between text-lg font-semibold">
             <span>{t("Total Price")}:</span>
-            <span>${totalPrice.toFixed(2)}</span>
+            <span>{formatPrice(totalPrice)}</span>
           </div>
         </CardContent>
       </Card>
