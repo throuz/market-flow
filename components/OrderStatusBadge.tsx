@@ -1,9 +1,9 @@
 "use client";
 
-import { Database } from "@/database.types";
-import useOrderStatus from "@/hooks/useOrderStatus";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Database } from "@/database.types";
+import { Badge } from "@/components/ui/badge";
+import useOrderStatus from "@/hooks/useOrderStatus";
 
 const statusVariants: Record<
   Database["public"]["Enums"]["order_status"],
@@ -20,10 +20,7 @@ interface OrderStatusBadgeProps {
 }
 
 export default function OrderStatusBadge({ status }: OrderStatusBadgeProps) {
-  const { orderStatusOptions } = useOrderStatus();
-  const label =
-    orderStatusOptions.find((option) => option.value === status)?.label ??
-    "N/A";
+  const { orderStatusMap } = useOrderStatus();
 
   return (
     <Badge
@@ -32,7 +29,7 @@ export default function OrderStatusBadge({ status }: OrderStatusBadgeProps) {
         "transition-colors duration-200 ease-in-out"
       )}
     >
-      {label}
+      {orderStatusMap[status]}
     </Badge>
   );
 }
