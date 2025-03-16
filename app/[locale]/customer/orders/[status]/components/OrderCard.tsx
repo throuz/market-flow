@@ -12,9 +12,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import OrderStatusBadge from "./OrderStatusBadge";
 import OrderDetailsDialog from "./OrderDetailsDialog";
 import { formatDateTime } from "@/lib/utils";
+import OrderStatusBadge from "@/components/OrderStatusBadge";
 
 interface OrderCardProps {
   profile: Database["public"]["Tables"]["profiles"]["Row"] | null;
