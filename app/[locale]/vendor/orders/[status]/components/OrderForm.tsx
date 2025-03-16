@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { useTranslations } from "next-intl";
 
+import { formatPrice } from "@/lib/utils";
 import { Database } from "@/database.types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -337,7 +338,7 @@ export default function OrderForm({
                   {t("Price")}
                 </Label>
                 <div className="p-2 bg-muted rounded-md">
-                  NT${item.price?.toFixed(2) ?? "0.00"}
+                  {item.price ? formatPrice(item.price) : "-"}
                 </div>
                 <Input
                   type="hidden"

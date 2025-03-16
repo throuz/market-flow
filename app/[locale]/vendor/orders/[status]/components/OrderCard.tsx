@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { Database } from "@/database.types";
 import { Button } from "@/components/ui/button";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
+import { formatDateTime, formatPrice } from "@/lib/utils";
 import OrderStatusBadge from "@/components/OrderStatusBadge";
 import {
   Card,
@@ -17,7 +18,6 @@ import {
 } from "@/components/ui/card";
 
 import OrderFormDialog from "./OrderFormDialog";
-import { formatDateTime } from "@/lib/utils";
 
 interface OrderCardProps {
   order: Database["public"]["Tables"]["orders"]["Row"] & {
@@ -57,7 +57,7 @@ export default function OrderCard({
       <CardContent className="space-y-3 py-4 border-t">
         <div>
           <p className="text-sm text-gray-500">{t("Total Price")}</p>
-          <p className="font-medium">NT${order.total_price.toFixed(2)}</p>
+          <p className="font-medium">{formatPrice(order.total_price)}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500">{t("Payment Method")}</p>
