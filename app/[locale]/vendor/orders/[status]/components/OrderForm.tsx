@@ -1,18 +1,11 @@
 "use client";
 
-import { useState } from "react";
-
+import { useMemo } from "react";
 import { useTranslations } from "next-intl";
-
-import { formatPrice } from "@/lib/utils";
 import { Database } from "@/database.types";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import useOrderStatus from "@/hooks/useOrderStatus";
-import { Separator } from "@/components/ui/separator";
-import useProductUnits from "@/hooks/useProductUnits";
-import usePaymentMethods from "@/hooks/usePaymentMethods";
 import {
   Select,
   SelectContent,
@@ -20,143 +13,55 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { formatPrice } from "@/lib/utils";
+import useProductUnits from "@/hooks/useProductUnits";
+import usePaymentMethods from "@/hooks/usePaymentMethods";
 
 interface OrderFormProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
-  categories: Database["public"]["Tables"]["categories"]["Row"][];
   products: Database["public"]["Tables"]["products"]["Row"][];
-  onSubmit: (formData: FormData) => Promise<void>;
   initialData: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
+  onSubmit: (formData: FormData) => Promise<void>;
 }
 
 export default function OrderForm({
   profiles,
-  categories,
   products,
-  onSubmit,
   initialData,
+  onSubmit,
 }: OrderFormProps) {
   const t = useTranslations();
-
   const { orderStatusOptions } = useOrderStatus();
-
   const { productUnitMap } = useProductUnits();
+  const { paymentMethodMap } = usePaymentMethods();
 
-  const { paymentMethodOptions } = usePaymentMethods();
+  const userEmail = profiles.find(
+    (profile) => profile.id === initialData.user_id
+  )?.email;
 
-  const [paymentMethod, setPaymentMethod] = useState<
-    Database["public"]["Enums"]["payment_method"]
-  >(initialData.payment_method);
-
-  const [orderItems, setOrderItems] = useState<
-    Database["public"]["Tables"]["order_items"]["Update"][]
-  >(
-    initialData.orderItems.map(({ price, product_id, quantity }) => ({
-      price,
-      product_id,
-      quantity,
-    })) ?? [{ quantity: 1 }]
+  const productMap = useMemo(
+    () =>
+      products.reduce<
+        Record<number, Database["public"]["Tables"]["products"]["Row"]>
+      >((acc, product) => {
+        acc[product.id] = product;
+        return acc;
+      }, {}),
+    [products]
   );
-
-  const calculateSubtotal = (items: typeof orderItems) => {
-    return items.reduce(
-      (sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0),
-      0
-    );
-  };
-
-  const getProductUnitLabel = (productId?: number) => {
-    const unitValue = products.find(
-      (product) => product.id === productId
-    )?.unit;
-    const unitLabel = unitValue ? productUnitMap[unitValue] : "";
-    return unitLabel;
-  };
-
-  const userIdOptions: {
-    label: string;
-    value: Database["public"]["Tables"]["orders"]["Row"]["user_id"];
-  }[] = profiles.map((profile) => ({
-    label: profile.email,
-    value: profile.id,
-  }));
-
-  const productIdOptions = products.reduce<
-    Record<
-      string,
-      {
-        label: string;
-        value: Database["public"]["Tables"]["products"]["Row"]["id"];
-      }[]
-    >
-  >((acc, product) => {
-    const categoryName =
-      categories.find((c) => c.id === product.category_id)?.name ||
-      "Uncategorized";
-
-    if (!acc[categoryName]) {
-      acc[categoryName] = [];
-    }
-
-    acc[categoryName].push({
-      label: product.name,
-      value: product.id,
-    });
-
-    return acc;
-  }, {});
-
-  const addOrderItem = () => {
-    setOrderItems([...orderItems, { quantity: 1 }]);
-  };
-
-  const removeOrderItem = (index: number) => {
-    setOrderItems(orderItems.filter((_, i) => i !== index));
-  };
-
-  const handleProductSelect = (index: number, productId: string) => {
-    const product = products.find((p) => p.id === parseInt(productId));
-    if (!product) return;
-
-    setOrderItems((items) =>
-      items.map((item, i) =>
-        i === index
-          ? {
-              ...item,
-              product_id: parseInt(productId),
-              price: product.price_per_unit,
-            }
-          : item
-      )
-    );
-  };
 
   return (
     <form action={onSubmit} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="user_id">{t("User")}</Label>
-        <Select name="user_id" defaultValue={initialData.user_id} disabled>
-          <SelectTrigger id="user_id">
-            <SelectValue placeholder={t("Select user")} />
-          </SelectTrigger>
-          <SelectContent>
-            {userIdOptions.map(({ label, value }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        {!!initialData && (
-          <Input
-            type="hidden"
-            name="user_id"
-            defaultValue={initialData.user_id}
-          />
-        )}
-      </div>
       <div className="space-y-2">
         <Label htmlFor="status">{t("Status")}</Label>
         <Select name="status" defaultValue={initialData.status} required>
@@ -172,185 +77,78 @@ export default function OrderForm({
           </SelectContent>
         </Select>
       </div>
+
       <div className="space-y-2">
-        <Label htmlFor="phone">{t("Phone")}</Label>
-        <Input
-          type="tel"
-          id="phone"
-          name="phone"
-          defaultValue={initialData.phone}
-          disabled
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="address">{t("Address")}</Label>
-        <Input
-          type="text"
-          id="address"
-          name="address"
-          defaultValue={initialData.address}
-          disabled
-        />
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="estimated_delivery_time">
-          {t("Estimated Delivery Time")}
-        </Label>
-        <Input
-          type="datetime-local"
-          id="estimated_delivery_time"
-          name="estimated_delivery_time"
-          defaultValue={initialData.estimated_delivery_time.slice(0, 16)}
-          disabled
-        />
+        <Label>{t("Email")}</Label>
+        <div className="p-2 bg-muted rounded-md">{userEmail}</div>
       </div>
 
       <div className="space-y-2">
-        <Label htmlFor="payment_method">{t("Payment Method")}</Label>
-        <Select
-          name="payment_method"
-          defaultValue={initialData.payment_method}
-          onValueChange={(value) =>
-            setPaymentMethod(
-              value as Database["public"]["Enums"]["payment_method"]
-            )
-          }
-          disabled
-        >
-          <SelectTrigger id="payment_method">
-            <SelectValue placeholder={t("Select payment method")} />
-          </SelectTrigger>
-          <SelectContent>
-            {paymentMethodOptions.map(({ label, value }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <Label>{t("Phone")}</Label>
+        <div className="p-2 bg-muted rounded-md">{initialData.phone}</div>
       </div>
 
-      {paymentMethod === "money_transfer" && (
+      <div className="space-y-2">
+        <Label>{t("Address")}</Label>
+        <div className="p-2 bg-muted rounded-md">{initialData.address}</div>
+      </div>
+
+      <div className="space-y-2">
+        <Label>{t("Estimated Delivery Time")}</Label>
+        <div className="p-2 bg-muted rounded-md">
+          {initialData.estimated_delivery_time}
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label>{t("Payment Method")}</Label>
+        <div className="p-2 bg-muted rounded-md">
+          {paymentMethodMap[initialData.payment_method]}
+        </div>
+      </div>
+
+      {initialData.payment_method === "money_transfer" && (
         <div className="space-y-2">
-          <Label htmlFor="account_last_five">
-            {t("Account Last 5 Digits")}
-          </Label>
-          <Input
-            type="text"
-            id="account_last_five"
-            name="account_last_five"
-            defaultValue={initialData.account_last_five ?? ""}
-            disabled
-          />
+          <Label>{t("Account Last 5 Digits")}</Label>
+          <div className="p-2 bg-muted rounded-md">
+            {initialData.account_last_five}
+          </div>
         </div>
       )}
 
-      <div className="space-y-4">
-        <div className="flex justify-between items-center">
-          <h3 className="text-lg font-medium">{t("Order Items")}</h3>
-          <div className="flex gap-4 items-center">
-            <div className="text-lg">
-              {t("Subtotal")}: ${calculateSubtotal(orderItems).toFixed(2)}
-            </div>
-            <Button type="button" variant="secondary" onClick={addOrderItem}>
-              {t("Add Item")}
-            </Button>
-          </div>
-        </div>
+      <div className="space-y-2">
+        <Label>{t("Order Items")}</Label>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>{t("Product Name")}</TableHead>
+              <TableHead>{t("Price")}</TableHead>
+              <TableHead>{t("Quantity")}</TableHead>
+              <TableHead>{t("Total")}</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {initialData.orderItems.map((item, index) => {
+              const product = productMap[item.product_id];
+              return (
+                <TableRow key={index}>
+                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{formatPrice(item.price)}</TableCell>
+                  <TableCell>
+                    {item.quantity} {productUnitMap[product.unit]}
+                  </TableCell>
+                  <TableCell>
+                    {formatPrice(item.price * item.quantity)}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
 
-        {orderItems.map((item, index) => (
-          <div key={index} className="space-y-2 p-4 border rounded-lg">
-            <div className="flex justify-between items-center">
-              <div className="font-medium">
-                {t("Item")} #{index + 1}
-              </div>
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                onClick={() => removeOrderItem(index)}
-              >
-                {t("Remove")}
-              </Button>
-            </div>
-            <div className="grid grid-cols-3 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor={`order_items.${index}.product_id`}>
-                  {t("Product")}
-                </Label>
-                <Select
-                  name={`order_items.${index}.product_id`}
-                  defaultValue={item.product_id?.toString()}
-                  disabled
-                >
-                  <SelectTrigger id={`order_items.${index}.product_id`}>
-                    <SelectValue placeholder={t("Select product")} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.entries(productIdOptions).map(
-                      ([category, options]) => (
-                        <div key={category}>
-                          <div className="px-2 py-1.5 text-sm font-medium text-muted-foreground">
-                            {category}
-                          </div>
-                          {options
-                            .filter(
-                              (option) =>
-                                !orderItems.some(
-                                  (item, idx) =>
-                                    idx !== index &&
-                                    item.product_id === option.value
-                                )
-                            )
-                            .map(({ label, value }) => (
-                              <SelectItem key={value} value={value.toString()}>
-                                {label}
-                              </SelectItem>
-                            ))}
-                          <Separator />
-                        </div>
-                      )
-                    )}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`order_items.${index}.price`}>
-                  {t("Price")}
-                </Label>
-                <div className="p-2 bg-muted rounded-md">
-                  {item.price ? formatPrice(item.price) : "-"}
-                </div>
-                <Input
-                  type="hidden"
-                  name={`order_items.${index}.price`}
-                  value={item.price}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor={`order_items.${index}.quantity`}>
-                  {t("Quantity")}
-                </Label>
-                <div className="relative">
-                  <Input
-                    type="number"
-                    name={`order_items.${index}.quantity`}
-                    value={item.quantity}
-                    disabled
-                    className="pr-12"
-                  />
-                  <span className="absolute inset-y-0 right-3 flex items-center text-sm text-muted-foreground">
-                    {getProductUnitLabel(item.product_id) ?? ""}
-                  </span>
-                </div>
-              </div>
-            </div>
-            <div className="text-right text-sm text-muted-foreground">
-              {t("Item total")}: $
-              {((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
-            </div>
-          </div>
-        ))}
+      <div className="text-lg font-semibold">
+        {t("Subtotal")}: {formatPrice(initialData.total_price)}
       </div>
 
       <Button type="submit" className="w-full">

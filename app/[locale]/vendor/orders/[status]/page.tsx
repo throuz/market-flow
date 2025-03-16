@@ -23,7 +23,6 @@ export default async function VendorOrdersPage({
     .from("profiles")
     .select("*")
     .eq("role", "customer");
-  const { data: categories } = await supabase.from("categories").select("*");
   const { data: products } = await supabase.from("products").select("*");
 
   const getOrderItems = (id: number) =>
@@ -55,7 +54,6 @@ export default async function VendorOrdersPage({
                 key={order.id}
                 order={order}
                 profiles={profiles ?? []}
-                categories={categories ?? []}
                 products={products ?? []}
                 onUpdate={updateOrderStatus}
               />
