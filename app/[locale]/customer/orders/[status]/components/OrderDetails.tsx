@@ -1,12 +1,15 @@
 "use client";
 
 import { useMemo } from "react";
+
 import { useTranslations } from "next-intl";
+
 import { Database } from "@/database.types";
-import useOrderStatus from "@/hooks/useOrderStatus";
 import useProductUnits from "@/hooks/useProductUnits";
-import usePaymentMethods from "@/hooks/usePaymentMethods";
 import { Card, CardContent } from "@/components/ui/card";
+import usePaymentMethods from "@/hooks/usePaymentMethods";
+import { formatDateTime, formatPrice } from "@/lib/utils";
+import OrderStatusBadge from "@/components/OrderStatusBadge";
 import {
   Table,
   TableBody,
@@ -15,8 +18,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import OrderStatusBadge from "@/components/OrderStatusBadge";
-import { formatDateTime } from "@/lib/utils";
 
 interface OrderDetailsProps {
   profile: Database["public"]["Tables"]["profiles"]["Row"] | null;
@@ -32,37 +33,18 @@ export default function OrderDetails({
   order,
 }: OrderDetailsProps) {
   const t = useTranslations();
-  const { orderStatusOptions } = useOrderStatus();
   const { productUnitMap } = useProductUnits();
-  const { paymentMethodOptions } = usePaymentMethods();
+  const { paymentMethodMap } = usePaymentMethods();
 
-  // Create product lookup map
   const productMap = useMemo(
     () =>
-      products.reduce(
-        (acc, product) => {
-          acc[product.id] = product;
-          return acc;
-        },
-        {} as Record<number, Database["public"]["Tables"]["products"]["Row"]>
-      ),
+      products.reduce<
+        Record<number, Database["public"]["Tables"]["products"]["Row"]>
+      >((acc, product) => {
+        acc[product.id] = product;
+        return acc;
+      }, {}),
     [products]
-  );
-
-  const getStatusLabel = (status: string) =>
-    orderStatusOptions.find((option) => option.value === status)?.label || "-";
-
-  const getPaymentLabel = (method: string) =>
-    paymentMethodOptions.find((option) => option.value === method)?.label ||
-    "-";
-
-  const calculateSubtotal = useMemo(
-    () =>
-      order.orderItems.reduce(
-        (sum, item) => sum + (item.price ?? 0) * (item.quantity ?? 0),
-        0
-      ),
-    [order.orderItems]
   );
 
   return (
@@ -77,23 +59,25 @@ export default function OrderDetails({
             <OrderStatusBadge status={order.status} />
           </p>
           <p>
-            <strong>{t("Phone")}:</strong> {order.phone}
+            <strong>{t("Phone")}:</strong> {order.phone ?? "-"}
           </p>
           <p>
-            <strong>{t("Address")}:</strong> {order.address}
+            <strong>{t("Address")}:</strong> {order.address ?? "-"}
           </p>
           <p>
             <strong>{t("Estimated Delivery Time")}:</strong>{" "}
-            {formatDateTime(order.estimated_delivery_time)}
+            {order.estimated_delivery_time
+              ? formatDateTime(order.estimated_delivery_time)
+              : "-"}
           </p>
           <p>
             <strong>{t("Payment Method")}:</strong>{" "}
-            {getPaymentLabel(order.payment_method)}
+            {paymentMethodMap[order.payment_method]}
           </p>
           {order.payment_method === "money_transfer" && (
             <p>
               <strong>{t("Account Last 5 Digits")}:</strong>{" "}
-              {order.account_last_five}
+              {order.account_last_five ?? "-"}
             </p>
           )}
         </div>
@@ -115,13 +99,13 @@ export default function OrderDetails({
                 return (
                   <TableRow key={index}>
                     <TableCell>{product?.name ?? "-"}</TableCell>
-                    <TableCell>${item.price?.toFixed(2)}</TableCell>
+                    <TableCell>{formatPrice(item.price)}</TableCell>
                     <TableCell>
                       {item.quantity}{" "}
                       {product?.unit ? productUnitMap[product.unit] : "-"}
                     </TableCell>
                     <TableCell>
-                      ${((item.price ?? 0) * (item.quantity ?? 0)).toFixed(2)}
+                      {formatPrice((item.price ?? 0) * (item.quantity ?? 0))}
                     </TableCell>
                   </TableRow>
                 );
@@ -131,7 +115,7 @@ export default function OrderDetails({
         </div>
 
         <div className="text-lg font-semibold">
-          {t("Subtotal")}: ${calculateSubtotal.toFixed(2)}
+          {t("Subtotal")}: {formatPrice(order.total_price)}
         </div>
       </CardContent>
     </Card>
