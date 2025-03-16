@@ -21,7 +21,7 @@ interface OrderDialogProps {
   categories: Database["public"]["Tables"]["categories"]["Row"][];
   products: Database["public"]["Tables"]["products"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
-  initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
+  initialData: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
 }
@@ -39,15 +39,11 @@ export default function OrderFormDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant={initialData ? "outline" : "default"}>
-          {initialData ? t("Edit") : t("Add Order")}
-        </Button>
+        <Button variant="outline">{t("Edit")}</Button>
       </DialogTrigger>
       <DialogContent className="rounded-lg overflow-y-scroll max-w-[90vw] md:max-w-lg max-h-[90vh]">
         <DialogHeader>
-          <DialogTitle>
-            {initialData ? t("Edit Order") : t("Add New Order")}
-          </DialogTitle>
+          <DialogTitle>{t("Edit Order")}</DialogTitle>
         </DialogHeader>
         <OrderForm
           profiles={profiles}

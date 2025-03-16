@@ -26,7 +26,7 @@ interface OrderFormProps {
   categories: Database["public"]["Tables"]["categories"]["Row"][];
   products: Database["public"]["Tables"]["products"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
-  initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
+  initialData: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
 }
@@ -47,13 +47,13 @@ export default function OrderForm({
   const { paymentMethodOptions } = usePaymentMethods();
 
   const [paymentMethod, setPaymentMethod] = useState<
-    Database["public"]["Enums"]["payment_method"] | null
-  >(initialData?.payment_method ?? null);
+    Database["public"]["Enums"]["payment_method"]
+  >(initialData.payment_method);
 
   const [orderItems, setOrderItems] = useState<
     Database["public"]["Tables"]["order_items"]["Update"][]
   >(
-    initialData?.orderItems.map(({ price, product_id, quantity }) => ({
+    initialData.orderItems.map(({ price, product_id, quantity }) => ({
       price,
       product_id,
       quantity,
@@ -137,12 +137,7 @@ export default function OrderForm({
     <form action={onSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="user_id">{t("User")}</Label>
-        <Select
-          name="user_id"
-          defaultValue={initialData?.user_id}
-          required
-          disabled={!!initialData}
-        >
+        <Select name="user_id" defaultValue={initialData.user_id} disabled>
           <SelectTrigger id="user_id">
             <SelectValue placeholder={t("Select user")} />
           </SelectTrigger>
@@ -158,13 +153,13 @@ export default function OrderForm({
           <Input
             type="hidden"
             name="user_id"
-            defaultValue={initialData?.user_id}
+            defaultValue={initialData.user_id}
           />
         )}
       </div>
       <div className="space-y-2">
         <Label htmlFor="status">{t("Status")}</Label>
-        <Select name="status" defaultValue={initialData?.status} required>
+        <Select name="status" defaultValue={initialData.status} required>
           <SelectTrigger id="status">
             <SelectValue placeholder={t("Select status")} />
           </SelectTrigger>
@@ -183,11 +178,8 @@ export default function OrderForm({
           type="tel"
           id="phone"
           name="phone"
-          defaultValue={initialData?.phone}
-          required
-          pattern="[0-9]{10}"
-          title={t("Phone number must be 10 digits")}
-          placeholder={t("Enter phone number")}
+          defaultValue={initialData.phone}
+          disabled
         />
       </div>
       <div className="space-y-2">
@@ -196,11 +188,8 @@ export default function OrderForm({
           type="text"
           id="address"
           name="address"
-          defaultValue={initialData?.address}
-          required
-          pattern=".{10,}"
-          title={t("Address must be at least 10 characters long")}
-          placeholder={t("Enter delivery address")}
+          defaultValue={initialData.address}
+          disabled
         />
       </div>
       <div className="space-y-2">
@@ -211,18 +200,8 @@ export default function OrderForm({
           type="datetime-local"
           id="estimated_delivery_time"
           name="estimated_delivery_time"
-          defaultValue={initialData?.estimated_delivery_time.slice(0, 16)}
-          required
-          // 1 day later & UTC+8 timezone
-          min={new Date(Date.now() + 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000)
-            .toISOString()
-            .slice(0, 16)}
-          // 1 month later & UTC+8 timezone
-          max={new Date(
-            Date.now() + 30 * 24 * 60 * 60 * 1000 + 8 * 60 * 60 * 1000
-          )
-            .toISOString()
-            .slice(0, 16)}
+          defaultValue={initialData.estimated_delivery_time.slice(0, 16)}
+          disabled
         />
       </div>
 
@@ -230,13 +209,13 @@ export default function OrderForm({
         <Label htmlFor="payment_method">{t("Payment Method")}</Label>
         <Select
           name="payment_method"
-          defaultValue={initialData?.payment_method}
+          defaultValue={initialData.payment_method}
           onValueChange={(value) =>
             setPaymentMethod(
               value as Database["public"]["Enums"]["payment_method"]
             )
           }
-          required
+          disabled
         >
           <SelectTrigger id="payment_method">
             <SelectValue placeholder={t("Select payment method")} />
@@ -260,11 +239,8 @@ export default function OrderForm({
             type="text"
             id="account_last_five"
             name="account_last_five"
-            defaultValue={initialData?.account_last_five ?? ""}
-            required
-            pattern="\d{5}"
-            title={t("Please enter last 5 digits of the account")}
-            placeholder={t("Enter last 5 digits")}
+            defaultValue={initialData.account_last_five ?? ""}
+            disabled
           />
         </div>
       )}
@@ -305,8 +281,7 @@ export default function OrderForm({
                 <Select
                   name={`order_items.${index}.product_id`}
                   defaultValue={item.product_id?.toString()}
-                  onValueChange={(value) => handleProductSelect(index, value)}
-                  required
+                  disabled
                 >
                   <SelectTrigger id={`order_items.${index}.product_id`}>
                     <SelectValue placeholder={t("Select product")} />
@@ -361,18 +336,7 @@ export default function OrderForm({
                     type="number"
                     name={`order_items.${index}.quantity`}
                     value={item.quantity}
-                    onChange={(e) => {
-                      const newQuantity = parseInt(e.target.value) || 1;
-                      setOrderItems((items) =>
-                        items.map((item, i) =>
-                          i === index
-                            ? { ...item, quantity: newQuantity }
-                            : item
-                        )
-                      );
-                    }}
-                    min="1"
-                    required
+                    disabled
                     className="pr-12"
                   />
                   <span className="absolute inset-y-0 right-3 flex items-center text-sm text-muted-foreground">

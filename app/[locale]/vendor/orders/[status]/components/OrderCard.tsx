@@ -27,7 +27,6 @@ interface OrderCardProps {
   categories: Database["public"]["Tables"]["categories"]["Row"][];
   products: Database["public"]["Tables"]["products"]["Row"][];
   onUpdate: (id: number, formData: FormData) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
 }
 
 export default function OrderCard({
@@ -36,7 +35,6 @@ export default function OrderCard({
   categories,
   products,
   onUpdate,
-  onDelete,
 }: OrderCardProps) {
   const t = useTranslations();
 
@@ -113,14 +111,6 @@ export default function OrderCard({
           initialData={order}
           onSubmit={(formData) => onUpdate(order.id, formData)}
         />
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            await onDelete(order.id);
-          }}
-        >
-          <Button variant="destructive">{t("Delete")}</Button>
-        </form>
       </CardFooter>
     </Card>
   );

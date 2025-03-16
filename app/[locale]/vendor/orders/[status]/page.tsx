@@ -3,9 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 
 import OrderCard from "./components/OrderCard";
 import OrderTitle from "./components/OrderTitle";
-import OrderFormDialog from "./components/OrderFormDialog";
 import OrderStatusTabs from "./components/OrderStatusTabs";
-import { createOrder, deleteOrder, updateOrder } from "./actions";
+import { updateOrderStatus } from "./actions";
 import NoOrdersMessage from "./components/NoOrdersMessage";
 
 export default async function VendorOrdersPage({
@@ -41,12 +40,6 @@ export default async function VendorOrdersPage({
       <section>
         <div className="flex justify-between items-center mb-6">
           <OrderTitle />
-          <OrderFormDialog
-            profiles={profiles ?? []}
-            categories={categories ?? []}
-            products={products ?? []}
-            onSubmit={createOrder}
-          />
         </div>
 
         <div className="mb-6">
@@ -64,8 +57,7 @@ export default async function VendorOrdersPage({
                 profiles={profiles ?? []}
                 categories={categories ?? []}
                 products={products ?? []}
-                onUpdate={updateOrder}
-                onDelete={deleteOrder}
+                onUpdate={updateOrderStatus}
               />
             ))
           )}
