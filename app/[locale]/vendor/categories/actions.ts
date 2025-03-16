@@ -1,8 +1,9 @@
 "use server";
 
 import { Database } from "@/database.types";
-import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { formatTimestamptz } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/server";
 
 export async function createCategory(formData: FormData) {
   const supabase = await createClient();
@@ -23,6 +24,7 @@ export async function updateCategory(id: number, formData: FormData) {
   const supabase = await createClient();
   const category: Database["public"]["Tables"]["categories"]["Update"] = {
     name: formData.get("name") as string,
+    updated_at: formatTimestamptz(new Date().toString()),
   };
 
   try {

@@ -1,14 +1,9 @@
 "use server";
 
 import { Database } from "@/database.types";
-import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
-
-function convertTimestamp(input: string): string {
-  const date = new Date(input);
-  const formatted = date.toISOString().replace("T", " ").replace("Z", "+00");
-  return formatted;
-}
+import { formatTimestamptz } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/server";
 
 export async function createOrder(formData: FormData) {
   const supabase = await createClient();
@@ -20,7 +15,7 @@ export async function createOrder(formData: FormData) {
     user_id: formData.get("user_id") as string,
     phone: formData.get("phone") as string,
     address: formData.get("address") as string,
-    estimated_delivery_time: convertTimestamp(
+    estimated_delivery_time: formatTimestamptz(
       String(formData.get("estimated_delivery_time"))
     ),
     total_price: 0,
@@ -98,7 +93,7 @@ export async function updateOrder(id: number, formData: FormData) {
     user_id: formData.get("user_id") as string,
     phone: formData.get("phone") as string,
     address: formData.get("address") as string,
-    estimated_delivery_time: convertTimestamp(
+    estimated_delivery_time: formatTimestamptz(
       formData.get("estimated_delivery_time") as string
     ),
     total_price: 0,
@@ -108,6 +103,7 @@ export async function updateOrder(id: number, formData: FormData) {
     account_last_five: formData.get("account_last_five")
       ? Number(formData.get("account_last_five"))
       : null,
+    updated_at: formatTimestamptz(new Date().toString()),
   };
 
   try {

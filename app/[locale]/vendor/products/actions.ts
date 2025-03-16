@@ -1,8 +1,9 @@
 "use server";
 
 import { Database } from "@/database.types";
-import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
+import { formatTimestamptz } from "@/lib/utils";
+import { createClient } from "@/lib/supabase/server";
 
 async function uploadFile(file: File | null): Promise<string> {
   if (!file || file.size === 0) return "";
@@ -62,6 +63,7 @@ export async function updateProduct(id: number, formData: FormData) {
     image_url: imageUrl || (formData.get("image_url") as string),
     stock_quantity: Number(formData.get("stock_quantity")) || 0,
     unit: formData.get("unit") as Database["public"]["Enums"]["product_unit"],
+    updated_at: formatTimestamptz(new Date().toString()),
   };
 
   try {
