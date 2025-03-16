@@ -22,7 +22,7 @@ interface OrderDialogProps {
   products: Database["public"]["Tables"]["products"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
   initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
-    orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
+    orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
 }
 

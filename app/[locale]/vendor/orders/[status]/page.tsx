@@ -32,13 +32,7 @@ export default async function VendorOrdersPage({
   const ordersWithItems =
     orders?.map((order) => ({
       ...order,
-      orderItems: getOrderItems(order.id).map(
-        ({ price, product_id, quantity }) => ({
-          price,
-          product_id,
-          quantity,
-        })
-      ),
+      orderItems: getOrderItems(order.id).map((orderItem) => orderItem),
     })) ?? [];
 
   return (

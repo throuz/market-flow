@@ -21,7 +21,7 @@ import OrderFormDialog from "./OrderFormDialog";
 
 interface OrderCardProps {
   order: Database["public"]["Tables"]["orders"]["Row"] & {
-    orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
+    orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
   categories: Database["public"]["Tables"]["categories"]["Row"][];

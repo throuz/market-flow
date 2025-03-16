@@ -27,7 +27,7 @@ interface OrderFormProps {
   products: Database["public"]["Tables"]["products"]["Row"][];
   onSubmit: (formData: FormData) => Promise<void>;
   initialData?: Database["public"]["Tables"]["orders"]["Row"] & {
-    orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
+    orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
 }
 
@@ -52,7 +52,13 @@ export default function OrderForm({
 
   const [orderItems, setOrderItems] = useState<
     Database["public"]["Tables"]["order_items"]["Update"][]
-  >(initialData?.orderItems ?? [{ quantity: 1 }]);
+  >(
+    initialData?.orderItems.map(({ price, product_id, quantity }) => ({
+      price,
+      product_id,
+      quantity,
+    })) ?? [{ quantity: 1 }]
+  );
 
   const calculateSubtotal = (items: typeof orderItems) => {
     return items.reduce(
