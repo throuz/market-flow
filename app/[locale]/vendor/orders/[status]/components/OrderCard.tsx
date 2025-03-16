@@ -17,8 +17,7 @@ import {
 } from "@/components/ui/card";
 
 import OrderFormDialog from "./OrderFormDialog";
-
-const formatDateTime = (date: string) => new Date(date).toLocaleString();
+import { formatDateTime } from "@/lib/utils";
 
 interface OrderCardProps {
   order: Database["public"]["Tables"]["orders"]["Row"] & {

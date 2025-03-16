@@ -16,8 +16,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import OrderStatusBadge from "@/components/OrderStatusBadge";
-
-const formatDateTime = (date: string) => new Date(date).toLocaleString();
+import { formatDateTime } from "@/lib/utils";
 
 interface OrderDetailsProps {
   profile: Database["public"]["Tables"]["profiles"]["Row"] | null;

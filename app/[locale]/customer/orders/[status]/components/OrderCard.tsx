@@ -14,8 +14,7 @@ import {
 
 import OrderStatusBadge from "./OrderStatusBadge";
 import OrderDetailsDialog from "./OrderDetailsDialog";
-
-const formatDateTime = (date: string) => new Date(date).toLocaleString();
+import { formatDateTime } from "@/lib/utils";
 
 interface OrderCardProps {
   profile: Database["public"]["Tables"]["profiles"]["Row"] | null;
