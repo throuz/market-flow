@@ -29,6 +29,7 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
   const cart = useCartStore((store) => store.cart);
   const removeFromCart = useCartStore((store) => store.removeFromCart);
   const updateCartItem = useCartStore((store) => store.updateCartItem);
+  const clearCart = useCartStore((store) => store.clearCart);
   const t = useTranslations();
   const { paymentMethodOptions } = usePaymentMethods();
   const router = useRouter();
@@ -51,6 +52,7 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
   const formAction = async (formData: FormData): Promise<void> => {
     try {
       await createOrder(formData);
+      clearCart();
       router.push("/customer/orders");
     } catch (error) {
       throw new Error("Order creation failed");

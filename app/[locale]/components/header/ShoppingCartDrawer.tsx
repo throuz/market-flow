@@ -5,6 +5,7 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { Minus, Plus, ShoppingCart, Trash, X } from "lucide-react";
 
+import { formatPrice } from "@/lib/utils";
 import { Database } from "@/database.types";
 import { Badge } from "@/components/ui/badge";
 import { useRouter } from "@/i18n/navigation";
@@ -40,6 +41,12 @@ export default function ShoppingCartDrawer({
     () => new Map(products.map((product) => [product.id, product])),
     [products]
   );
+
+  // Calculate subtotal for each item and total for the cart
+  const subtotal = cart.reduce((acc, item) => {
+    const product = productMap.get(item.product_id);
+    return product ? acc + product.price_per_unit * item.quantity : acc;
+  }, 0);
 
   const handleProceedToCheckout = () => {
     router.push("/customer/checkout");
@@ -93,6 +100,8 @@ export default function ShoppingCartDrawer({
               const product = productMap.get(item.product_id);
               if (!product) return null;
 
+              const itemSubtotal = product.price_per_unit * item.quantity;
+
               return (
                 <div
                   key={item.product_id}
@@ -101,7 +110,10 @@ export default function ShoppingCartDrawer({
                   <div>
                     <p className="font-semibold">{product.name}</p>
                     <p className="text-sm text-muted-foreground">
-                      ${product.price_per_unit.toFixed(2)}
+                      {formatPrice(product.price_per_unit)}
+                    </p>
+                    <p className="text-sm text-muted-foreground">
+                      {t("Subtotal")}: {formatPrice(itemSubtotal)}
                     </p>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -145,6 +157,10 @@ export default function ShoppingCartDrawer({
         <DrawerFooter>
           {cart.length > 0 && (
             <>
+              <div className="flex justify-between items-center">
+                <p className="font-semibold">{t("Subtotal")}:</p>
+                <p className="font-semibold">{formatPrice(subtotal)}</p>
+              </div>
               <Button className="w-full" onClick={handleProceedToCheckout}>
                 {t("Proceed to Checkout")}
               </Button>
