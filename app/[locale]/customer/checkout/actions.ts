@@ -1,8 +1,6 @@
 "use server";
 
 import { Database } from "@/database.types";
-import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
 import { createClient } from "@/lib/supabase/server";
 
 function convertTimestamp(input: string): string {
@@ -12,8 +10,6 @@ function convertTimestamp(input: string): string {
 }
 
 export async function createOrder(formData: FormData) {
-  const locale = await getLocale();
-
   const supabase = await createClient();
 
   const order: Database["public"]["Tables"]["orders"]["Insert"] = {
@@ -51,17 +47,21 @@ export async function createOrder(formData: FormData) {
     const formEntries = Array.from(formData.entries());
 
     formEntries.forEach(([key, value]) => {
-      if (key.startsWith("order_items.") && key.endsWith(".product_id")) {
+      if (key.startsWith("order_items.") && key.endsWith(".name")) {
         const index = key.split(".")[1];
-        const productId = Number(value);
-        const quantity = Number(formData.get(`order_items.${index}.quantity`));
+        const name = String(value);
         const price = Number(formData.get(`order_items.${index}.price`));
+        const quantity = Number(formData.get(`order_items.${index}.quantity`));
+        const unit = String(
+          formData.get(`order_items.${index}.unit`)
+        ) as Database["public"]["Enums"]["product_unit"];
 
         orderItems.push({
           order_id: orderData.id,
-          product_id: productId,
-          quantity: quantity,
-          price: price,
+          name,
+          price,
+          quantity,
+          unit,
         });
       }
     });

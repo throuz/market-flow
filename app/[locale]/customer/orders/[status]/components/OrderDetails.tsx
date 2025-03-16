@@ -102,14 +102,12 @@ export default function OrderDetails({
             </TableHeader>
             <TableBody>
               {order.orderItems.map((item, index) => {
-                const product = productMap[item.product_id];
                 return (
                   <TableRow key={index}>
-                    <TableCell>{product?.name ?? "-"}</TableCell>
+                    <TableCell>{item.name}</TableCell>
                     <TableCell>{formatPrice(item.price)}</TableCell>
                     <TableCell>
-                      {item.quantity}{" "}
-                      {product?.unit ? productUnitMap[product.unit] : "-"}
+                      {item.quantity} {item.unit}
                     </TableCell>
                     <TableCell>
                       {formatPrice(item.price * item.quantity)}

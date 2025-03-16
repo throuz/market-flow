@@ -33,24 +33,27 @@ export type Database = {
       order_items: {
         Row: {
           id: number
+          name: string
           order_id: number
           price: number
-          product_id: number
           quantity: number
+          unit: Database["public"]["Enums"]["product_unit"]
         }
         Insert: {
           id?: never
+          name: string
           order_id: number
           price: number
-          product_id: number
           quantity: number
+          unit: Database["public"]["Enums"]["product_unit"]
         }
         Update: {
           id?: never
+          name?: string
           order_id?: number
           price?: number
-          product_id?: number
           quantity?: number
+          unit?: Database["public"]["Enums"]["product_unit"]
         }
         Relationships: [
           {
@@ -58,13 +61,6 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "order_items_product_id_fkey"
-            columns: ["product_id"]
-            isOneToOne: false
-            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]

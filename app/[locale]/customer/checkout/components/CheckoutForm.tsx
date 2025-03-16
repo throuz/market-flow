@@ -1,15 +1,18 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useCartStore } from "@/providers/shopping-cart-provider";
-import { Database } from "@/database.types";
+
 import { useTranslations } from "next-intl";
 import { Minus, Plus, Trash } from "lucide-react";
+
+import { Database } from "@/database.types";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useRouter } from "@/i18n/navigation";
+import { Button } from "@/components/ui/button";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
+import { useCartStore } from "@/providers/shopping-cart-provider";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -17,8 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
 import { createOrder } from "../actions";
-import { useRouter } from "@/i18n/navigation";
 
 interface CheckoutFormProps {
   userId: string;
@@ -80,8 +83,14 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
                 >
                   <Input
                     type="hidden"
-                    name={`order_items.${index}.product_id`}
-                    value={item.product_id}
+                    name={`order_items.${index}.name`}
+                    value={product.name}
+                    required
+                  />
+                  <Input
+                    type="hidden"
+                    name={`order_items.${index}.price`}
+                    value={product.price_per_unit}
                     required
                   />
                   <Input
@@ -92,8 +101,8 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
                   />
                   <Input
                     type="hidden"
-                    name={`order_items.${index}.price`}
-                    value={productMap.get(item.product_id)?.price_per_unit}
+                    name={`order_items.${index}.unit`}
+                    value={product.unit}
                     required
                   />
                   <div>

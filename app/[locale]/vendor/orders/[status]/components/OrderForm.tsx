@@ -129,13 +129,12 @@ export default function OrderForm({
           </TableHeader>
           <TableBody>
             {initialData.orderItems.map((item, index) => {
-              const product = productMap[item.product_id];
               return (
                 <TableRow key={index}>
-                  <TableCell>{product.name}</TableCell>
+                  <TableCell>{item.name}</TableCell>
                   <TableCell>{formatPrice(item.price)}</TableCell>
                   <TableCell>
-                    {item.quantity} {productUnitMap[product.unit]}
+                    {item.quantity} {item.unit}
                   </TableCell>
                   <TableCell>
                     {formatPrice(item.price * item.quantity)}

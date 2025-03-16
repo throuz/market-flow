@@ -5,7 +5,6 @@ import { useMemo } from "react";
 import { useTranslations } from "next-intl";
 
 import { Database } from "@/database.types";
-import { Button } from "@/components/ui/button";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
 import { formatDateTime, formatPrice } from "@/lib/utils";
 import OrderStatusBadge from "@/components/OrderStatusBadge";
@@ -24,19 +23,15 @@ interface OrderCardProps {
     orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
-  categories: Database["public"]["Tables"]["categories"]["Row"][];
   products: Database["public"]["Tables"]["products"]["Row"][];
   onUpdate: (id: number, formData: FormData) => Promise<void>;
-  onDelete: (id: number) => Promise<void>;
 }
 
 export default function OrderCard({
   order,
   profiles,
-  categories,
   products,
   onUpdate,
-  onDelete,
 }: OrderCardProps) {
   const t = useTranslations();
 
@@ -108,19 +103,10 @@ export default function OrderCard({
       <CardFooter className="justify-end gap-4 pt-4 border-t">
         <OrderFormDialog
           profiles={profiles}
-          categories={categories}
           products={products}
           initialData={order}
           onSubmit={(formData) => onUpdate(order.id, formData)}
         />
-        <form
-          onSubmit={async (e) => {
-            e.preventDefault();
-            await onDelete(order.id);
-          }}
-        >
-          <Button variant="destructive">{t("Delete")}</Button>
-        </form>
       </CardFooter>
     </Card>
   );
