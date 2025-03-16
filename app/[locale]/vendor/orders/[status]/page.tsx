@@ -6,6 +6,7 @@ import OrderTitle from "./components/OrderTitle";
 import OrderFormDialog from "./components/OrderFormDialog";
 import OrderStatusTabs from "./components/OrderStatusTabs";
 import { createOrder, deleteOrder, updateOrder } from "./actions";
+import NoOrdersMessage from "./components/NoOrdersMessage";
 
 export default async function VendorOrdersPage({
   params,
@@ -53,17 +54,21 @@ export default async function VendorOrdersPage({
         </div>
 
         <div className="grid gap-6 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {ordersWithItems.map((order) => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              profiles={profiles ?? []}
-              categories={categories ?? []}
-              products={products ?? []}
-              onUpdate={updateOrder}
-              onDelete={deleteOrder}
-            />
-          ))}
+          {ordersWithItems.length === 0 ? (
+            <NoOrdersMessage />
+          ) : (
+            ordersWithItems.map((order) => (
+              <OrderCard
+                key={order.id}
+                order={order}
+                profiles={profiles ?? []}
+                categories={categories ?? []}
+                products={products ?? []}
+                onUpdate={updateOrder}
+                onDelete={deleteOrder}
+              />
+            ))
+          )}
         </div>
       </section>
     </div>
