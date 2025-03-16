@@ -3,7 +3,7 @@
 import { Database } from "@/database.types";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 function convertTimestamp(input: string): string {
   const date = new Date(input);

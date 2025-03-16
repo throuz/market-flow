@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 import CheckoutForm from "./components/CheckoutForm";
 import CheckoutTitle from "./components/CheckoutTitle";

@@ -1,5 +1,5 @@
 import { Link } from "@/i18n/navigation";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import HeaderAuth from "@/app/[locale]/components/header/header-auth";
 
 import NavLinks from "./nav-links";

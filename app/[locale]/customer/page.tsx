@@ -1,4 +1,4 @@
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import CustomerTitle from "./components/CustomerTitle";
 import CustomerUserInfo from "./components/CustomerUserInfo";
 

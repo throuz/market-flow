@@ -1,5 +1,5 @@
 import { Database } from "@/database.types";
-import { createClient } from "@/utils/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 import ProductCard from "./components/ProductCard";
 import ProductTitle from "./components/ProductTitle";
