@@ -51,34 +51,41 @@ export default function OrderDetails({
     <Card>
       <CardContent className="space-y-4 p-6">
         <div className="grid gap-2">
-          <p>
-            <strong>{t("Email")}:</strong> {profile?.email ?? "-"}
-          </p>
-          <p>
-            <strong>{t("Status")}:</strong>{" "}
-            <OrderStatusBadge status={order.status} />
-          </p>
-          <p>
-            <strong>{t("Phone")}:</strong> {order.phone ?? "-"}
-          </p>
-          <p>
-            <strong>{t("Address")}:</strong> {order.address ?? "-"}
-          </p>
-          <p>
-            <strong>{t("Estimated Delivery Time")}:</strong>{" "}
-            {order.estimated_delivery_time
-              ? formatDateTime(order.estimated_delivery_time)
-              : "-"}
-          </p>
-          <p>
-            <strong>{t("Payment Method")}:</strong>{" "}
-            {paymentMethodMap[order.payment_method]}
-          </p>
+          <div className="flex space-x-2">
+            <strong>{t("Email")}:</strong>
+            <span>{profile?.email ?? "-"}</span>
+          </div>
+          <div className="flex space-x-2">
+            <strong>{t("Status")}:</strong>
+            <span>
+              <OrderStatusBadge status={order.status} />
+            </span>
+          </div>
+          <div className="flex space-x-2">
+            <strong>{t("Phone")}:</strong>
+            <span>{order.phone ?? "-"}</span>
+          </div>
+          <div className="flex space-x-2">
+            <strong>{t("Address")}:</strong>
+            <span>{order.address ?? "-"}</span>
+          </div>
+          <div className="flex space-x-2">
+            <strong>{t("Estimated Delivery Time")}:</strong>
+            <span>
+              {order.estimated_delivery_time
+                ? formatDateTime(order.estimated_delivery_time)
+                : "-"}
+            </span>
+          </div>
+          <div className="flex space-x-2">
+            <strong>{t("Payment Method")}:</strong>
+            <span>{paymentMethodMap[order.payment_method]}</span>
+          </div>
           {order.payment_method === "money_transfer" && (
-            <p>
-              <strong>{t("Account Last 5 Digits")}:</strong>{" "}
-              {order.account_last_five ?? "-"}
-            </p>
+            <div className="flex space-x-2">
+              <strong>{t("Account Last 5 Digits")}:</strong>
+              <span>{order.account_last_five ?? "-"}</span>
+            </div>
           )}
         </div>
 
@@ -105,7 +112,7 @@ export default function OrderDetails({
                       {product?.unit ? productUnitMap[product.unit] : "-"}
                     </TableCell>
                     <TableCell>
-                      {formatPrice((item.price ?? 0) * (item.quantity ?? 0))}
+                      {formatPrice(item.price * item.quantity)}
                     </TableCell>
                   </TableRow>
                 );
