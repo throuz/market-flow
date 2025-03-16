@@ -15,6 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import OrderStatusBadge from "@/components/OrderStatusBadge";
 
 const formatDateTime = (date: string) => new Date(date).toLocaleString();
 
@@ -73,7 +74,8 @@ export default function OrderDetails({
             <strong>{t("Email")}:</strong> {profile?.email ?? "-"}
           </p>
           <p>
-            <strong>{t("Status")}:</strong> {getStatusLabel(order.status)}
+            <strong>{t("Status")}:</strong>{" "}
+            <OrderStatusBadge status={order.status} />
           </p>
           <p>
             <strong>{t("Phone")}:</strong> {order.phone}

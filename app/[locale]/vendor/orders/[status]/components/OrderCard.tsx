@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { Database } from "@/database.types";
 import { Button } from "@/components/ui/button";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
+import OrderStatusBadge from "@/components/OrderStatusBadge";
 import {
   Card,
   CardContent,
@@ -16,7 +17,6 @@ import {
 } from "@/components/ui/card";
 
 import OrderFormDialog from "./OrderFormDialog";
-import OrderStatusBadge from "./OrderStatusBadge";
 
 const formatDateTime = (date: string) => new Date(date).toLocaleString();
 
