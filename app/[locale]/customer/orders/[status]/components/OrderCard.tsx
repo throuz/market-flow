@@ -1,24 +1,35 @@
 "use client";
 
-import { useMemo } from "react";
-
 import { useTranslations } from "next-intl";
 
 import { Database } from "@/database.types";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import OrderStatusBadge from "./OrderStatusBadge";
+import OrderDetailsDialog from "./OrderDetailsDialog";
 
 const formatDateTime = (date: string) => new Date(date).toLocaleString();
 
 interface OrderCardProps {
+  profile: Database["public"]["Tables"]["profiles"]["Row"] | null;
+  products: Database["public"]["Tables"]["products"]["Row"][];
   order: Database["public"]["Tables"]["orders"]["Row"] & {
-    orderItems: Database["public"]["Tables"]["order_items"]["Update"][];
+    orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
 }
 
-export default function OrderCard({ order }: OrderCardProps) {
+export default function OrderCard({
+  profile,
+  products,
+  order,
+}: OrderCardProps) {
   const t = useTranslations();
 
   const { paymentMethodMap } = usePaymentMethods();
@@ -77,6 +88,13 @@ export default function OrderCard({ order }: OrderCardProps) {
           <p className="font-medium">{formatDateTime(order.updated_at)}</p>
         </div>
       </CardContent>
+      <CardFooter className="justify-end gap-4 pt-4 border-t">
+        <OrderDetailsDialog
+          profile={profile}
+          products={products}
+          order={order}
+        />
+      </CardFooter>
     </Card>
   );
 }

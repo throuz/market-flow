@@ -26,19 +26,21 @@ export default async function CustomerOrdersPage({
 
   const { data: order_items } = await supabase.from("order_items").select("*");
 
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("*")
+    .eq("id", user?.id ?? "")
+    .single();
+
+  const { data: products } = await supabase.from("products").select("*");
+
   const getOrderItems = (id: number) =>
     order_items?.filter((orderItem) => orderItem.order_id === id) ?? [];
 
   const ordersWithItems =
     orders?.map((order) => ({
       ...order,
-      orderItems: getOrderItems(order.id).map(
-        ({ price, product_id, quantity }) => ({
-          price,
-          product_id,
-          quantity,
-        })
-      ),
+      orderItems: getOrderItems(order.id).map((orderItem) => orderItem),
     })) ?? [];
 
   return (
@@ -57,7 +59,12 @@ export default async function CustomerOrdersPage({
             <NoOrdersMessage />
           ) : (
             ordersWithItems.map((order) => (
-              <OrderCard key={order.id} order={order} />
+              <OrderCard
+                key={order.id}
+                profile={profile}
+                products={products ?? []}
+                order={order}
+              />
             ))
           )}
         </div>
