@@ -23,7 +23,7 @@ export default function CategoryForm({
         <Input
           id="category-name"
           name="name"
-          placeholder="Category Name"
+          placeholder={t("Category Name")}
           defaultValue={initialData?.name}
           required
         />
