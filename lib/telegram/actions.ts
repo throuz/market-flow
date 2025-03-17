@@ -29,21 +29,21 @@ export async function sendOrderCreatedMessage(
     .join("\n");
 
   // Construct the message
-  const message = `
-🛒 *New Order Created!*
-📦 *Order ID:* ${orderId}
-💰 *Total:* $${totalAmount}
-💳 *Payment Method:* ${paymentMethod}
-🚚 *Estimated Delivery:* ${estimatedDelivery}
-
-🛍 *Items:*
-${itemsList}
+  const formattedMessage = `
+  <b>🛒 New Order Created!</b>
+  <b>📦 Order ID:</b> ${orderData.id}
+  <b>💰 Total:</b> $${orderData.total_price.toFixed(2)}
+  <b>💳 Payment:</b> ${orderData.payment_method}
+  <b>🚚 Delivery:</b> ${orderData.estimated_delivery_time}
+  
+  <b>🛍 Items:</b>
+  ${orderItems
+    .map(
+      (item) =>
+        `- <b>${item.name}</b> (${item.quantity}x) - $${(item.price * item.quantity).toFixed(2)}`
+    )
+    .join("\n")}
   `.trim();
-
-  const escapeMarkdown = (text: string) =>
-    text.replace(/([_*[\]()~`>#+\-=|{}.!])/g, "\\$1");
-
-  const safeMessage = escapeMarkdown(message);
 
   const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
 
@@ -52,9 +52,8 @@ ${itemsList}
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       chat_id: TELEGRAM_CHAT_ID,
-      // text: message,
-      text: safeMessage,
-      parse_mode: "Markdown",
+      text: formattedMessage,
+      parse_mode: "HTML",
     }),
   });
 
