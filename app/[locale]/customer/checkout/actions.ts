@@ -1,6 +1,6 @@
 "use server";
 
-import { sendOrderCreatedEmail } from "@/email/actions";
+import { sendOrderCreatedEmail } from "@/lib/email/actions";
 import { Database } from "@/database.types";
 import { createClient } from "@/lib/supabase/server";
 import { formatTimestamptz } from "@/lib/utils";
