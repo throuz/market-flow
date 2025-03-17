@@ -4,6 +4,7 @@ import { sendOrderCreatedEmail } from "@/lib/email/actions";
 import { Database } from "@/database.types";
 import { createClient } from "@/lib/supabase/server";
 import { formatTimestamptz } from "@/lib/utils";
+import { sendOrderCreatedMessage } from "@/lib/telegram/actions";
 
 export async function createOrder(formData: FormData) {
   const supabase = await createClient();
@@ -81,29 +82,11 @@ export async function createOrder(formData: FormData) {
 
     if (updateError) throw updateError;
 
-    // Send email with order details
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-
-    const customerEmail = user?.email ?? "";
-
-    const { data: vendors } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("role", "vendor");
-
-    const vendorEmails = vendors?.map((vendor) => vendor.email) ?? [];
-
-    const emails = [customerEmail, ...vendorEmails];
-
-    const sendOrderCreatedEmailRes = await sendOrderCreatedEmail(
-      emails,
+    // Send telegram message with order details
+    await sendOrderCreatedMessage(
       { ...orderData, total_price: totalPrice },
       orderItems
     );
-    console.log(sendOrderCreatedEmailRes.data);
-    console.log(sendOrderCreatedEmailRes.error);
   } catch (error) {
     throw new Error("Order creation failed");
   }
