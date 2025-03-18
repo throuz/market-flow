@@ -1,18 +1,16 @@
 "use client";
 
 import { useMemo } from "react";
+
 import { useTranslations } from "next-intl";
+
 import { Database } from "@/database.types";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import useOrderStatus from "@/hooks/useOrderStatus";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import SubmitButton from "@/components/SubmitButton";
+import useProductUnits from "@/hooks/useProductUnits";
+import { formatDateTime, formatPrice } from "@/lib/utils";
+import usePaymentMethods from "@/hooks/usePaymentMethods";
 import {
   Table,
   TableBody,
@@ -21,10 +19,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatPrice } from "@/lib/utils";
-import useProductUnits from "@/hooks/useProductUnits";
-import usePaymentMethods from "@/hooks/usePaymentMethods";
-import SubmitButton from "@/components/SubmitButton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface OrderFormProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
@@ -49,17 +50,6 @@ export default function OrderForm({
   const userEmail = profiles.find(
     (profile) => profile.id === initialData.user_id
   )?.email;
-
-  const productMap = useMemo(
-    () =>
-      products.reduce<
-        Record<number, Database["public"]["Tables"]["products"]["Row"]>
-      >((acc, product) => {
-        acc[product.id] = product;
-        return acc;
-      }, {}),
-    [products]
-  );
 
   return (
     <form action={onSubmit} className="space-y-4">
@@ -97,7 +87,7 @@ export default function OrderForm({
       <div className="space-y-2">
         <Label>{t("Estimated Delivery Time")}</Label>
         <div className="p-2 bg-muted rounded-md">
-          {initialData.estimated_delivery_time}
+          {formatDateTime(initialData.estimated_delivery_time)}
         </div>
       </div>
 
@@ -135,7 +125,7 @@ export default function OrderForm({
                   <TableCell>{item.name}</TableCell>
                   <TableCell>{formatPrice(item.price)}</TableCell>
                   <TableCell>
-                    {item.quantity} {item.unit}
+                    {item.quantity} {productUnitMap[item.unit]}
                   </TableCell>
                   <TableCell>
                     {formatPrice(item.price * item.quantity)}
