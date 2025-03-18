@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 
 import ProductFormDialog from "./ProductFormDialog";
+import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Database["public"]["Tables"]["products"]["Row"];
@@ -45,7 +46,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div>
           <p className="text-sm text-gray-500">{t("Price per unit")}</p>
           <p className="font-medium">
-            ${product.price_per_unit} / {productUnitLabel}
+            {formatPrice(product.price_per_unit)} / {productUnitLabel}
           </p>
         </div>
         <div>

@@ -10,7 +10,7 @@ export function formatDateTime(date: string): string {
 }
 
 export function formatPrice(value: number): string {
-  return `NT$${value.toFixed(2)}`;
+  return `NT$${value}`;
 }
 
 export function formatTimestamptz(value: string): string {
