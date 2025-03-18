@@ -12,7 +12,7 @@ type ProductUnitMap = Record<ProductUnit, string>;
 
 export async function sendOrderCreatedMessage(
   orderData: Database["public"]["Tables"]["orders"]["Row"],
-  orderItems: Database["public"]["Tables"]["order_items"]["Insert"][]
+  orderItems: Database["public"]["Tables"]["order_items"]["Row"][]
 ) {
   const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN!;
   const TELEGRAM_CHAT_ID = process.env.TELEGRAM_CHAT_ID!;

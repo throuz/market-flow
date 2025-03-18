@@ -85,6 +85,12 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
                 >
                   <Input
                     type="hidden"
+                    name={`order_items.${index}.product_id`}
+                    value={product.id}
+                    required
+                  />
+                  <Input
+                    type="hidden"
                     name={`order_items.${index}.name`}
                     value={product.name}
                     required
