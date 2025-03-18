@@ -1,10 +1,12 @@
 "use client";
 
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import CategoryFormDialog from "./CategoryFormDialog";
-import { Button } from "@/components/ui/button";
-import { Database } from "@/database.types";
 import { useTranslations } from "next-intl";
+
+import { Database } from "@/database.types";
+import SubmitButton from "@/components/SubmitButton";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+
+import CategoryFormDialog from "./CategoryFormDialog";
 
 interface CategoryCardProps {
   category: Database["public"]["Tables"]["categories"]["Row"];
@@ -29,12 +31,16 @@ export default function CategoryCard({
           onSubmit={(formData) => onUpdate(category.id, formData)}
         />
         <form
-          onSubmit={async (e) => {
-            e.preventDefault();
+          action={async () => {
             await onDelete(category.id);
           }}
         >
-          <Button variant="destructive">{t("Delete")}</Button>
+          <SubmitButton
+            variant="destructive"
+            pendingText={`${t("Deleting")}...`}
+          >
+            {t("Delete")}
+          </SubmitButton>
         </form>
       </CardFooter>
     </Card>

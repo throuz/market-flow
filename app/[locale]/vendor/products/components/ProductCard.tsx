@@ -2,8 +2,10 @@
 
 import { useTranslations } from "next-intl";
 
+import { formatPrice } from "@/lib/utils";
 import { Database } from "@/database.types";
-import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/SubmitButton";
+import useProductUnits from "@/hooks/useProductUnits";
 import {
   Card,
   CardContent,
@@ -13,8 +15,6 @@ import {
 } from "@/components/ui/card";
 
 import ProductFormDialog from "./ProductFormDialog";
-import useProductUnits from "@/hooks/useProductUnits";
-import { formatPrice } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Database["public"]["Tables"]["products"]["Row"];
@@ -76,12 +76,16 @@ export default function ProductCard({
           onSubmit={(formData) => onUpdate(product.id, formData)}
         />
         <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            onDelete(product.id);
+          action={async () => {
+            await onDelete(product.id);
           }}
         >
-          <Button variant="destructive">{t("Delete")}</Button>
+          <SubmitButton
+            variant="destructive"
+            pendingText={`${t("Deleting")}...`}
+          >
+            {t("Delete")}
+          </SubmitButton>
         </form>
       </CardFooter>
     </Card>
