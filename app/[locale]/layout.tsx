@@ -11,6 +11,7 @@ import Header from "./components/header";
 import Footer from "./components/footer";
 
 import "./globals.css";
+import { Locale } from "@/i18n/types";
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -36,7 +37,7 @@ export default async function RootLayout({
 }>) {
   // Ensure that the incoming `locale` is valid
   const { locale } = await params;
-  if (!routing.locales.includes(locale as any)) {
+  if (!routing.locales.includes(locale as Locale)) {
     notFound();
   }
 
