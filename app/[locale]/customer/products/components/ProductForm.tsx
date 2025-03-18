@@ -38,6 +38,7 @@ export default function ProductForm({
             name="quantity"
             defaultValue={1}
             min="1"
+            max={initialData.stock_quantity}
             required
             className="pr-12"
           />
