@@ -18,17 +18,12 @@ import OrderDetailsDialog from "./OrderDetailsDialog";
 
 interface OrderCardProps {
   profile: Database["public"]["Tables"]["profiles"]["Row"] | null;
-  products: Database["public"]["Tables"]["products"]["Row"][];
   order: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
 }
 
-export default function OrderCard({
-  profile,
-  products,
-  order,
-}: OrderCardProps) {
+export default function OrderCard({ profile, order }: OrderCardProps) {
   const t = useTranslations();
 
   const { paymentMethodMap } = usePaymentMethods();
@@ -88,11 +83,7 @@ export default function OrderCard({
         </div>
       </CardContent>
       <CardFooter className="justify-end gap-4 pt-4 border-t">
-        <OrderDetailsDialog
-          profile={profile}
-          products={products}
-          order={order}
-        />
+        <OrderDetailsDialog profile={profile} order={order} />
       </CardFooter>
     </Card>
   );

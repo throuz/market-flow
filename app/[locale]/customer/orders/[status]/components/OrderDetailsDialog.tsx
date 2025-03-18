@@ -17,7 +17,6 @@ import OrderDetails from "./OrderDetails";
 
 interface OrderDetailsDialogProps {
   profile: Database["public"]["Tables"]["profiles"]["Row"] | null;
-  products: Database["public"]["Tables"]["products"]["Row"][];
   order: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
@@ -25,7 +24,6 @@ interface OrderDetailsDialogProps {
 
 export default function OrderDetailsDialog({
   profile,
-  products,
   order,
 }: OrderDetailsDialogProps) {
   const t = useTranslations();
@@ -40,7 +38,7 @@ export default function OrderDetailsDialog({
         <DialogHeader>
           <DialogTitle>{t("View Order Details")}</DialogTitle>
         </DialogHeader>
-        <OrderDetails profile={profile} products={products} order={order} />
+        <OrderDetails profile={profile} order={order} />
       </DialogContent>
     </Dialog>
   );

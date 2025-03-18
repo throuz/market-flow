@@ -21,31 +21,15 @@ import {
 
 interface OrderDetailsProps {
   profile: Database["public"]["Tables"]["profiles"]["Row"] | null;
-  products: Database["public"]["Tables"]["products"]["Row"][];
   order: Database["public"]["Tables"]["orders"]["Row"] & {
     orderItems: Database["public"]["Tables"]["order_items"]["Row"][];
   };
 }
 
-export default function OrderDetails({
-  profile,
-  products,
-  order,
-}: OrderDetailsProps) {
+export default function OrderDetails({ profile, order }: OrderDetailsProps) {
   const t = useTranslations();
   const { productUnitMap } = useProductUnits();
   const { paymentMethodMap } = usePaymentMethods();
-
-  const productMap = useMemo(
-    () =>
-      products.reduce<
-        Record<number, Database["public"]["Tables"]["products"]["Row"]>
-      >((acc, product) => {
-        acc[product.id] = product;
-        return acc;
-      }, {}),
-    [products]
-  );
 
   return (
     <Card>
@@ -107,7 +91,7 @@ export default function OrderDetails({
                     <TableCell>{item.name}</TableCell>
                     <TableCell>{formatPrice(item.price)}</TableCell>
                     <TableCell>
-                      {item.quantity} {item.unit}
+                      {item.quantity} {productUnitMap[item.unit]}
                     </TableCell>
                     <TableCell>
                       {formatPrice(item.price * item.quantity)}
