@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { useTranslations } from "next-intl";
+import SubmitButton from "@/components/SubmitButton";
 
 interface CategoryFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -28,9 +29,7 @@ export default function CategoryForm({
           required
         />
       </div>
-      <Button type="submit" className="w-full">
-        {t("Save")}
-      </Button>
+      <SubmitButton className="w-full">{t("Save")}</SubmitButton>
     </form>
   );
 }

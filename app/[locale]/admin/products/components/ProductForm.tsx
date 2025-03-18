@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SubmitButton from "@/components/SubmitButton";
 
 interface ProductFormProps {
   categories: Database["public"]["Tables"]["categories"]["Row"][];
@@ -125,9 +126,9 @@ export default function ProductForm({
         </Select>
       </div>
 
-      <Button type="submit" className="w-full">
+      <SubmitButton className="w-full">
         {initialData ? t("Update Product") : t("Add Product")}
-      </Button>
+      </SubmitButton>
     </form>
   );
 }

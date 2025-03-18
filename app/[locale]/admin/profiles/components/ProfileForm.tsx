@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SubmitButton from "@/components/SubmitButton";
 
 interface ProfileFormProps {
   onSubmit: (formData: FormData) => Promise<void>;
@@ -48,9 +49,7 @@ export default function ProfileForm({
           </SelectContent>
         </Select>
       </div>
-      <Button type="submit" className="w-full">
-        {t("Save")}
-      </Button>
+      <SubmitButton className="w-full">{t("Save")}</SubmitButton>
     </form>
   );
 }

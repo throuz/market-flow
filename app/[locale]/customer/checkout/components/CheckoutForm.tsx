@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "@/i18n/navigation";
 import { Button } from "@/components/ui/button";
+import SubmitButton from "@/components/SubmitButton";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
 import { useCartStore } from "@/providers/shopping-cart-provider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -272,9 +273,7 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
         </CardContent>
       </Card>
 
-      <Button className="w-full" type="submit">
-        {t("Place Order")}
-      </Button>
+      <SubmitButton className="w-full">{t("Place Order")}</SubmitButton>
     </form>
   );
 }

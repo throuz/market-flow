@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import SubmitButton from "@/components/SubmitButton";
 
 interface ProductFormProps {
   categories: Database["public"]["Tables"]["categories"]["Row"][];
@@ -44,7 +45,6 @@ export default function ProductForm({
           required
         />
       </div>
-
       <div className="space-y-2">
         <Label htmlFor="category">{t("Category")}</Label>
         <Select
@@ -63,7 +63,6 @@ export default function ProductForm({
           </SelectContent>
         </Select>
       </div>
-
       <div className="space-y-2">
         <Label htmlFor="description">{t("Description")}</Label>
         <Textarea
@@ -73,7 +72,6 @@ export default function ProductForm({
           placeholder={t("Description")}
         />
       </div>
-
       <div className="space-y-2">
         <Label htmlFor="price">{t("Price per Unit")}</Label>
         <Input
@@ -86,7 +84,6 @@ export default function ProductForm({
           required
         />
       </div>
-
       <div className="space-y-2">
         <Label>{t("Product Image")}</Label>
         <ImageUpload
@@ -96,7 +93,6 @@ export default function ProductForm({
           required={!initialData}
         />
       </div>
-
       <div className="space-y-2">
         <Label htmlFor="stock">{t("Stock Quantity")}</Label>
         <Input
@@ -108,7 +104,6 @@ export default function ProductForm({
           required
         />
       </div>
-
       <div className="space-y-2">
         <Label htmlFor="unit">{t("Unit")}</Label>
         <Select name="unit" defaultValue={initialData?.unit}>
@@ -124,10 +119,9 @@ export default function ProductForm({
           </SelectContent>
         </Select>
       </div>
-
-      <Button type="submit" className="w-full">
+      <SubmitButton className="w-full">
         {initialData ? t("Update Product") : t("Add Product")}
-      </Button>
+      </SubmitButton>
     </form>
   );
 }

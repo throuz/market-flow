@@ -24,6 +24,7 @@ import {
 import { formatPrice } from "@/lib/utils";
 import useProductUnits from "@/hooks/useProductUnits";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
+import SubmitButton from "@/components/SubmitButton";
 
 interface OrderFormProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
@@ -150,9 +151,7 @@ export default function OrderForm({
         {t("Subtotal")}: {formatPrice(initialData.total_price)}
       </div>
 
-      <Button type="submit" className="w-full">
-        {t("Save")}
-      </Button>
+      <SubmitButton className="w-full">{t("Save")}</SubmitButton>
     </form>
   );
 }

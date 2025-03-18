@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import useProductUnits from "@/hooks/useProductUnits";
+import SubmitButton from "@/components/SubmitButton";
 
 interface ProductFormProps {
   onSubmit: (formData: FormData) => void;
@@ -45,9 +46,7 @@ export default function ProductForm({
           </span>
         </div>
       </div>
-      <Button type="submit" className="w-full">
-        {t("Add to cart")}
-      </Button>
+      <SubmitButton className="w-full">{t("Add to cart")}</SubmitButton>
     </form>
   );
 }
