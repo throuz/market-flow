@@ -7,7 +7,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SubmitButton } from "@/components/submit-button";
+import SubmitButton from "@/components/SubmitButton";
 import { forgotPasswordAction } from "@/app/[locale]/actions";
 import { FormMessage, Message } from "@/components/form-message";
 

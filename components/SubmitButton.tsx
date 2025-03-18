@@ -11,7 +11,11 @@ type Props = ComponentProps<typeof Button> & {
   pendingText?: string;
 };
 
-export function SubmitButton({ children, pendingText, ...props }: Props) {
+export default function SubmitButton({
+  children,
+  pendingText,
+  ...props
+}: Props) {
   const { pending } = useFormStatus();
   const t = useTranslations();
 
