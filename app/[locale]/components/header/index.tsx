@@ -26,13 +26,13 @@ export default async function Header() {
   const { data: products } = await supabase.from("products").select("*");
 
   return (
-    <header className="relative">
+    <header className="fixed top-0 left-0 w-full z-50 bg-background">
       <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
         <div className="w-full flex justify-between items-center p-3 px-5 text-sm">
           <div className="flex gap-5 items-center">
             <HeaderDrawer role={role} user={user} />
             <Link href="/" className="font-semibold">
-              Market flow
+              Market Flow
             </Link>
             <div className="hidden md:block">
               <NavLinks role={role} />

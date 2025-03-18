@@ -61,7 +61,7 @@ export default async function RootLayout({
           >
             <CartStoreProvider>
               <Header />
-              <main>{children}</main>
+              <main className="pt-16">{children}</main>
               <Footer />
             </CartStoreProvider>
           </ThemeProvider>
