@@ -264,6 +264,7 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
                   pattern="\d{5}"
                   title={t("Please enter last 5 digits of the account")}
                   placeholder={t("Enter last 5 digits")}
+                  required
                 />
               </div>
             )}
@@ -283,7 +284,10 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
         </CardContent>
       </Card>
 
-      <SubmitButton className="w-full" disabled={isPending}>
+      <SubmitButton
+        className="w-full"
+        disabled={isPending || cart.length === 0}
+      >
         {isPending ? t("Placing Order") + "..." : t("Place Order")}
       </SubmitButton>
     </form>
