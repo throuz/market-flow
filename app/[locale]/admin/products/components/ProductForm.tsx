@@ -104,6 +104,7 @@ export default function ProductForm({
           id="stock"
           type="number"
           name="stock_quantity"
+          min={1}
           defaultValue={initialData?.stock_quantity}
           placeholder={t("Stock quantity")}
           required
