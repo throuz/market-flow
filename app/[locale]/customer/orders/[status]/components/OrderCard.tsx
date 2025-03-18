@@ -3,6 +3,7 @@
 import { useTranslations } from "next-intl";
 
 import { Database } from "@/database.types";
+import SubmitButton from "@/components/SubmitButton";
 import usePaymentMethods from "@/hooks/usePaymentMethods";
 import { formatDateTime, formatPrice } from "@/lib/utils";
 import OrderStatusBadge from "@/components/OrderStatusBadge";
@@ -14,6 +15,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { cancelOrder } from "../actions";
 import OrderDetailsDialog from "./OrderDetailsDialog";
 
 interface OrderCardProps {
@@ -84,6 +86,20 @@ export default function OrderCard({ profile, order }: OrderCardProps) {
       </CardContent>
       <CardFooter className="justify-end gap-4 pt-4 border-t">
         <OrderDetailsDialog profile={profile} order={order} />
+        {order.status === "pending" && (
+          <form
+            action={async () => {
+              await cancelOrder(order.id);
+            }}
+          >
+            <SubmitButton
+              variant="destructive"
+              pendingText={`${t("Canceling")}...`}
+            >
+              {t("Cancel")}
+            </SubmitButton>
+          </form>
+        )}
       </CardFooter>
     </Card>
   );
