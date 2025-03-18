@@ -144,7 +144,7 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
                       onClick={() =>
                         updateCartItem(item.product_id, item.quantity + 1)
                       }
-                      disabled={item.quantity === product.stock_quantity}
+                      disabled={item.quantity >= product.stock_quantity}
                     >
                       <Plus className="w-4 h-4" />
                     </Button>
