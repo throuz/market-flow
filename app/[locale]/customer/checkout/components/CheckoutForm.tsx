@@ -31,16 +31,16 @@ interface CheckoutFormProps {
 }
 
 export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
+  const router = useRouter();
   const cart = useCartStore((store) => store.cart);
   const removeFromCart = useCartStore((store) => store.removeFromCart);
   const updateCartItem = useCartStore((store) => store.updateCartItem);
   const clearCart = useCartStore((store) => store.clearCart);
   const t = useTranslations();
   const { paymentMethodOptions } = usePaymentMethods();
-  const router = useRouter();
-
   const [paymentMethod, setPaymentMethod] =
     React.useState<Database["public"]["Enums"]["payment_method"]>();
+  const [isPending, startTransition] = React.useTransition();
 
   const productMap = React.useMemo(
     () => new Map(products.map((product) => [product.id, product])),
@@ -54,9 +54,12 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
     0
   );
 
-  const formAction = async (formData: FormData): Promise<void> => {
-    clearCart();
-    await createOrder(formData);
+  const formAction = (formData: FormData): void => {
+    startTransition(async () => {
+      await createOrder(formData);
+      clearCart();
+      router.push("/customer/orders");
+    });
   };
 
   return (
@@ -273,7 +276,9 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
         </CardContent>
       </Card>
 
-      <SubmitButton className="w-full">{t("Place Order")}</SubmitButton>
+      <SubmitButton className="w-full" disabled={isPending}>
+        {isPending ? t("Placing Order") + "..." : t("Place Order")}
+      </SubmitButton>
     </form>
   );
 }

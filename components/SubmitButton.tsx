@@ -19,8 +19,15 @@ export default function SubmitButton({
   const { pending } = useFormStatus();
   const t = useTranslations();
 
+  const disabled = pending || props.disabled;
+
   return (
-    <Button type="submit" aria-disabled={pending} {...props} disabled={pending}>
+    <Button
+      type="submit"
+      aria-disabled={disabled}
+      {...props}
+      disabled={disabled}
+    >
       {pending ? pendingText || `${t("Submitting")}...` : children}
     </Button>
   );

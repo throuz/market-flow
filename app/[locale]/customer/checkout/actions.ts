@@ -4,8 +4,6 @@ import { Database } from "@/database.types";
 import { createClient } from "@/lib/supabase/server";
 import { formatTimestamptz } from "@/lib/utils";
 import { sendOrderCreatedMessage } from "@/lib/telegram/actions";
-import { redirect } from "@/i18n/navigation";
-import { getLocale } from "next-intl/server";
 
 export async function createOrder(formData: FormData) {
   const supabase = await createClient();
@@ -91,8 +89,4 @@ export async function createOrder(formData: FormData) {
   } catch (error) {
     throw new Error("Order creation failed");
   }
-
-  const locale = await getLocale();
-
-  redirect({ href: "/customer/orders", locale });
 }
