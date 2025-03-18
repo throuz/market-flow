@@ -38,10 +38,12 @@ export const signUpAction = async (formData: FormData): Promise<void> => {
     .eq("id", data.user?.id ?? "")
     .single();
 
-  redirect({
-    locale,
-    href: `/${profile?.role ?? ""}`,
-  });
+  if (profile) {
+    redirect({
+      locale,
+      href: `/${profile.role}/products`,
+    });
+  }
 };
 
 export const signInAction = async (formData: FormData): Promise<void> => {
@@ -73,10 +75,12 @@ export const signInAction = async (formData: FormData): Promise<void> => {
     .eq("id", data.user.id)
     .single();
 
-  redirect({
-    locale,
-    href: `/${profile?.role ?? ""}`,
-  });
+  if (profile) {
+    redirect({
+      locale,
+      href: `/${profile.role}/products`,
+    });
+  }
 };
 
 export const forgotPasswordAction = async (
