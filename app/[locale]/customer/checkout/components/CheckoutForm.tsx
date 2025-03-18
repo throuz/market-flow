@@ -55,13 +55,8 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
   );
 
   const formAction = async (formData: FormData): Promise<void> => {
-    try {
-      await createOrder(formData);
-      clearCart();
-      router.push("/customer/orders");
-    } catch (error) {
-      throw new Error("Order creation failed");
-    }
+    clearCart();
+    await createOrder(formData);
   };
 
   return (
