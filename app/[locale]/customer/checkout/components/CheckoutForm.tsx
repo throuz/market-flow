@@ -73,6 +73,8 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
               const product = productMap.get(item.product_id);
               if (!product) return null;
 
+              const subtotal = item.quantity * product.price_per_unit;
+
               return (
                 <div
                   key={item.product_id}
@@ -106,6 +108,9 @@ export default function CheckoutForm({ userId, products }: CheckoutFormProps) {
                     <p className="font-medium">{product.name}</p>
                     <p className="text-gray-500">
                       {formatPrice(product.price_per_unit)}
+                    </p>
+                    <p className="text-gray-700 font-semibold">
+                      {t("Subtotal")}: {formatPrice(subtotal)}
                     </p>
                   </div>
                   <div className="flex items-center space-x-3">
