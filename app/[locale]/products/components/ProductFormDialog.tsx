@@ -42,6 +42,7 @@ export default function ProductFormDialog({ initialData }: ProductDialogProps) {
             const cartItem: CartItem = {
               product_id: Number(formData.get("product_id")),
               quantity: Number(formData.get("quantity")),
+              stock_quantity: initialData.stock_quantity,
             };
             addToCart(cartItem);
             setOpen(false);

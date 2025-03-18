@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 export interface CartItem {
   product_id: number;
   quantity: number;
+  stock_quantity: number; // Add stock quantity
 }
 
 interface CartStoreState {
@@ -38,24 +39,55 @@ export const createCartStore = (
           );
 
           if (existingItem) {
-            set({
-              cart: cart.map((item) =>
-                item.product_id === newItem.product_id
-                  ? { ...item, quantity: item.quantity + newItem.quantity }
-                  : item
-              ),
-            });
+            // Ensure that the total quantity doesn't exceed the stock
+            const updatedQuantity = existingItem.quantity + newItem.quantity;
+            if (updatedQuantity <= existingItem.stock_quantity) {
+              set({
+                cart: cart.map((item) =>
+                  item.product_id === newItem.product_id
+                    ? { ...item, quantity: updatedQuantity }
+                    : item
+                ),
+              });
+            } else {
+              // If stock is insufficient, only update to the max stock available
+              set({
+                cart: cart.map((item) =>
+                  item.product_id === newItem.product_id
+                    ? { ...item, quantity: existingItem.stock_quantity }
+                    : item
+                ),
+              });
+            }
           } else {
-            set({ cart: [...cart, newItem] });
+            // Ensure new item does not exceed stock
+            if (newItem.quantity <= newItem.stock_quantity) {
+              set({ cart: [...cart, newItem] });
+            } else {
+              set({
+                cart: [
+                  ...cart,
+                  { ...newItem, quantity: newItem.stock_quantity },
+                ],
+              });
+            }
           }
         },
 
         updateCartItem: (product_id, quantity) => {
-          set({
-            cart: get().cart.map((item) =>
-              item.product_id === product_id ? { ...item, quantity } : item
-            ),
-          });
+          const { cart } = get();
+          const item = cart.find((item) => item.product_id === product_id);
+          if (item) {
+            // Ensure quantity doesn't exceed stock
+            const updatedQuantity = Math.min(quantity, item.stock_quantity);
+            set({
+              cart: cart.map((item) =>
+                item.product_id === product_id
+                  ? { ...item, quantity: updatedQuantity }
+                  : item
+              ),
+            });
+          }
         },
 
         removeFromCart: (product_id) => {
