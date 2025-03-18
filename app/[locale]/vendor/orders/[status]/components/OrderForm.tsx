@@ -26,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import OrderStatusSelector from "./OrderStatusSelector";
 
 interface OrderFormProps {
   profiles: Database["public"]["Tables"]["profiles"]["Row"][];
@@ -55,18 +56,7 @@ export default function OrderForm({
     <form action={onSubmit} className="space-y-4">
       <div className="space-y-2">
         <Label htmlFor="status">{t("Status")}</Label>
-        <Select name="status" defaultValue={initialData.status} required>
-          <SelectTrigger id="status">
-            <SelectValue placeholder={t("Select status")} />
-          </SelectTrigger>
-          <SelectContent>
-            {orderStatusOptions.map(({ label, value }) => (
-              <SelectItem key={value} value={value}>
-                {label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <OrderStatusSelector status={initialData.status} />
       </div>
 
       <div className="space-y-2">
